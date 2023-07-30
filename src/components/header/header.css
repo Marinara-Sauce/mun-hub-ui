@@ -1,0 +1,12 @@
+.page-header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin: 0px 10px 0px 10px;
+}
+
+.page-header .left-bar {
+    flex: 1;
+    display: flex;
+    width: fit-content;
+}
