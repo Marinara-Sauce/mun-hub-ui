@@ -34,7 +34,7 @@ export default function SpeakersList() {
                 </div>
                 <div className="footer">
                     <div className="addButton">
-                        <Button>Add to List</Button>
+                        <Button variant="contained">Add to List</Button>
                     </div>
                     <div className="selectCount">
                         <InputLabel id="select-num-items" className="select-label">Number of Items to Display</InputLabel>

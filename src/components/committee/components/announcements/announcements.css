@@ -1,5 +1,6 @@
 .buttonRow {
     display: flex;
+    padding: 10px;
 }
 
 button {
