@@ -1,5 +1,5 @@
 import { Button, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import Widget from "../../widget/widget";
+import Widget from "../../../widget/widget";
 import './speakers-list.css';
 import React from "react";
 

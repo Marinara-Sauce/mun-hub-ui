@@ -1,0 +1,23 @@
+.list {
+    padding: 10px
+}
+
+.footer {
+    display: flex;
+    padding: 10px;
+}
+
+.footer .addButton {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.footer .selectCount {
+    display: flex;
+    align-items: center;
+}
+
+.footer .selectCount .select-label {
+    padding: 10px;
+}
