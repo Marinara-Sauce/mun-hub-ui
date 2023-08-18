@@ -1,0 +1,8 @@
+.buttonRow {
+    display: flex;
+    padding: 10px;
+}
+
+button {
+    flex: 1;
+}
