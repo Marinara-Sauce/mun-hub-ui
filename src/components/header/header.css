@@ -2,11 +2,25 @@
     display: flex;
     width: 100%;
     align-items: center;
-    margin: 0px 10px 0px 10px;
 }
 
 .page-header .left-bar {
     flex: 1;
     display: flex;
-    width: fit-content;
+    align-items: center;
+}
+
+.page-header .left-bar button {
+    width: 48px;
+    height: 48px;
+}
+
+.page-header .right-bar {
+    display: flex;
+    flex: 0;
+    margin-right: 10px;
+}
+
+.page-header .right-bar button {
+    width: 128px;
 }

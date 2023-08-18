@@ -13,7 +13,9 @@ export default function AppHeader() {
                 </IconButton>
                 <h2>MUN HUB</h2>
             </div>
-            <Button>Admin Login</Button>
+            <div className="right-bar">
+                <Button>Admin Login</Button>
+            </div>
         </div>
     );
 }
