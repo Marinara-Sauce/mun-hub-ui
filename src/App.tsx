@@ -10,9 +10,9 @@ function App() {
       <header>
         <AppHeader />
       </header>
-      <body>
+      <div className="appBody">
         <Committee />
-      </body>
+      </div>
       <footer>
         <AppFooter />
       </footer>

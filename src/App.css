@@ -6,13 +6,11 @@
 }
 
 header {
-  display: flex;
-  width: var(--app-width);
+  width: 100%;
   background-color: gainsboro;
 }
 
-body {
-  display: flex;
+.appBody {
   flex: 1;
 }
 
