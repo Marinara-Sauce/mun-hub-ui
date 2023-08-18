@@ -14,7 +14,6 @@ export default function SpeakersList() {
         'Uganda',
         'Brazil',
         'Europe',
-        'Ur mom',
         'Antartica',
         'Iran',
         'Estionia'
