@@ -1,11 +1,11 @@
 import { Participant } from "./participant";
 
 export interface Committee {
-    committeeId: number;
-    committeeName: string;
-    committeeAbbreviation: string;
-    committeeDescription?: string;
-    committeeStatus: CommitteeTypes;
+    committee_id: number;
+    committee_name: string;
+    committee_abbreviation: string;
+    committee_description?: string;
+    committee_status: CommitteeTypes;
     participants: Participant[];
 }
 
