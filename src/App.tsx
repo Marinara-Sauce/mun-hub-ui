@@ -2,7 +2,8 @@ import React from 'react';
 import './App.css';
 import AppHeader from './components/header/header';
 import AppFooter from './components/footer/footer';
-import Committee from './components/committee/committee';
+import CommitteeHub from './components/committee/committee';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
@@ -11,7 +12,9 @@ function App() {
         <AppHeader />
       </header>
       <div className="appBody">
-        <Committee />
+        <Routes>
+          <Route path="/committee/:id" Component={CommitteeHub} />
+        </Routes>
       </div>
       <footer>
         <AppFooter />
