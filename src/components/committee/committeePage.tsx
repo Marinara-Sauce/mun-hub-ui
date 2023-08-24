@@ -4,12 +4,14 @@ import SpeakersList from "./components/speakers-list/speakers-list";
 import Voting from "./components/voting/voting";
 import WorkingPapers from "./components/working-papers/working-papers";
 
-import './committeePage.css';
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Committee } from "../../model/committee";
+import { useParams } from "react-router-dom";
 import { useHeader } from "../../contexts/headerContext";
+import { Committee } from "../../model/committee";
 import ErrorModal from "../error/errorModal";
+import './committeePage.css';
+import SelectCommittee from "./components/selectCommittee/selectCommittee";
+
 
 export default function CommitteeHub() {
 
@@ -36,13 +38,17 @@ export default function CommitteeHub() {
             });
     }, []);
 
-    useEffect(() => committee && setHeader(committee.committee_name), [committee]);
+    useEffect(() => {committee && setHeader(committee.committee_name)}, [committee]);
+
+    if (id === "-1") {
+        return <SelectCommittee />
+    }
 
     const procedure: number = 2;
 
     return (
         <>
-            <ErrorModal open={errorOpen} message={error} onClose={() => setErrorOpen(false)}/> 
+            <ErrorModal open={errorOpen} message={error} onClose={() => setErrorOpen(false)}/>
             <div className="mainContainer">
                 <div className="top">
                     <div className="left">
