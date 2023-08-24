@@ -4,7 +4,7 @@ import SpeakersList from "./components/speakers-list/speakers-list";
 import Voting from "./components/voting/voting";
 import WorkingPapers from "./components/working-papers/working-papers";
 
-import './committee.css';
+import './committeePage.css';
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Committee } from "../../model/committee";
