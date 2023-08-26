@@ -5,6 +5,7 @@ import AppFooter from './components/footer/footer';
 import CommitteeHub from './components/committee/committeePage';
 import { Route, Routes } from 'react-router-dom';
 import { HeaderProvider } from './contexts/headerContext';
+import SelectCommittee from './components/committee/components/selectCommittee/selectCommittee';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         </header>
         <div className="appBody">
           <Routes>
+            <Route path="/committee" Component={SelectCommittee} />
             <Route path="/committee/:id" Component={CommitteeHub} />
           </Routes>
         </div>

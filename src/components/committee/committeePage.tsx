@@ -10,13 +10,12 @@ import { useHeader } from "../../contexts/headerContext";
 import { Committee } from "../../model/committee";
 import ErrorModal from "../error/errorModal";
 import './committeePage.css';
-import SelectCommittee from "./components/selectCommittee/selectCommittee";
 
 
 export default function CommitteeHub() {
 
     const { id } = useParams();
-
+    
     const [committee, setCommittee] = useState<Committee>();
 
     const [error, setError] = useState<string>('');
@@ -39,10 +38,6 @@ export default function CommitteeHub() {
     }, []);
 
     useEffect(() => {committee && setHeader(committee.committee_name)}, [committee]);
-
-    if (id === "-1") {
-        return <SelectCommittee />
-    }
 
     const procedure: number = 2;
 
