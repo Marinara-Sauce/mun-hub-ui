@@ -14,7 +14,7 @@ export default function AppHeader() {
             </Box>
             <Box className="right-bar" sx={{mr: 1}}>
                 <Button component={Link} to="/committee" sx={{m: 1}}>Committees</Button>
-                <Button component={Link} to="/delegations" sx={{m: 1}}>Delegations</Button>
+                <Button component={Link} to="/delegation" sx={{m: 1}}>Delegations</Button>
                 <Button component={Link} to="/login" sx={{m: 1}}>Admin Login</Button>
             </Box>
         </Box>
