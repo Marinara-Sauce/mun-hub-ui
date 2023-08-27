@@ -17,8 +17,8 @@
 
 .page-header .right-bar {
     display: flex;
-    flex: 0;
-    margin-right: 10px;
+    flex: 1;
+    justify-content: end;
 }
 
 .page-header .right-bar button {
