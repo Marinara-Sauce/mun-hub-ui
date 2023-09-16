@@ -1,4 +1,5 @@
 import { Participant } from "./participant";
+import { WorkingPaper } from "./workingPaper";
 
 export interface Committee {
     committee_id: number;
@@ -7,6 +8,7 @@ export interface Committee {
     committee_description?: string;
     committee_status: CommitteeTypes;
     participants: Participant[];
+    working_papers: WorkingPaper[];
 }
 
 export enum CommitteeTypes {

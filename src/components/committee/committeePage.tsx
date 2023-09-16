@@ -39,34 +39,36 @@ export default function CommitteeHub() {
 
     useEffect(() => {committee && setHeader(committee.committee_name)}, [committee]);
 
-    const procedure: number = 2;
+    const procedure: number = 1;
 
     return (
         <>
             <ErrorModal open={errorOpen} message={error} onClose={() => setErrorOpen(false)}/>
-            <div className="mainContainer">
-                <div className="top">
-                    <div className="left">
-                        <Announcements />
+            {committee && // TODO: Loading throbber for no committee
+                <div className="mainContainer">
+                    <div className="top">
+                        <div className="left">
+                            <Announcements />
+                        </div>
+                        <div className="right">
+                            <SpeakersList />
+                            {
+                                procedure === 1 && (
+                                    <Voting />
+                                )
+                            }
+                            {
+                                procedure === 2 && (
+                                    <Attendance />
+                                )
+                            }
+                        </div>
                     </div>
-                    <div className="right">
-                        <SpeakersList />
-                        {
-                            procedure === 1 && (
-                                <Voting />
-                            )
-                        }
-                        {
-                            procedure === 2 && (
-                                <Attendance />
-                            )
-                        }
+                    <div className="bottom">
+                        <WorkingPapers workingPapers={committee.working_papers}/>
                     </div>
                 </div>
-                <div className="bottom">
-                    <WorkingPapers />
-                </div>
-            </div>
+            }
         </>
     );
 }

@@ -1,29 +1,9 @@
-import { Button, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import Widget from "../../../widget/widget";
+import { WorkingPaper } from "../../../../model/workingPaper";
+
 import './working-papers.css';
-import React from "react";
 
-export default function WorkingPapers() {
-
-    const tableData = [
-        {
-          workingGroupName: 'Group A',
-          groupMembers: 'John Doe, Jane Smith',
-          paperLink: 'https://example.com/paperA',
-        },
-        {
-          workingGroupName: 'Group B',
-          groupMembers: 'Alice Johnson, Bob Williams',
-          paperLink: 'https://example.com/paperB',
-        },
-        {
-          workingGroupName: 'Group C',
-          groupMembers: 'Michael Brown, Emily Davis',
-          paperLink: 'https://example.com/paperC',
-        },
-        // Add more data rows as needed
-    ];
-
+export default function WorkingPapers({workingPapers}: {workingPapers: WorkingPaper[]}) {
     return (
         <Widget title="Working Papers">
             <table className="table">
@@ -35,17 +15,19 @@ export default function WorkingPapers() {
                     </tr>
                 </thead>
                 <tbody>
-                    {tableData.map((row, index) => (
-                    <tr key={index}>
-                        <td>{row.workingGroupName}</td>
-                        <td>{row.groupMembers}</td>
-                        <td>
-                        <a href={row.paperLink} target="_blank" rel="noopener noreferrer">
-                            {row.paperLink}
-                        </a>
-                        </td>
-                    </tr>
-                    ))}
+                    {(workingPapers.length === 0) ? <tr><td>No Papers Yet :(</td></tr> : <>
+                        {workingPapers.map((paper, index) => (
+                            <tr key={index}>
+                                <td>{paper.working_group.working_group_name}</td>
+                                <td>{"ahhh"}</td>
+                                <td>
+                                <a href={paper.paper_link} target="_blank" rel="noopener noreferrer">
+                                    {paper.paper_link}
+                                </a>
+                                </td>
+                            </tr>
+                        ))}
+                    </>}
                 </tbody>
             </table>
         </Widget>
