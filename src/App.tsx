@@ -8,6 +8,7 @@ import { HeaderProvider } from './contexts/headerContext';
 import SelectCommittee from './components/committee/components/selectCommittee/selectCommittee';
 import SelectDelegation from './components/delegation/components/selectDelegation/selectDelegation';
 import DelegationPage from './components/delegation/delegationPage';
+import { Box } from '@mui/material';
 
 function App() {
   return (
@@ -17,16 +18,20 @@ function App() {
           <AppHeader />
         </header>
         <div className="appBody">
-          <Routes>
-            <Route path="/committee" Component={SelectCommittee} />
-            <Route path="/committee/:id" Component={CommitteeHub} />
-            <Route path="/delegation" Component={SelectDelegation} />
-            <Route path="/delegation/:id" Component={DelegationPage} />
-          </Routes>
+          <Box sx={{
+            height: "100%"
+          }}>
+            <Routes>
+              <Route path="/committee" Component={SelectCommittee} />
+              <Route path="/committee/:id" Component={CommitteeHub} />
+              <Route path="/delegation" Component={SelectDelegation} />
+              <Route path="/delegation/:id" Component={DelegationPage} />
+            </Routes>
+          </Box>
+          <footer>
+            <AppFooter />
+          </footer>
         </div>
-        <footer>
-          <AppFooter />
-        </footer>
       </HeaderProvider>
     </div>
   );
