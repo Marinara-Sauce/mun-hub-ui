@@ -39,7 +39,7 @@ export default function CommitteeHub() {
 
     useEffect(() => {committee && setHeader(committee.committee_name)}, [committee]);
 
-    const procedure: number = 1;
+    const procedure: number = 2;
 
     return (
         <>
