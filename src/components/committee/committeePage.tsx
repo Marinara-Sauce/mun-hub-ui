@@ -48,7 +48,7 @@ export default function CommitteeHub() {
                 <div className="mainContainer">
                     <div className="top">
                         <div className="left">
-                            <Announcements />
+                            <Announcements committee_status={committee.committee_status} announcement={committee.committee_announcement} />
                         </div>
                         <div className="right">
                             <SpeakersList />
