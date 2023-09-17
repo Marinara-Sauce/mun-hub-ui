@@ -17,6 +17,7 @@ export default function CommitteeHub() {
     const { id } = useParams();
     
     const [committee, setCommittee] = useState<Committee>();
+    const [procedure, setProcedure] = useState<number>(1);
 
     const [error, setError] = useState<string>('');
     const [errorOpen, setErrorOpen] = useState<boolean>(false);
@@ -27,7 +28,9 @@ export default function CommitteeHub() {
         fetch(`http://localhost:8000/committees/${id}`) // TODO: Place this in some env file
             .then((r) => r.json())
             .then((d: Committee) => {
-                setCommittee(d as Committee);
+                const committee = d as Committee;
+                setCommittee(d);
+                setProcedure(d.committee_poll);
                 console.log(d)
             })
             .catch((e) => {
@@ -37,9 +40,32 @@ export default function CommitteeHub() {
             });
     }, []);
 
-    useEffect(() => {committee && setHeader(committee.committee_name)}, [committee]);
+    useEffect(() => {
+        const socket = new WebSocket(`ws://localhost:8000/committees/${id}/ws`)
 
-    const procedure: number = 2;
+        socket.onopen = () => {
+            console.log("Websocket is open")
+        }
+
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data)
+            setProcedure(data)
+        }
+
+        const heartbeatInterval = setInterval(() => {
+            if (socket.readyState === WebSocket.OPEN) {
+              socket.send("heartbeat");
+            }
+          }, 1000);
+
+        socket.onclose = () => {
+            clearInterval(heartbeatInterval)
+        }
+
+        return () => socket.close();
+    });
+
+    useEffect(() => {committee && setHeader(committee.committee_name)}, [committee]);
 
     return (
         <>
@@ -53,12 +79,12 @@ export default function CommitteeHub() {
                         <div className="right">
                             <SpeakersList />
                             {
-                                procedure === 1 && (
+                                procedure === 2 && (
                                     <Voting />
                                 )
                             }
                             {
-                                procedure === 2 && (
+                                procedure === 3 && (
                                     <Attendance />
                                 )
                             }

@@ -8,6 +8,7 @@ export interface Committee {
     committee_description?: string;
     committee_status: CommitteeStatus;
     committee_announcement: string;
+    committee_poll: CommitteePollingType;
     participants: Participant[];
     working_papers: WorkingPaper[];
 }
@@ -19,6 +20,12 @@ export enum CommitteeStatus {
     UNMOD = 4,
     MOD = 5
 };
+
+export enum CommitteePollingType {
+    NONE = 1,
+    VOTING = 2,
+    ATTENDANCE = 3
+}
 
 export function CommitteeStatusToString(status: CommitteeStatus) {
     switch (status) {
