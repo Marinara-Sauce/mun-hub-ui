@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { useCookies } from 'react-cookie';
 
 const token = document.cookie.split('; ').find((row) => row.startsWith('token'))?.split("=")[1];
 
@@ -19,8 +18,9 @@ export function updateToken(token: string) {
 export function hasToken() {
     const token = axiosInstance.defaults.headers.common['Authorization'];
   
+    console.log(token)
     // Check if the token exists and is not empty
-    return !!token;
+    return token != 'Bearer undefined';
 };
 
 export default axiosInstance;
