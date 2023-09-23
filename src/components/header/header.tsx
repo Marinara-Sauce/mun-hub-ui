@@ -2,6 +2,7 @@ import { Box, Button } from '@mui/material';
 import './header.css';
 import { useHeader } from '../../contexts/headerContext';
 import { Link } from 'react-router-dom';
+import Account from '../account/account';
 
 export default function AppHeader() {
 
@@ -15,7 +16,7 @@ export default function AppHeader() {
             <Box className="right-bar" sx={{mr: 1}}>
                 <Button component={Link} to="/committee" sx={{m: 1}}>Committees</Button>
                 <Button component={Link} to="/delegation" sx={{m: 1}}>Delegations</Button>
-                <Button component={Link} to="/login" sx={{m: 1}}>Admin Login</Button>
+                <Account />
             </Box>
         </Box>
     );

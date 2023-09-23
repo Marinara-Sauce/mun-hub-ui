@@ -33,7 +33,7 @@ function App() {
           </footer>
         </div>
       </HeaderProvider>
-    </div>
+  </div>
   );
 }
 
