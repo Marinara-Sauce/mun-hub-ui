@@ -3,18 +3,18 @@ import { useEffect, useState } from "react";
 import axiosInstance, { updateToken } from "../../axiosInstance";
 import { useCookies } from "react-cookie";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { AdminUser } from "../../model/adminUser";
 
 interface TokenResponse {
     access_token: string;
     token_type: string;
     expiration: number;
-    username: string;
-    first_name: string;
+    user: AdminUser;
 }
 
 export default function Account() {
 
-    const [cookie, setCookie, removeCookie] = useCookies(['token', 'refresh_token', 'username', 'first_name']);
+    const [cookie, setCookie, removeCookie] = useCookies(['token', 'refresh_token', 'user']);
     const [login, setLoggedIn] = useState(cookie['token']);
 
     const [loginFormVisible, setLoginFormVisible] = useState(false);
@@ -27,8 +27,7 @@ export default function Account() {
         expires.setTime(expires.getTime() + token.expiration * 1000);
         setCookie('token', token.access_token);
         setCookie('refresh_token', expires);
-        setCookie('username', token.username);
-        setCookie('first_name', token.first_name);
+        setCookie('user', token.user);
         
         // Give axios updated cookie
         updateToken(token.access_token);
@@ -41,8 +40,7 @@ export default function Account() {
 
         removeCookie('token');
         removeCookie('refresh_token');
-        removeCookie('username');
-        removeCookie('first_name');
+        removeCookie('user');
     }
 
     useEffect(() => {
@@ -61,7 +59,7 @@ export default function Account() {
     return (
         <Box sx={{display: 'flex', alignItems: 'center', m: 1}}>
             <Typography>
-                Welcome, {cookie.first_name}!
+                Welcome, {cookie.user.first_name}!
             </Typography>
             <IconButton
                 color="primary"
