@@ -1,8 +1,10 @@
-import { Drawer, Typography, TextField, InputAdornment, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
+import { Drawer, Typography, TextField, InputAdornment, List, ListItem, ListItemButton, ListItemText, Button } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from "react";
 import { Committee } from "../../../../model/committee";
 import { Link } from "react-router-dom";
+import { hasToken } from "../../../../axiosInstance";
+import AddIcon from '@mui/icons-material/Add';
 
 export default function SelectCommittee() {
 
@@ -28,6 +30,7 @@ export default function SelectCommittee() {
                     <SearchIcon />
                 </InputAdornment>
             )}} />
+            {hasToken() && <Button variant="outlined" sx={{m: 2}} startIcon={<AddIcon />}>Add Committee</Button>}
             <List>
                 {committees.map((c) => (
                     <ListItem key={c.committee_id}>
