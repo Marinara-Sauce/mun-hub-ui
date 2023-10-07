@@ -36,16 +36,8 @@ export default function Account() {
 
     const onLogout = () => {
         setLoggedIn(false);
-        updateToken('');
-
-        removeCookie('token');
-        removeCookie('refresh_token');
-        removeCookie('user');
+        
     }
-
-    useEffect(() => {
-        updateToken(cookie["token"]);
-    }, [cookie["token"]]);
 
     if (!login) {
         return (

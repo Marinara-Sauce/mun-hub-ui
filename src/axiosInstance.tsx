@@ -8,11 +8,14 @@ const axiosInstance = axios.create({
         'Authorization': `Bearer: ${token}`,
         'Content-Type': 'application/json'
     },
+    withCredentials: (token !== undefined)
 });
 
 export function updateToken(token: string) {
     console.log("new token: " + token)
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axiosInstance.defaults.withCredentials = (token !== undefined);
+    console.log(axiosInstance.defaults);
 }
 
 export function hasToken() {

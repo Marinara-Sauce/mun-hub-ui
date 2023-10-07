@@ -9,30 +9,33 @@ import SelectCommittee from './components/committee/components/selectCommittee/s
 import SelectDelegation from './components/delegation/components/selectDelegation/selectDelegation';
 import DelegationPage from './components/delegation/delegationPage';
 import { Box } from '@mui/material';
+import { AuthProvider } from './contexts/authContext';
 
 function App() {
   return (
     <div className="App">
-      <HeaderProvider>
-        <header>
-          <AppHeader />
-        </header>
-        <div className="appBody">
-          <Box sx={{
-            height: "100%"
-          }}>
-            <Routes>
-              <Route path="/committee" Component={SelectCommittee} />
-              <Route path="/committee/:id" Component={CommitteeHub} />
-              <Route path="/delegation" Component={SelectDelegation} />
-              <Route path="/delegation/:id" Component={DelegationPage} />
-            </Routes>
-          </Box>
-          <footer>
-            <AppFooter />
-          </footer>
-        </div>
-      </HeaderProvider>
+      <AuthProvider>
+        <HeaderProvider>
+          <header>
+            <AppHeader />
+          </header>
+          <div className="appBody">
+            <Box sx={{
+              height: "100%"
+            }}>
+              <Routes>
+                <Route path="/committee" Component={SelectCommittee} />
+                <Route path="/committee/:id" Component={CommitteeHub} />
+                <Route path="/delegation" Component={SelectDelegation} />
+                <Route path="/delegation/:id" Component={DelegationPage} />
+              </Routes>
+            </Box>
+            <footer>
+              <AppFooter />
+            </footer>
+          </div>
+        </HeaderProvider>
+      </AuthProvider>
     </div>
   );
 }
