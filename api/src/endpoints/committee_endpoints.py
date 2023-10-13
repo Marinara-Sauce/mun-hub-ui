@@ -93,7 +93,7 @@ async def change_committee_poll(committee_id: str, new_poll: CommitteePollingTyp
 
 
 # delete a committee
-@router.delete("/committees/{id}", tags=["Committees"])
+@router.delete("/committees/{committee_id}", tags=["Committees"])
 async def delete_committee(committee_id: str, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
     response = committee_operations.delete_committee(db, committee_id)
     

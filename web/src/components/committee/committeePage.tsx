@@ -98,7 +98,7 @@ export default function CommitteeHub() {
                         <Box className="bottom">
                             <WorkingPapers workingPapers={committee.working_papers}/>
                         </Box>
-                        <Box className="w-full">
+                        <Box>
                             {authed && <AdminControls />}      
                         </Box>
                     </Box>

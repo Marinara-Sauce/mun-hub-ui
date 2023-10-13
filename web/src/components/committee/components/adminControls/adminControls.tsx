@@ -1,20 +1,17 @@
-import { Box, Button } from "@mui/material";
-import { useAuth } from "../../../../contexts/authContext";
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import Widget from "../../../widget/widget";
+import DeleteCommittee from "./components/deleteCommittee";
+import RenameCommittee from "./components/renameCommittee";
 
 export default function AdminControls() {
-    const [ authed, user ] = useAuth();
-    
     return (
+      <>
         <Widget title="Admin Controls">
-            <Box className="w-full">
-                <Button variant="contained" className="w-full">
-                    Rename Committee
-                </Button>
-                <Button variant="contained" color="error" className="w-full">
-                    Delete Committee
-                </Button>
+            <Box sx={{display: "flex"}}>
+                <RenameCommittee />
+                <DeleteCommittee />
             </Box>
         </Widget>
+      </>
     );
 }
