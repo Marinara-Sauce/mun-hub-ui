@@ -1,162 +1,176 @@
-import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
-import axiosInstance, { updateToken } from "../../axiosInstance";
-import { useCookies } from "react-cookie";
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { AdminUser } from "../../model/adminUser";
+import { useAuth } from "../../contexts/authContext";
+import { AxiosInstance } from "axios";
 
 interface TokenResponse {
-    access_token: string;
-    token_type: string;
-    expiration: number;
-    user: AdminUser;
+  access_token: string;
+  token_type: string;
+  expiration: number;
+  user: AdminUser;
 }
 
 export default function Account() {
+  const [axiosInstance, authed, login, logout, user] = useAuth();
 
-    const [cookie, setCookie, removeCookie] = useCookies(['token', 'refresh_token', 'user']);
-    const [login, setLoggedIn] = useState(cookie['token']);
+  const [loginFormVisible, setLoginFormVisible] = useState(false);
 
-    const [loginFormVisible, setLoginFormVisible] = useState(false);
+  const onLoggedIn = (token: TokenResponse) => {
+    setLoginFormVisible(false);
+    login(token);
+  };
 
-    const onLoggedIn = (token: TokenResponse) => {
-        setLoginFormVisible(false);
+  const onLogout = () => {
+    logout();
+  };
 
-        // Update the cookie
-        let expires = new Date();
-        expires.setTime(expires.getTime() + token.expiration * 1000);
-        setCookie('token', token.access_token);
-        setCookie('refresh_token', expires);
-        setCookie('user', token.user);
-        
-        // Give axios updated cookie
-        updateToken(token.access_token);
-        setLoggedIn(true);
-    }
-
-    const onLogout = () => {
-        setLoggedIn(false);
-        updateToken('');
-
-        removeCookie('token');
-        removeCookie('refresh_token');
-        removeCookie('user');
-    }
-
-    useEffect(() => {
-        updateToken(cookie["token"]);
-    }, [cookie["token"]]);
-
-    if (!login) {
-        return (
-            <>
-                <LoginPopup open={loginFormVisible} onClose={() => setLoginFormVisible(false)} onLoggedIn={onLoggedIn} />
-                <Button sx={{ m: 1 }} onClick={() => setLoginFormVisible(true)}>Admin Login</Button>
-            </>
-        );
-    }
-
+  if (!authed) {
     return (
-        <Box sx={{display: 'flex', alignItems: 'center', m: 1}}>
-            <Typography>
-                Welcome, {cookie.user.first_name}!
-            </Typography>
-            <IconButton
-                color="primary"
-                sx={{
-                    width: '48px',
-                    height: '48px',
-                    ml: 1
-                }}
-                onClick={onLogout}
-            >
-          <ExitToAppIcon fontSize="inherit"/>
-        </IconButton>
-        </Box>
-    )
-}
-
-function LoginPopup({ open, onClose, onLoggedIn }: { open: boolean, onClose: () => void, onLoggedIn: (token: TokenResponse) => void}) {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string>('');
-
-    const onLogin = (credentials: { username: string, password: string }) => {
-        setLoading(true);
-
-        axiosInstance.post('/token', credentials, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        })
-        .then((response) => {
-            setLoading(false);
-            setError('');
-            onLoggedIn(response.data);
-        })
-        .catch((err) => {
-            setLoading(false);
-            setError(err.response.data.detail);
-        })
-    }
-  
-    const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setUsername(event.target.value);
-    };
-  
-    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPassword(event.target.value);
-    };
-  
-    const handleLogin = () => {
-      onLogin({ username, password });
-    };
-  
-    return (
-      <Dialog
-        open={open}
-        onClose={onClose}
-        aria-labelledby="login-dialog-title"
-        maxWidth="xs"
-        sx={{ minWidth: "300px" }}
-      >
-        <DialogTitle id="login-dialog-title">Login</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please enter your username and password.
-          </DialogContentText>
-          <form>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Username"
-              type="text"
-              fullWidth
-              value={username}
-              onChange={handleUsernameChange}
-            />
-            <TextField
-              margin="dense"
-              label="Password"
-              type="password"
-              fullWidth
-              value={password}
-              onChange={handlePasswordChange}
-            />
-          </form>
-        </DialogContent>
-        {error && (
-          <Typography variant="body2" color="error" sx={{textAlign: 'center'}}>
-            {error}
-          </Typography>
-        )}
-        <DialogActions>
-          <Button onClick={onClose} color="primary">
-            Cancel
-          </Button>
-          {loading ? <CircularProgress /> : <Button onClick={handleLogin} color="primary">Login</Button>}
-        </DialogActions>
-      </Dialog>
+      <>
+        <LoginPopup
+          axiosInstance={axiosInstance}
+          open={loginFormVisible}
+          onClose={() => setLoginFormVisible(false)}
+          onLoggedIn={onLoggedIn}
+        />
+        <Button sx={{ m: 1 }} onClick={() => setLoginFormVisible(true)}>
+          Admin Login
+        </Button>
+      </>
     );
   }
+
+  return (
+    <Box sx={{ display: "flex", alignItems: "center", m: 1 }}>
+      <Typography>Welcome, {user?.first_name}!</Typography>
+      <IconButton
+        color="primary"
+        sx={{
+          width: "48px",
+          height: "48px",
+          ml: 1,
+        }}
+        onClick={onLogout}
+      >
+        <ExitToAppIcon fontSize="inherit" />
+      </IconButton>
+    </Box>
+  );
+}
+
+function LoginPopup({
+  axiosInstance,
+  open,
+  onClose,
+  onLoggedIn,
+}: {
+  axiosInstance: AxiosInstance;
+  open: boolean;
+  onClose: () => void;
+  onLoggedIn: (token: TokenResponse) => void;
+}) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>("");
+
+  const onLogin = (credentials: { username: string; password: string }) => {
+    setLoading(true);
+
+    axiosInstance
+      .post("/token", credentials, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      })
+      .then((response) => {
+        setLoading(false);
+        setError("");
+        onLoggedIn(response.data);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+        // setError(err.response.data.detail);
+      });
+  };
+
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
+  };
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  };
+
+  const handleLogin = () => {
+    onLogin({ username, password });
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      aria-labelledby="login-dialog-title"
+      maxWidth="xs"
+      sx={{ minWidth: "300px" }}
+    >
+      <DialogTitle id="login-dialog-title">Login</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          Please enter your username and password.
+        </DialogContentText>
+        <form>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Username"
+            type="text"
+            fullWidth
+            value={username}
+            onChange={handleUsernameChange}
+          />
+          <TextField
+            margin="dense"
+            label="Password"
+            type="password"
+            fullWidth
+            value={password}
+            onChange={handlePasswordChange}
+          />
+        </form>
+      </DialogContent>
+      {error && (
+        <Typography variant="body2" color="error" sx={{ textAlign: "center" }}>
+          {error}
+        </Typography>
+      )}
+      <DialogActions>
+        <Button onClick={onClose} color="primary">
+          Cancel
+        </Button>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <Button onClick={handleLogin} color="primary">
+            Login
+          </Button>
+        )}
+      </DialogActions>
+    </Dialog>
+  );
+}
