@@ -10,12 +10,16 @@ import { useHeader } from "../../contexts/headerContext";
 import { Committee } from "../../model/committee";
 import ErrorModal from "../error/errorModal";
 import './committeePage.css';
+import { Box } from "@mui/material";
+import { useAuth } from "../../contexts/authContext";
+import AdminControls from "./components/adminControls/adminControls";
 
 
 export default function CommitteeHub() {
 
     const { id } = useParams();
-    
+    const [ axiosInstance, authed ] = useAuth();
+
     const [committee, setCommittee] = useState<Committee>();
     const [procedure, setProcedure] = useState<number>(1);
 
@@ -71,29 +75,34 @@ export default function CommitteeHub() {
         <>
             <ErrorModal open={errorOpen} message={error} onClose={() => setErrorOpen(false)}/>
             {committee && // TODO: Loading throbber for no committee
-                <div className="mainContainer">
-                    <div className="top">
-                        <div className="left">
-                            <Announcements committee_status={committee.committee_status} announcement={committee.committee_announcement} />
-                        </div>
-                        <div className="right">
-                            <SpeakersList />
-                            {
-                                procedure === 2 && (
-                                    <Voting />
-                                )
-                            }
-                            {
-                                procedure === 3 && (
-                                    <Attendance />
-                                )
-                            }
-                        </div>
-                    </div>
-                    <div className="bottom">
-                        <WorkingPapers workingPapers={committee.working_papers}/>
-                    </div>
-                </div>
+                <>
+                    <Box className="mainContainer">
+                        <Box className="top">
+                            <Box className="left">
+                                <Announcements committee_status={committee.committee_status} announcement={committee.committee_announcement} />
+                            </Box>
+                            <Box className="right">
+                                <SpeakersList />
+                                {
+                                    procedure === 2 && (
+                                        <Voting />
+                                    )
+                                }
+                                {
+                                    procedure === 3 && (
+                                        <Attendance />
+                                    )
+                                }
+                            </Box>
+                        </Box>
+                        <Box className="bottom">
+                            <WorkingPapers workingPapers={committee.working_papers}/>
+                        </Box>
+                        <Box className="w-full">
+                            {authed && <AdminControls />}      
+                        </Box>
+                    </Box>
+                </>
             }
         </>
     );
