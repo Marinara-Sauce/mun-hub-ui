@@ -1,10 +1,11 @@
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
-import axiosInstance, { hasToken } from "../../../../axiosInstance";
 import AddIcon from '@mui/icons-material/Add';
 import { SetStateAction, useState } from "react";
 import { Committee } from "../../../../model/committee";
+import { useAuth } from "../../../../contexts/authContext";
 
 export default function AddCommittee() {
+    const [ authContext, authed ] = useAuth();
     const [ dialogOpen, setDialogOpen ] = useState(false);
     const [ loading, setLoading ] = useState(false);
     const [ committeeName, setCommitteeName ] = useState('');
@@ -21,7 +22,7 @@ export default function AddCommittee() {
     const handleCreate = () => {
         setLoading(true);
 
-        axiosInstance.post('/committees', {
+        authContext.post('/committees', {
             committee_name: committeeName,
             committee_abbreviation: 'this should be deleted'
         })
@@ -44,7 +45,7 @@ export default function AddCommittee() {
 
     return (
         <>
-            {hasToken() && <Button variant="outlined" sx={{m: 2}} startIcon={<AddIcon />} onClick={openDialog}>Add Committee</Button>}
+            {authed && <Button variant="outlined" sx={{m: 2}} startIcon={<AddIcon />} onClick={openDialog}>Add Committee</Button>}
             <Dialog open={dialogOpen} onClose={closeDialog} sx={{ minWidth: "600px" }}>
                 <DialogTitle>Create Committee</DialogTitle>
                 <DialogContent>
