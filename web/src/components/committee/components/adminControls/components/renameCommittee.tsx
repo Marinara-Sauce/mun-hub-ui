@@ -1,13 +1,11 @@
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress, Button, TextField } from "@mui/material";
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router";
-import { useAuth } from "../../../../../contexts/authContext";
+import { useCommittee } from "../../../contexts/committeeContext";
 
 export default function RenameCommittee() {
-    const { id } = useParams();
-    const [ axiosInstance ] = useAuth();
-    const navigate = useNavigate();
-
+    const committee = useCommittee()[0];
+    const updateCommittee = useCommittee()[3];
+    
     const [renameDialogOpen, setRenameDialogOpen] = useState(false);
     const [renameLoading, setRenameLoading] = useState(false);
 
@@ -23,6 +21,15 @@ export default function RenameCommittee() {
   
     const handleRename = () => {
         setRenameLoading(true);
+        if (committee) {
+          updateCommittee({
+            ...committee,
+            committee_name: newName
+          }, () => {
+            setRenameDialogOpen(false);
+            setRenameLoading(false);
+          })
+        }
     };
   
     return (
