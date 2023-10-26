@@ -7,43 +7,26 @@ import WorkingPapers from "./components/working-papers/working-papers";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useHeader } from "../../contexts/headerContext";
-import { Committee } from "../../model/committee";
 import ErrorModal from "../error/errorModal";
 import './committeePage.css';
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { useAuth } from "../../contexts/authContext";
 import AdminControls from "./components/adminControls/adminControls";
+import { CommitteeProvider, useCommittee } from "./contexts/committeeContext";
 
-
-export default function CommitteeHub() {
-
+function CommitteeLayout() {
     const { id } = useParams();
-    const [ axiosInstance, authed ] = useAuth();
 
-    const [committee, setCommittee] = useState<Committee>();
-    const [procedure, setProcedure] = useState<number>(1);
-
-    const [error, setError] = useState<string>('');
-    const [errorOpen, setErrorOpen] = useState<boolean>(false);
-
+    // Contexts
+    const authed = useAuth()[1];
+    const [ committee, error ] = useCommittee();
     const setHeader = useHeader()[1];
 
-    useEffect(() => {
-        fetch(`http://localhost:8000/committees/${id}`) // TODO: Place this in some env file
-            .then((r) => r.json())
-            .then((d: Committee) => {
-                const committee = d as Committee;
-                setCommittee(d);
-                setProcedure(d.committee_poll);
-                console.log(d)
-            })
-            .catch((e) => {
-                console.log(e);
-                setError(`${e.message}`)
-                setErrorOpen(true);
-            });
-    }, []);
-
+    // Committee States
+    const [procedure, setProcedure] = useState<number>(1);
+    const [errorOpen, setErrorOpen] = useState<boolean>(false);
+    
+    // Connect to websocket for polling
     useEffect(() => {
         const socket = new WebSocket(`ws://localhost:8000/committees/${id}/ws`)
 
@@ -69,12 +52,13 @@ export default function CommitteeHub() {
         return () => socket.close();
     });
 
-    useEffect(() => {committee && setHeader(committee.committee_name)}, [committee]);
+    // Update page header
+    useEffect(() => setHeader(committee ? committee.committee_name : ''), [committee]);
 
     return (
         <>
-            <ErrorModal open={errorOpen} message={error} onClose={() => setErrorOpen(false)}/>
-            {committee && // TODO: Loading throbber for no committee
+            <ErrorModal open={errorOpen} message={'as'} onClose={() => setErrorOpen(false)}/>
+            {!committee ? <CircularProgress /> : 
                 <>
                     <Box className="mainContainer">
                         <Box className="top">
@@ -83,27 +67,29 @@ export default function CommitteeHub() {
                             </Box>
                             <Box className="right">
                                 <SpeakersList />
-                                {
-                                    procedure === 2 && (
-                                        <Voting />
-                                    )
-                                }
-                                {
-                                    procedure === 3 && (
-                                        <Attendance />
-                                    )
-                                }
+                                { procedure === 2 ? <Voting /> : null }
+                                { procedure === 3 ? <Attendance /> : null }
                             </Box>
                         </Box>
                         <Box className="bottom">
                             <WorkingPapers workingPapers={committee.working_papers}/>
                         </Box>
                         <Box>
-                            {authed && <AdminControls />}      
+                            {authed ? <AdminControls /> : null}      
                         </Box>
                     </Box>
                 </>
             }
         </>
+    )
+}
+
+export default function CommitteeHub() {
+    const { id } = useParams();
+
+    return (
+        <CommitteeProvider committee_id={id}>
+            <CommitteeLayout />
+        </CommitteeProvider>
     );
 }
