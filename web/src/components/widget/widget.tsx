@@ -2,8 +2,8 @@ import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import { Box, Typography } from "@mui/material";
 
 export default function Widget(props: {
-    title: string,
-    children: ReactJSXElement
+  title: string;
+  children: ReactJSXElement;
 }) {
     return (
         <Box sx={{

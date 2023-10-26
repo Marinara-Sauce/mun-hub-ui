@@ -30,27 +30,27 @@ function CommitteeLayout() {
     useEffect(() => {
         const socket = new WebSocket(`ws://localhost:8000/committees/${id}/ws`)
 
-        socket.onopen = () => {
-            console.log("Websocket is open")
-        }
+    socket.onopen = () => {
+      console.log("Websocket is open");
+    };
 
-        socket.onmessage = (event) => {
-            const data = JSON.parse(event.data)
-            setProcedure(data)
-        }
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      setProcedure(data);
+    };
 
-        const heartbeatInterval = setInterval(() => {
-            if (socket.readyState === WebSocket.OPEN) {
-              socket.send("heartbeat");
-            }
-          }, 1000);
+    const heartbeatInterval = setInterval(() => {
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send("heartbeat");
+      }
+    }, 1000);
 
-        socket.onclose = () => {
-            clearInterval(heartbeatInterval)
-        }
+    socket.onclose = () => {
+      clearInterval(heartbeatInterval);
+    };
 
-        return () => socket.close();
-    });
+    return () => socket.close();
+  });
 
     // Update page header
     useEffect(() => setHeader(committee ? committee.committee_name : ''), [committee]);

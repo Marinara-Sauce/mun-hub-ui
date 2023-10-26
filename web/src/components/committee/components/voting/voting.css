@@ -1,8 +1,8 @@
 .buttonRow {
-    display: flex;
+  display: flex;
 }
 
 .buttonRow button {
-    flex: 1;
-    margin: 0px 2px;
+  flex: 1;
+  margin: 0px 2px;
 }

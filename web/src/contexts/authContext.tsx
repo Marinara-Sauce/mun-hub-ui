@@ -21,7 +21,7 @@ export type IAuthContext = [
   boolean,
   (token: TokenResponse) => void,
   () => void,
-  AdminUser | null
+  AdminUser | null,
 ];
 
 const DataContext = createContext<IAuthContext>([
@@ -42,8 +42,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const axiosInstance = axios.create({
     baseURL: "http://localhost:8000",
     headers: {
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   });
 
   const [authed, setAuthed] = useState<boolean>(false);
@@ -70,10 +70,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (expiration) {
         const currentUtcTime = new Date().toISOString();
-        const tokenExpirationTime = cookie["refresh_token"]
-  
-        const isTokenExpired = new Date(tokenExpirationTime) <= new Date(currentUtcTime);
-  
+        const tokenExpirationTime = cookie["refresh_token"];
+
+        const isTokenExpired =
+          new Date(tokenExpirationTime) <= new Date(currentUtcTime);
+
         if (isTokenExpired) {
           logout();
         }
@@ -83,10 +84,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     cookie["token"] ? setAuthed(true) : setAuthed(false);
 
     if (authed) {
-      axiosInstance.defaults.headers.common.Authorization = `Bearer ${cookie["token"]}`
+      axiosInstance.defaults.headers.common.Authorization = `Bearer ${cookie["token"]}`;
       setUser(cookie["user"]);
     }
-
   }, [axiosInstance]);
 
   return (
