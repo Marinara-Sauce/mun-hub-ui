@@ -1,7 +1,8 @@
-import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { Box } from "@mui/material";
 import Widget from "../../../widget/widget";
 import DeleteCommittee from "./components/deleteCommittee";
 import RenameCommittee from "./components/renameCommittee";
+import EditDelegations from "../editDelegations/editDelegations";
 
 export default function AdminControls() {
     return (
@@ -9,6 +10,7 @@ export default function AdminControls() {
         <Widget title="Admin Controls">
             <Box sx={{display: "flex"}}>
                 <RenameCommittee />
+                <EditDelegations />
                 <DeleteCommittee />
             </Box>
         </Widget>
