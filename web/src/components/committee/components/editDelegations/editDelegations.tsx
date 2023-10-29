@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Delegation } from "../../../../model/delegation";
 import { useAuth } from "../../../../contexts/authContext";
 import { useCommittee } from "../../contexts/committeeContext";
+import { useParams } from "react-router-dom";
 
 function DelegationNotInCommittee({ delegation, onAdd }: { 
     delegation: Delegation, 
@@ -30,9 +31,12 @@ function DelegationInCommittee({ delegation, onRemove }: {
 
 export default function EditDelegations() {
 
+    const { id } = useParams();
+
     const axiosInstance = useAuth()[0];
 
     const committee = useCommittee()[0];
+    const fetchCommittee = useCommittee()[4];
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [delegationsNotInCommittee, setDelegationsNotInCommittee] = useState<Delegation[]>([]);
@@ -42,6 +46,8 @@ export default function EditDelegations() {
 
     const [notInDelegationSearch, setNotInDelegationSearch] = useState<string>('');
     const [inDelegationSearch, setInDelegationSearch] = useState<string>('');
+
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         if (dialogOpen && delegationsNotInCommittee.length === 0) {
@@ -67,7 +73,18 @@ export default function EditDelegations() {
     }
 
     function onSaveChanges() {
-        // TODO
+        setSaving(true);
+        axiosInstance.patch(`/committees/${id}/participants`, delegationsInCommittee.map(d => d.delegation_id)).then(() => {
+            fetchCommittee();
+            setSaving(false);
+            onCancel();
+        });
+    }
+
+    function onCancel() {
+        setDialogOpen(false);
+        setDelegationsInCommittee([]);
+        setDelegationsNotInCommittee([]);
     }
 
     return (
@@ -117,8 +134,8 @@ export default function EditDelegations() {
                                     )}        
                                 </List>
                                 <DialogActions sx={{display: 'flex'}}>
-                                    <Button sx={{flex: '1'}} variant="contained">Save Changes</Button>
-                                    <Button>Cancel Changes</Button>
+                                    {saving ? <CircularProgress /> : <Button sx={{flex: '1'}} variant="contained" onClick={onSaveChanges}>Save Changes</Button>}
+                                    <Button onClick={onCancel}>Cancel Changes</Button>
                                 </DialogActions>
                             </Box>
                         )}

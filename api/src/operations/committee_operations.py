@@ -129,6 +129,18 @@ def remove_participant(db: Session, committee_id: int, delegation_id: int) -> bo
     return True
 
 
+# replace a committee's list of delegations
+def patch_participants(db: Session, committee_id: int, delegation_ids: [int]):
+    # remove all participants first
+    current_participants = db.query(Participant).filter(Participant.committee_id == committee_id).all()
+    
+    for p in current_participants:
+        remove_participant(db, committee_id, p.delegation_id)
+    
+    # add the new participants
+    return add_participants(db, committee_id, delegation_ids)
+
+
 # add a working paper to a committee
 def add_working_paper(db: Session, working_paper: WorkingPaperCreate):
 
