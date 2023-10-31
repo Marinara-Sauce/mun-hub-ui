@@ -1,29 +1,41 @@
 import Widget from "../../../widget/widget";
 import {
-  CommitteeStatus,
   CommitteeStatusToString,
 } from "../../../../model/committee";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { useCommittee } from "../../contexts/committeeContext";
+import { useAuth } from "../../../../contexts/authContext";
+import { useState } from "react";
 
-export default function Announcements({
-  committee_status,
-  announcement,
-}: {
-  committee_status: CommitteeStatus;
-  announcement: string;
-}) {
+export default function Announcements() {
+  const [committee, loading] = useCommittee();
+  const [axiosInstance, authed] = useAuth();
+  
+  const [editing, setEditing] = useState(false);
+
+  if (loading) return <CircularProgress />;
+
+  function onEdit() {
+    console.log('hello')
+    setEditing(true);
+  }
+
   return (
-    <Widget title="Announcements">
-      <Box>
-        <Box sx={{ p: 1 }}>
-          <Typography variant="h3">
-            Committee Status: {CommitteeStatusToString(committee_status)}
-          </Typography>
-        </Box>
-        <Box sx={{ p: 1 }}>
-          <Typography>{announcement}</Typography>
-        </Box>
-      </Box>
+    <Widget title="Announcements" onEdit={authed ? onEdit : undefined}>
+      {!editing ? (
+          <Box>
+            <Box sx={{ p: 1 }}>
+              <Typography variant="h3">
+                {CommitteeStatusToString(committee?.committee_status)}
+              </Typography>
+            </Box>
+            <Box sx={{ p: 1 }}>
+              <Typography>{committee?.committee_announcement}</Typography>
+            </Box>
+          </Box>
+        ) : (
+          <p>Hello</p>
+        )}
     </Widget>
   );
 }

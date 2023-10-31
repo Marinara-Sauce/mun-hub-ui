@@ -27,7 +27,9 @@ export enum CommitteePollingType {
   ATTENDANCE = 3,
 }
 
-export function CommitteeStatusToString(status: CommitteeStatus) {
+export function CommitteeStatusToString(status?: CommitteeStatus) {
+  if (!status) return "";
+  
   switch (status) {
     case CommitteeStatus.IN_SESSION:
       return "In Session";

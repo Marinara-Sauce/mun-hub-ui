@@ -94,9 +94,9 @@ export default function EditDelegations() {
                     <DialogTitle>Edit Committee Delegations</DialogTitle>
                     <DialogContent>
                         {delegationsLoading ? <CircularProgress /> : (
-                            <Box>
+                            <Box sx={{overflow: "none", overflowY: "none"}}>
                                 <Typography variant="h5">Delegations in Committee</Typography>
-                                <List sx={{overflow: 'auto', width: '100%'}}>
+                                <List sx={{}}>
                                     <TextField 
                                         fullWidth 
                                         label="Search" 
@@ -115,7 +115,7 @@ export default function EditDelegations() {
                                     )}
                                 </List>
                                 <Typography variant="h5">Delegations not in Committee</Typography>
-                                <List sx={{overflow: 'auto', width: '100%'}}>
+                                <List sx={{}}>
                                     <TextField 
                                         fullWidth 
                                         label="Search" 

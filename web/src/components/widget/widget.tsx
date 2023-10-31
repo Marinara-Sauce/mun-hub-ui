@@ -1,8 +1,10 @@
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
-import { Box, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function Widget(props: {
   title: string;
+  onEdit?: () => void;
   children: ReactJSXElement;
 }) {
     return (
@@ -22,9 +24,14 @@ export default function Widget(props: {
                 width: '100%',
                 display: 'flex',
             }}>
-                <Typography variant="h4" sx={{ margin: '8px' }}>
+                <Typography variant="h4" sx={{ margin: '8px', flexGrow: '1' }}>
                     {props.title}
                 </Typography>
+                {props.onEdit ? (
+                    <IconButton aria-label="edit" sx={{margin: '8px'}} onClick={props.onEdit}>
+                        <EditIcon />
+                    </IconButton>
+                ) : null}
             </Box>
             <Box sx={{
                 overflow: 'visible',
