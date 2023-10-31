@@ -6,6 +6,7 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import { useCommittee } from "../../contexts/committeeContext";
 import { useAuth } from "../../../../contexts/authContext";
 import { useState } from "react";
+import AnnouncementsJoditEditor from "./components/joditEditor/joditEditor";
 
 export default function Announcements() {
   const [committee, loading] = useCommittee();
@@ -34,7 +35,7 @@ export default function Announcements() {
             </Box>
           </Box>
         ) : (
-          <p>Hello</p>
+          <AnnouncementsJoditEditor />
         )}
     </Widget>
   );
