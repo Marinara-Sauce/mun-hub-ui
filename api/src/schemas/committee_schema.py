@@ -15,7 +15,7 @@ class CommitteeCreate(CommitteeBase):
 
 class CommitteeUpdate(CommitteeBase):
     committee_id: int
-    ommittee_announcement: str = ""
+    committee_announcement: str = ""
     committee_description: str = ""
     committee_status: CommitteeSessionTypes = CommitteeSessionTypes.OUT_OF_SESSION
 
