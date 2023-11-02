@@ -1,5 +1,5 @@
 import JoditEditor, { IJoditEditorProps } from "jodit-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 
 export default function AnnouncementsJoditEditor({content, onChange}: {content: string, onChange: (newContent: string) => void}) {
     const editor = useRef(null);

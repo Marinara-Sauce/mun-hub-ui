@@ -63,7 +63,7 @@ function CommitteeLayout() {
                     <Box className="mainContainer">
                         <Box className="top">
                             <Box className="left">
-                                <Announcements />
+                                <Announcements committee={committee} />
                             </Box>
                             <Box className="right">
                                 <SpeakersList />

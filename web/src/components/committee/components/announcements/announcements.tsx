@@ -1,25 +1,23 @@
 import Widget from "../../../widget/widget";
 import {
+  Committee,
+  CommitteeStatus,
   CommitteeStatusToString,
 } from "../../../../model/committee";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import { useCommittee } from "../../contexts/committeeContext";
 import { useAuth } from "../../../../contexts/authContext";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AnnouncementsJoditEditor from "./components/joditEditor/joditEditor";
 
-export default function Announcements() {
-  const [committee, loading] = useCommittee();
+export default function Announcements({ committee }: { committee: Committee }) {
   const updateCommittee = useCommittee()[3];
-  const fetchCommittee = useCommittee()[4];
 
-  const [axiosInstance, authed] = useAuth();
-  const [content, setContent] = useState<string>();
+  const authed = useAuth()[1];
+  const [content, setContent] = useState<string>(committee.committee_announcement);
+  const [status, setStatus] = useState<CommitteeStatus>(committee.committee_status);
   
   const [editing, setEditing] = useState(false);
-
-  useEffect(() => setContent(committee?.committee_announcement), [committee]);
-  if (loading) return <CircularProgress />;
 
   function onEdit() {
     setEditing(true);
@@ -31,14 +29,13 @@ export default function Announcements() {
   }
 
   function onSave() {
-    if (content && committee) {
-      updateCommittee({
-        ...committee,
-        committee_announcement: content
-      }, () => {
-        setEditing(false);
-      })
-    }
+    updateCommittee({
+      ...committee,
+      committee_announcement: content,
+      committee_status: status,
+    }, () => {
+      setEditing(false);
+    });
   }
 
   return (
@@ -47,15 +44,31 @@ export default function Announcements() {
           <Box>
             <Box sx={{ p: 1 }}>
               <Typography variant="h3">
-                {CommitteeStatusToString(committee?.committee_status)}
+                {CommitteeStatusToString(committee.committee_status)}
               </Typography>
             </Box>
             <Box sx={{ p: 1 }}>
-              <div dangerouslySetInnerHTML={{ __html: committee ? committee.committee_announcement : '' }} /> 
+              <div dangerouslySetInnerHTML={{ __html: committee ? committee.committee_announcement : '' }} /> {/* TODO: This is so insecure its not even funny. Fix it */}
             </Box>
           </Box>
         ) : (
-          <Box sx={{display: 'flex', flexDirection: 'column'}}>
+          <Box sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
+            <FormControl fullWidth>
+              <InputLabel id="select-label">Committee Status</InputLabel>
+              <Select
+                labelId="select-label"
+                id="state"
+                label="Committee State"
+                value={status}
+                onChange={(event) => setStatus(event.target.value as CommitteeStatus)}
+              >
+                <MenuItem value={CommitteeStatus.IN_SESSION}>In Session</MenuItem>
+                <MenuItem value={CommitteeStatus.MOD}>Moderated Caucus</MenuItem>
+                <MenuItem value={CommitteeStatus.UNMOD}>Unmoderated Caucus</MenuItem>
+                <MenuItem value={CommitteeStatus.OUT_OF_SESSION}>Out of Session</MenuItem>
+                <MenuItem value={CommitteeStatus.SUSPENDED_SESSION}>Suspended Session</MenuItem>
+              </Select>
+            </FormControl>
             <Box sx={{flex: '1'}}>
               <AnnouncementsJoditEditor content={content || ''} onChange={(newContent) => setContent(newContent)} />
             </Box>
