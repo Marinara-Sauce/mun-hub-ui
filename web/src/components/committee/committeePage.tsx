@@ -8,27 +8,27 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useHeader } from "../../contexts/headerContext";
 import ErrorModal from "../error/errorModal";
-import './committeePage.css';
+import "./committeePage.css";
 import { Box, CircularProgress } from "@mui/material";
 import { useAuth } from "../../contexts/authContext";
 import AdminControls from "./components/adminControls/adminControls";
 import { CommitteeProvider, useCommittee } from "./contexts/committeeContext";
 
 function CommitteeLayout() {
-    const { id } = useParams();
+  const { id } = useParams();
 
-    // Contexts
-    const authed = useAuth()[1];
-    const { committee } = useCommittee();
-    const setHeader = useHeader()[1];
+  // Contexts
+  const authed = useAuth()[1];
+  const { committee, loading } = useCommittee();
+  const setHeader = useHeader()[1];
 
-    // Committee States
-    const [procedure, setProcedure] = useState<number>(1);
-    const [errorOpen, setErrorOpen] = useState<boolean>(false);
-    
-    // Connect to websocket for polling
-    useEffect(() => {
-        const socket = new WebSocket(`ws://localhost:8000/committees/${id}/ws`)
+  // Committee States
+  const [procedure, setProcedure] = useState<number>(1);
+  const [errorOpen, setErrorOpen] = useState<boolean>(false);
+
+  // Connect to websocket for polling
+  useEffect(() => {
+    const socket = new WebSocket(`ws://localhost:8000/committees/${id}/ws`);
 
     socket.onopen = () => {
       console.log("Websocket is open");
@@ -52,44 +52,51 @@ function CommitteeLayout() {
     return () => socket.close();
   });
 
-    // Update page header
-    useEffect(() => setHeader(committee ? committee.committee_name : ''), [committee]);
+  // Update page header
+  useEffect(
+    () => setHeader(committee ? committee.committee_name : ""),
+    [committee],
+  );
 
-    return (
+  return (
+    <>
+      <ErrorModal
+        open={errorOpen}
+        message={"as"}
+        onClose={() => setErrorOpen(false)}
+      />
+      {loading ? (
+        <CircularProgress />
+      ) : (
         <>
-            <ErrorModal open={errorOpen} message={'as'} onClose={() => setErrorOpen(false)}/>
-            {!committee ? <CircularProgress /> : 
-                <>
-                    <Box className="mainContainer">
-                        <Box className="top">
-                            <Box className="left">
-                                <Announcements committee={committee} />
-                            </Box>
-                            <Box className="right">
-                                <SpeakersList />
-                                { procedure === 2 ? <Voting /> : null }
-                                { procedure === 3 ? <Attendance /> : null }
-                            </Box>
-                        </Box>
-                        <Box className="bottom">
-                            <WorkingPapers workingPapers={committee.working_papers}/>
-                        </Box>
-                        <Box>
-                            {authed ? <AdminControls /> : null}      
-                        </Box>
-                    </Box>
-                </>
-            }
+          <Box className="mainContainer">
+            <Box className="top">
+              <Box className="left">
+                <Announcements />
+              </Box>
+              <Box className="right">
+                <SpeakersList />
+                {procedure === 2 ? <Voting /> : null}
+                {procedure === 3 ? <Attendance /> : null}
+              </Box>
+            </Box>
+            <Box className="bottom">
+              <WorkingPapers workingPapers={committee.working_papers} />
+            </Box>
+            <Box>{authed ? <AdminControls /> : null}</Box>
+          </Box>
         </>
-    )
+      )}
+    </>
+  );
 }
 
 export default function CommitteeHub() {
-    const { id } = useParams();
+  const { id } = useParams();
 
-    return (
-        <CommitteeProvider committee_id={id}>
-            <CommitteeLayout />
-        </CommitteeProvider>
-    );
+  return (
+    <CommitteeProvider committee_id={id}>
+      <CommitteeLayout />
+    </CommitteeProvider>
+  );
 }

@@ -29,7 +29,7 @@ export enum CommitteePollingType {
 
 export function CommitteeStatusToString(status: CommitteeStatus) {
   if (!status) return "";
-  
+
   switch (status) {
     case CommitteeStatus.IN_SESSION:
       return "In Session";

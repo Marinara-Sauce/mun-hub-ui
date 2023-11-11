@@ -14,12 +14,12 @@ import { useAuth } from "../../../../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 
 export default function AddCommittee() {
-    const [ authContext, authed ] = useAuth();
-    const [ dialogOpen, setDialogOpen ] = useState(false);
-    const [ loading, setLoading ] = useState(false);
-    const [ committeeName, setCommitteeName ] = useState('');
-    const navigate = useNavigate();
-    const [ error, setError ] = useState('');
+  const [authContext, authed] = useAuth();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [committeeName, setCommitteeName] = useState("");
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const openDialog = () => {
     setDialogOpen(true);
@@ -32,21 +32,22 @@ export default function AddCommittee() {
   const handleCreate = () => {
     setLoading(true);
 
-        authContext.post('/committees', {
-            committee_name: committeeName,
-            committee_abbreviation: 'this should be deleted'
-        })
-        .then((response) => {
-            setLoading(false);
-            setError('');
-            setDialogOpen(false);
-            navigate(`/committee/${response.data.committee_id}`);
-        })
-        .catch((err) => {
-            setLoading(false);
-            setError(err.response.data.detail);
-        })
-    }
+    authContext
+      .post("/committees", {
+        committee_name: committeeName,
+        committee_abbreviation: "this should be deleted",
+      })
+      .then((response) => {
+        setLoading(false);
+        setError("");
+        setDialogOpen(false);
+        navigate(`/committee/${response.data.committee_id}`);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError(err.response.data.detail);
+      });
+  };
 
   const handleCommitteeNameChange = (
     event: React.ChangeEvent<HTMLInputElement>,

@@ -11,24 +11,24 @@ import { useCommittee } from "../../../contexts/committeeContext";
 import { CommitteePollingType } from "../../../../../model/committee";
 import LoadingButton from "../../../../shared/loadingButton/loadingButton";
 
-export default function VotingProcedureControls() {
+export default function AttendanceProcedureControls() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { committee, setCommitteePoll } = useCommittee();
   const [loading, setLoading] = useState(false);
 
-  const [inVotingProcedure, setInVotingProcedure] = useState<boolean>(
-    committee.committee_poll === CommitteePollingType.VOTING,
+  const [inAttendance, setInAttendance] = useState<boolean>(
+    committee.committee_poll === CommitteePollingType.ATTENDANCE,
   );
 
-  function toggleVote() {
+  function toggleAttendance() {
     setLoading(true);
     setCommitteePoll(
-      inVotingProcedure
+      inAttendance
         ? CommitteePollingType.NONE
-        : CommitteePollingType.VOTING,
+        : CommitteePollingType.ATTENDANCE,
       () => {
         setLoading(false);
-        setInVotingProcedure(!inVotingProcedure);
+        setInAttendance(!inAttendance);
       },
     );
   }
@@ -36,31 +36,31 @@ export default function VotingProcedureControls() {
   return (
     <>
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogTitle>Voting Procedure</DialogTitle>
+        <DialogTitle>Attendance Procedure</DialogTitle>
         <DialogContent>
-          {!inVotingProcedure ? (
-            <Typography>Voting Procedure Has Not Started Yet</Typography>
+          {!inAttendance ? (
+            <Typography>Attendance has not been opened yet</Typography>
           ) : (
-            <Typography>Voting Procedure In Progress</Typography>
+            <Typography>Attendance in progress</Typography>
           )}
         </DialogContent>
         <DialogActions>
-          {inVotingProcedure ? (
+          {inAttendance ? (
             <LoadingButton
               loading={loading}
               variant="contained"
               color="error"
-              onClick={toggleVote}
+              onClick={toggleAttendance}
             >
-              End Vote
+              End Attendance
             </LoadingButton>
           ) : (
             <LoadingButton
               loading={loading}
               variant="contained"
-              onClick={toggleVote}
+              onClick={toggleAttendance}
             >
-              Start Vote
+              Start Attendance
             </LoadingButton>
           )}
           <Button onClick={() => setDialogOpen(false)}>Close</Button>
@@ -71,7 +71,7 @@ export default function VotingProcedureControls() {
         sx={{ flex: 1, margin: 1 }}
         onClick={() => setDialogOpen(true)}
       >
-        Voting Procedure
+        Attendance
       </Button>
     </>
   );
