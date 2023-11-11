@@ -35,8 +35,7 @@ export default function EditDelegations() {
 
     const axiosInstance = useAuth()[0];
 
-    const committee = useCommittee()[0];
-    const fetchCommittee = useCommittee()[4];
+    const { committee, refreshCommittee } = useCommittee();
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [delegationsNotInCommittee, setDelegationsNotInCommittee] = useState<Delegation[]>([]);
@@ -75,7 +74,7 @@ export default function EditDelegations() {
     function onSaveChanges() {
         setSaving(true);
         axiosInstance.patch(`/committees/${id}/participants`, delegationsInCommittee.map(d => d.delegation_id)).then(() => {
-            fetchCommittee();
+            refreshCommittee();
             setSaving(false);
             onCancel();
         });

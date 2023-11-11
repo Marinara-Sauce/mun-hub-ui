@@ -2,10 +2,22 @@ import { ReactNode, createContext, useContext, useEffect, useState } from "react
 import { Committee } from "../../../model/committee";
 import { useAuth } from "../../../contexts/authContext";
 
-export type ICommitteeContext = [ Committee | undefined, boolean, string, (updatedCommittee: Committee, then: () => void) => void, () => void ];
+export type ICommitteeContext = { 
+    committee: Committee | undefined, 
+    loading: boolean, 
+    error: string, 
+    updateCommittee: (updatedCommittee: Committee, then: () => void) => void, 
+    refreshCommittee: () => void 
+};
 
 const CommitteeContext = createContext<ICommitteeContext>(
-    [undefined, false, '', () => {}, () => {}]
+    {
+        committee: undefined, 
+        loading: false, 
+        error: '', 
+        updateCommittee: () => {}, 
+        refreshCommittee: () => {}
+    }
 );
 
 export function CommitteeProvider({ committee_id, children }: { committee_id?: string, children: ReactNode }) {
@@ -13,7 +25,7 @@ export function CommitteeProvider({ committee_id, children }: { committee_id?: s
     const [ committee, setCommittee ] = useState<Committee>();
     const [ loading, setLoading ] = useState(true);
 
-    useEffect(() => fetchCommittee(), [committee_id]);
+    useEffect(() => refreshCommittee(), [committee_id]);
 
     function updateCommittee(updatedCommittee: Committee, then: () => void) {
         axiosInstance.patch("/committees", updatedCommittee).then((response) => {
@@ -25,7 +37,7 @@ export function CommitteeProvider({ committee_id, children }: { committee_id?: s
         });
     };
 
-    function fetchCommittee() {
+    function refreshCommittee() {
         axiosInstance.get(`/committees/${committee_id}`)
         .then((response) => {
             setLoading(false);
@@ -38,7 +50,13 @@ export function CommitteeProvider({ committee_id, children }: { committee_id?: s
 }
 
     return (
-        <CommitteeContext.Provider value={[committee, loading, '', updateCommittee, fetchCommittee]}>
+        <CommitteeContext.Provider value={{
+            committee, 
+            loading, 
+            error: '', 
+            updateCommittee, 
+            refreshCommittee
+        }}>
             {children}
         </CommitteeContext.Provider>
     );

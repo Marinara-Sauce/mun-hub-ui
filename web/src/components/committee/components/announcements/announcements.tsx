@@ -11,7 +11,7 @@ import { useState } from "react";
 import AnnouncementsJoditEditor from "./components/joditEditor/joditEditor";
 
 export default function Announcements({ committee }: { committee: Committee }) {
-  const updateCommittee = useCommittee()[3];
+  const { updateCommittee } = useCommittee();
 
   const authed = useAuth()[1];
   const [content, setContent] = useState<string>(committee.committee_announcement);

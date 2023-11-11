@@ -19,7 +19,7 @@ function CommitteeLayout() {
 
     // Contexts
     const authed = useAuth()[1];
-    const [ committee, loading, error ] = useCommittee();
+    const { committee } = useCommittee();
     const setHeader = useHeader()[1];
 
     // Committee States

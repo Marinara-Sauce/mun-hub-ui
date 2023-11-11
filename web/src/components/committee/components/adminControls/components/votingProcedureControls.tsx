@@ -5,7 +5,7 @@ import { CommitteePollingType } from "../../../../../model/committee";
 
 export default function VotingProcedureControls() {
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [ committee ] = useCommittee();
+    const { committee } = useCommittee();
 
     const inVotingProcedure = committee?.committee_poll === CommitteePollingType.VOTING;
 

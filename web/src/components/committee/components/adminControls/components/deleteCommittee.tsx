@@ -1,9 +1,7 @@
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress, Button } from "@mui/material";
-import { Box } from "@mui/system";
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useAuth } from "../../../../../contexts/authContext";
-import Widget from "../../../../widget/widget";
 
 export default function DeleteCommittee() {
     const { id } = useParams();

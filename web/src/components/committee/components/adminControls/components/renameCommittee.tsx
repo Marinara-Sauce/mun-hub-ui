@@ -1,10 +1,9 @@
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress, Button, TextField } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, CircularProgress, Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { useCommittee } from "../../../contexts/committeeContext";
 
 export default function RenameCommittee() {
-    const committee = useCommittee()[0];
-    const updateCommittee = useCommittee()[3];
+    const { committee, updateCommittee } = useCommittee();
     
     const [renameDialogOpen, setRenameDialogOpen] = useState(false);
     const [renameLoading, setRenameLoading] = useState(false);
