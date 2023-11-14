@@ -70,6 +70,7 @@ function CommitteeLayout() {
       ) : (
         <>
           <Box className="mainContainer">
+            <Box>{authed ? <AdminControls /> : null}</Box>
             <Box className="top">
               <Box className="left">
                 <Announcements />
@@ -83,7 +84,6 @@ function CommitteeLayout() {
             <Box className="bottom">
               <WorkingPapers workingPapers={committee.working_papers} />
             </Box>
-            <Box>{authed ? <AdminControls /> : null}</Box>
           </Box>
         </>
       )}
