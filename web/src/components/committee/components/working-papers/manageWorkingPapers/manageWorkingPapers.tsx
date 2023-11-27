@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { WorkingPaper } from "../../../../../model/workingPaper";
-import { Button, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
+import ManageWorkingPaperDelegations from "./components/manageWorkingPaperDelegations";
 
 export default function ManageWorkingPapers({currentWorkingPapers}: {currentWorkingPapers: WorkingPaper[]}) {
     const [workingPapers, setWorkingPapers] = useState<WorkingPaper[]>(currentWorkingPapers);
@@ -22,7 +23,10 @@ export default function ManageWorkingPapers({currentWorkingPapers}: {currentWork
                         <TextField id="group-name" label="Working Group Name" variant="standard" sx={{width: "100%"}} />
                     </td>
                     <td>
-                        {paper.delegations.map((d) => d.delegation_name).join(", ")}
+                        <Box sx={{display: "flex"}}>
+                            {paper.delegations.map((d) => d.delegation_name).join(", ")}
+                            <ManageWorkingPaperDelegations workingPaper={paper} />
+                        </Box>
                     </td>
                     <td>
                         <TextField id="paper-link" label="Working Paper Link" variant="standard" sx={{width: "100%"}} />
