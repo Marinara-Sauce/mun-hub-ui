@@ -4,12 +4,17 @@ import { Box, Button, TextField } from "@mui/material";
 import ManageWorkingPaperDelegations from "./components/manageWorkingPaperDelegations";
 
 export default function ManageWorkingPapers({currentWorkingPapers}: {currentWorkingPapers: WorkingPaper[]}) {
-    const [workingPapers, setWorkingPapers] = useState<WorkingPaper[]>(currentWorkingPapers);
+    const [workingPapers, setWorkingPapers] = useState<WorkingPaper[]>([...currentWorkingPapers]);
 
+    function getNextPaperId() {
+        if (workingPapers.length === 0) return 1;
+
+        return workingPapers[workingPapers.length - 1].working_paper_id + 1;
+    }
     function addPaper() {
         setWorkingPapers([...workingPapers, {
             working_group_name: '', 
-            working_paper_id: 1, 
+            working_paper_id: getNextPaperId(), 
             paper_link: '', 
             delegations: []
         }]);
@@ -29,7 +34,12 @@ export default function ManageWorkingPapers({currentWorkingPapers}: {currentWork
                         </Box>
                     </td>
                     <td>
-                        <TextField id="paper-link" label="Working Paper Link" variant="standard" sx={{width: "100%"}} />
+                        <Box sx={{display: 'flex'}}>
+                            <TextField id="paper-link" label="Working Paper Link" variant="standard" sx={{width: "100%", flexGrow: 1}} />
+                            <IconButton aria-label="delete" size="small">
+                                <DeleteIcon fontSize="small" />
+                            </IconButton>
+                        </Box>
                     </td>
                 </tr>
             ))}
