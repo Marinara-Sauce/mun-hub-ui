@@ -8,11 +8,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useHeader } from "../../contexts/headerContext";
 import ErrorModal from "../error/errorModal";
-import "./committeePage.css";
 import { Box, CircularProgress } from "@mui/material";
 import { useAuth } from "../../contexts/authContext";
 import AdminControls from "./components/adminControls/adminControls";
 import { CommitteeProvider, useCommittee } from "./contexts/committeeContext";
+import Widget from "../widget/widget";
 
 function CommitteeLayout() {
   const { id } = useParams();
@@ -69,20 +69,24 @@ function CommitteeLayout() {
         <CircularProgress />
       ) : (
         <>
-          <Box className="mainContainer">
+          <Box sx={{ display: "flex", flexDirection: "column"}}>
             <Box>{authed ? <AdminControls /> : null}</Box>
-            <Box className="top">
-              <Box className="left">
-                <Announcements />
-              </Box>
-              <Box className="right">
-                <SpeakersList />
+            <Box sx={{ flex: "1", display: "flex", maxHeight: "75%" }}>
+              <Box sx={{ flexBasis: "30%" }}>
+                <Widget title="My Delegation">
+                  <p>Not Yet Implemented :(</p>
+                </Widget>
                 {procedure === 2 ? <Voting /> : null}
                 {procedure === 3 ? <Attendance /> : null}
+                <SpeakersList />
               </Box>
-            </Box>
-            <Box className="bottom">
-              <WorkingPapers />
+              <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+                <Announcements />
+                <Widget title="Publications">
+                  <p>Not yet implemented :(</p>
+                </Widget>
+                <WorkingPapers />
+              </Box>
             </Box>
           </Box>
         </>
