@@ -9,8 +9,8 @@ class WorkingPaperBase(BaseModel):
     committee_id: int
 
 class WorkingPaperCreate(WorkingPaperBase):
-    delegation_ids: int
-
+    delegation_ids: list[int]
+    
 class WorkingPaper(WorkingPaperBase):
     working_paper_id: int
     delegations: list[Delegation]

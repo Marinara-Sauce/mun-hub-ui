@@ -11,12 +11,14 @@ import AddIcon from "@mui/icons-material/Add";
 import { SetStateAction, useState } from "react";
 import { Committee } from "../../../../model/committee";
 import { useAuth } from "../../../../contexts/authContext";
+import { useNavigate } from "react-router-dom";
 
 export default function AddCommittee() {
   const [authContext, authed] = useAuth();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [committeeName, setCommitteeName] = useState("");
+  const navigate = useNavigate();
   const [error, setError] = useState("");
 
   const openDialog = () => {
@@ -39,7 +41,7 @@ export default function AddCommittee() {
         setLoading(false);
         setError("");
         setDialogOpen(false);
-        console.log(response);
+        navigate(`/committee/${response.data.committee_id}`);
       })
       .catch((err) => {
         setLoading(false);

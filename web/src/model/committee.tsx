@@ -1,4 +1,4 @@
-import { Participant } from "./participant";
+import { Delegation } from "./delegation";
 import { WorkingPaper } from "./workingPaper";
 
 export interface Committee {
@@ -9,7 +9,7 @@ export interface Committee {
   committee_status: CommitteeStatus;
   committee_announcement: string;
   committee_poll: CommitteePollingType;
-  participants: Participant[];
+  delegations: Delegation[];
   working_papers: WorkingPaper[];
 }
 
@@ -28,6 +28,8 @@ export enum CommitteePollingType {
 }
 
 export function CommitteeStatusToString(status: CommitteeStatus) {
+  if (!status) return "";
+
   switch (status) {
     case CommitteeStatus.IN_SESSION:
       return "In Session";
