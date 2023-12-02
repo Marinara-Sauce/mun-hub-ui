@@ -3,6 +3,7 @@ import { WorkingPaper } from "../../../../../../model/workingPaper";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, TextField, Typography } from "@mui/material";
 import { useCommittee } from "../../../../contexts/committeeContext";
 import { Delegation } from "../../../../../../model/delegation";
+import { useAuth } from "../../../../../../contexts/authContext";
 
 function DelegationNotInWorkingGroup({
     delegation,
@@ -34,9 +35,16 @@ function DelegationInWorkingGroup({
     );
 }
 
-export default function ManageWorkingPaperDelegations({workingPaper}: {workingPaper: WorkingPaper}) {
-    const { committee } = useCommittee();
+export default function ManageWorkingPaperDelegations({
+  workingPaper, 
+  updatePaperDelegations
+}: {
+  workingPaper: WorkingPaper; 
+  updatePaperDelegations: (workingPaper: WorkingPaper, delegations: Delegation[]) => void
+}) {  
+  const { committee, updateCommittee } = useCommittee();
 
+    const [saving, setSaving] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const [notInDelegationSearch, setNotInDelegationSearch] =
@@ -71,7 +79,8 @@ export default function ManageWorkingPaperDelegations({workingPaper}: {workingPa
     }
 
     function onSaveDelegations() {
-        
+      updatePaperDelegations(workingPaper, delegationsInWorkingGroup);
+      closeDialog();
     }
 
     return (
@@ -87,7 +96,7 @@ export default function ManageWorkingPaperDelegations({workingPaper}: {workingPa
                             variant="outlined"
                             value={inDelegationSearch}
                             onChange={(e) => setInDelegationSearch(e.target.value)} />
-                        {workingPaper.delegations.map((d) => d.delegation_name.startsWith(inDelegationSearch) ? (
+                        {delegationsInWorkingGroup.map((d) => d.delegation_name.startsWith(inDelegationSearch) ? (
                             <ListItem divider sx={{ pl: "0", pr: "0" }}>
                                 <DelegationInWorkingGroup
                                     key={d.delegation_id}
@@ -107,7 +116,7 @@ export default function ManageWorkingPaperDelegations({workingPaper}: {workingPa
                             variant="outlined"
                             value={notInDelegationSearch}
                             onChange={(e) => setNotInDelegationSearch(e.target.value)} />
-                        {committee.delegations.map((d) => d.delegation_name.startsWith(notInDelegationSearch) ? (
+                        {delegationsNotInWorkingGroup.map((d) => d.delegation_name.startsWith(notInDelegationSearch) ? (
                             <ListItem divider sx={{ pl: "0", pr: "0" }}>
                                 <DelegationNotInWorkingGroup
                                     key={d.delegation_id}

@@ -2,7 +2,8 @@ from typing import List, Optional
 from fastapi import HTTPException, status
 
 from sqlalchemy.orm import Session
-from src.schemas.workingpaper_schema import WorkingPaperCreate, WorkingPaper
+from src.schemas.workingpaper_schema import WorkingPaperCreate
+from src.schemas.workingpaper_schema import WorkingPaper as SchemaWorkingPaper
 
 from src.models.models import Committee, CommitteePollingTypes, Participant, WorkingPaper, WorkingPaperDelegation
 from src.schemas.committee_schema import CommitteeCreate, CommitteeUpdate
@@ -141,6 +142,27 @@ def patch_participants(db: Session, committee_id: int, delegation_ids: [int]):
     return add_participants(db, committee_id, delegation_ids)
 
 
+
+def patch_working_papers(db: Session, committee_id: int, working_papers: [WorkingPaperCreate]):
+    # remove all working papers first
+    current_working_papers = db.query(WorkingPaper).filter(WorkingPaper.committee_id == committee_id).all()
+    
+    # make a list of all the working paper ids
+    current_wp_ids = [wp.working_paper_id for wp in current_working_papers]
+    current_working_paper_delegations = db.query(WorkingPaperDelegation).filter(WorkingPaperDelegation.working_paper_id in current_wp_ids).all()
+    
+    for d in current_working_paper_delegations:
+        remove_delegation_from_working_paper(db, d.working_paper_id, d.delegation_id)
+    
+    for wp in current_working_papers:
+        delete_working_paper(db, wp.working_paper_id)
+        
+    # add new working papers
+    for wp in working_papers:
+        db_wp = add_working_paper(db, wp)
+
+    return True
+        
 # add a working paper to a committee
 def add_working_paper(db: Session, working_paper: WorkingPaperCreate):
 

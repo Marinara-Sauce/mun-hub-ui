@@ -2,7 +2,7 @@ from typing import Annotated, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
 from sqlalchemy.orm import Session
-from src.schemas.workingpaper_schema import WorkingPaperCreate
+from src.schemas.workingpaper_schema import WorkingPaper, WorkingPaperCreate
 
 from src.database.database import SessionLocal
 from src.models.models import AdminUser, CommitteePollingTypes
@@ -143,6 +143,12 @@ def add_delegate_to_working_paper(working_paper_id: int, delegation_ids: List[in
 @router.delete("/committees/working-paper/{working_paper_id}/remove", tags=["Committees"])
 def remove_delegation_from_working_paper(working_paper_id: int, delgation_id: int, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
     return committee_operations.remove_delegation_from_working_paper(db, working_paper_id, delgation_id)
+
+
+# patch working papers
+@router.patch("/committees/{committee_id}/working-papers", tags=["Committees"])
+def patch_committee_working_papers(committee_id: int, working_papers: List[WorkingPaperCreate], db: Session = Depends(get_db)):
+    return committee_operations.patch_working_papers(db, committee_id, working_papers)
 
 
 # websocket for polls

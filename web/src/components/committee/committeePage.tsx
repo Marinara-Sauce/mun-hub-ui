@@ -2,7 +2,7 @@ import Announcements from "./components/announcements/announcements";
 import Attendance from "./components/attendance/attendance";
 import SpeakersList from "./components/speakers-list/speakers-list";
 import Voting from "./components/voting/voting";
-import WorkingPapers from "./components/working-papers/working-papers";
+import WorkingPapers from "./components/working-papers/workingPapers";
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -82,7 +82,7 @@ function CommitteeLayout() {
               </Box>
             </Box>
             <Box className="bottom">
-              <WorkingPapers workingPapers={committee.working_papers} />
+              <WorkingPapers />
             </Box>
           </Box>
         </>
