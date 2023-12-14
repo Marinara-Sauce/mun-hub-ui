@@ -8,7 +8,7 @@ export default function AppHeader() {
   const [header] = useHeader();
 
   return (
-    <Box className="page-header">
+    <Box className="page-header" sx={{ backgroundColor: "gainsboro", boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)" }}>
       <Box className="left-bar" sx={{ ml: 1 }}>
         <h2>{header}</h2>
       </Box>

@@ -14,7 +14,7 @@ export default function Widget(props: {
         boxShadow: "5px 5px 5px 2px rgba(0,0,0,.2)",
         display: "flex",
         flexDirection: "column",
-        margin: 1,
+        margin: 2,
         maxHeight: "100%",
         maxWidth: "100%",
         flex: 1,

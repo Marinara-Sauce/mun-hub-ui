@@ -6,11 +6,11 @@ export default function AppFooter() {
   return (
     <Box
       sx={{
-        m: 1,
         alignItems: "center",
         justifyContent: "center",
         display: "flex",
         width: "100%",
+        backgroundColor: "orange",
       }}
     >
       <Button
