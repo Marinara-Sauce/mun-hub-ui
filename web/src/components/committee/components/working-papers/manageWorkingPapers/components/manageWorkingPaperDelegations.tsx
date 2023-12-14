@@ -3,7 +3,7 @@ import { WorkingPaper } from "../../../../../../model/workingPaper";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, TextField, Typography } from "@mui/material";
 import { useCommittee } from "../../../../contexts/committeeContext";
 import { Delegation } from "../../../../../../model/delegation";
-import { useAuth } from "../../../../../../contexts/authContext";
+import { useApi } from "../../../../../../contexts/authContext";
 
 function DelegationNotInWorkingGroup({
     delegation,
@@ -42,9 +42,8 @@ export default function ManageWorkingPaperDelegations({
   workingPaper: WorkingPaper; 
   updatePaperDelegations: (workingPaper: WorkingPaper, delegations: Delegation[]) => void
 }) {  
-  const { committee, updateCommittee } = useCommittee();
+  const { committee } = useCommittee();
 
-    const [saving, setSaving] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const [notInDelegationSearch, setNotInDelegationSearch] =

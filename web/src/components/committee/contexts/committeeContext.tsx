@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import { Committee, CommitteePollingType } from "../../../model/committee";
-import { useAuth } from "../../../contexts/authContext";
+import { useApi } from "../../../contexts/authContext";
 
 export type ICommitteeContext = {
   committee: Committee;
@@ -45,7 +45,7 @@ export function CommitteeProvider({
   committee_id?: string;
   children: ReactNode;
 }) {
-  const [axiosInstance] = useAuth();
+  const { axiosInstance } = useApi();
   const [committee, setCommittee] = useState<Committee>(defaultCommittee);
   const [loading, setLoading] = useState(true);
 

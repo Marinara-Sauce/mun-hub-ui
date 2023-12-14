@@ -6,11 +6,11 @@ import SelectCommittee from "./components/committee/components/selectCommittee/s
 import SelectDelegation from "./components/delegation/components/selectDelegation/selectDelegation";
 import DelegationPage from "./components/delegation/delegationPage";
 import { Box } from "@mui/material";
-import { AuthProvider } from "./contexts/authContext";
+import { APIProvider } from "./contexts/authContext";
 
 function App() {
   return (
-      <AuthProvider>
+      <APIProvider>
         <HeaderProvider>
           <Box sx={{display: "flex", flexDirection: "column", height: "100vh", flex: "1"}}>
             <AppHeader />
@@ -24,7 +24,7 @@ function App() {
             </Box>
           </Box>
         </HeaderProvider>
-      </AuthProvider>
+      </APIProvider>
   );
 }
 

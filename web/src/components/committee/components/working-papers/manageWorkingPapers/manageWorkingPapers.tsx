@@ -3,7 +3,7 @@ import { WorkingPaper } from "../../../../../model/workingPaper";
 import { Button } from "@mui/material";
 import LoadingButton from "../../../../shared/loadingButton/loadingButton";
 import { useCommittee } from "../../../contexts/committeeContext";
-import { useAuth } from "../../../../../contexts/authContext";
+import { useApi } from "../../../../../contexts/authContext";
 import EditableWorkingPaper from "./components/editableWorkingPaper";
 
 interface WorkingPaperRequest {
@@ -19,7 +19,7 @@ export default function ManageWorkingPapers({
     currentWorkingPapers: WorkingPaper[];
     exitEditMode: () => void;
 }) {
-    const [ axiosInstance ] = useAuth();
+    const { axiosInstance } = useApi();
     const { committee, refreshCommittee } = useCommittee();
     
     const [workingPapers, setWorkingPapers] = useState<WorkingPaper[]>([...currentWorkingPapers]);

@@ -14,14 +14,14 @@ import {
   Typography,
 } from "@mui/material";
 import { useCommittee } from "../../contexts/committeeContext";
-import { useAuth } from "../../../../contexts/authContext";
+import { useApi } from "../../../../contexts/authContext";
 import { useState } from "react";
 import AnnouncementsJoditEditor from "./components/joditEditor/joditEditor";
 
 export default function Announcements() {
   const { committee, updateCommittee } = useCommittee();
+  const { isLoggedIn } = useApi();
 
-  const authed = useAuth()[1];
   const [content, setContent] = useState<string>(
     committee.committee_announcement,
   );
@@ -54,7 +54,7 @@ export default function Announcements() {
   }
 
   return (
-    <Widget title="Announcements" onEdit={authed ? onEdit : undefined}>
+    <Widget title="Announcements" onEdit={isLoggedIn ? onEdit : undefined}>
       {!editing ? (
         <Box>
           <Box sx={{ p: 1 }}>

@@ -16,23 +16,22 @@ export interface TokenResponse {
   user: AdminUser;
 }
 
-export type IAuthContext = [
-  AxiosInstance,
-  boolean,
-  (token: TokenResponse) => void,
-  () => void,
-  AdminUser | null,
-];
+export type IAPIContext = {
+  axiosInstance: AxiosInstance,
+  isLoggedIn: boolean,
+  loginUser: (token: TokenResponse) => void,
+  logoutUser: () => void,
+  currentUser?: AdminUser,
+};
 
-const DataContext = createContext<IAuthContext>([
-  axios.create({ baseURL: "http://localhost:8000" }),
-  false,
-  () => {},
-  () => {},
-  null,
-]);
+const DataContext = createContext<IAPIContext>({
+  axiosInstance: axios.create({ baseURL: "http://localhost:8000" }),
+  isLoggedIn: false,
+  loginUser: () => {},
+  logoutUser: () => {},
+});
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function APIProvider({ children }: { children: ReactNode }) {
   const [cookie, setCookie, removeCookie] = useCookies([
     "token",
     "refresh_token",
@@ -46,10 +45,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
   });
 
-  const [authed, setAuthed] = useState<boolean>(false);
-  const [user, setUser] = useState<AdminUser | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<AdminUser>();
 
-  const login = (token: TokenResponse) => {
+  const loginUser = (token: TokenResponse) => {
     let expires = new Date();
     expires = new Date(expires.getTime() + 30 * 60000);
 
@@ -58,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setCookie("user", token.user);
   };
 
-  const logout = () => {
+  const logoutUser = () => {
     removeCookie("token");
     removeCookie("refresh_token");
     removeCookie("user");
@@ -76,26 +75,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           new Date(tokenExpirationTime) <= new Date(currentUtcTime);
 
         if (isTokenExpired) {
-          logout();
+          logoutUser();
         }
       }
     }
 
-    cookie["token"] ? setAuthed(true) : setAuthed(false);
+    cookie["token"] ? setIsLoggedIn(true) : setIsLoggedIn(false);
 
-    if (authed) {
+    if (isLoggedIn) {
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${cookie["token"]}`;
-      setUser(cookie["user"]);
+      setCurrentUser(cookie["user"]);
     }
   }, [axiosInstance]);
 
   return (
-    <DataContext.Provider value={[axiosInstance, authed, login, logout, user]}>
+    <DataContext.Provider value={{axiosInstance, isLoggedIn, loginUser, logoutUser, currentUser}}>
       {children}
     </DataContext.Provider>
   );
 }
 
-export function useAuth() {
+export function useApi() {
   return useContext(DataContext);
 }

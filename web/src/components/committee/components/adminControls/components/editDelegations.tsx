@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Delegation } from "../../../../../model/delegation";
-import { useAuth } from "../../../../../contexts/authContext";
+import { useApi } from "../../../../../contexts/authContext";
 import { useCommittee } from "../../../contexts/committeeContext";
 import { useParams } from "react-router-dom";
 
@@ -51,7 +51,7 @@ function DelegationInCommittee({
 export default function EditDelegations() {
   const { id } = useParams();
 
-  const axiosInstance = useAuth()[0];
+  const { axiosInstance } = useApi();
 
   const { committee, refreshCommittee } = useCommittee();
 

@@ -8,13 +8,12 @@ import {
   TextField,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { SetStateAction, useState } from "react";
-import { Committee } from "../../../../model/committee";
-import { useAuth } from "../../../../contexts/authContext";
+import { useState } from "react";
+import { useApi } from "../../../../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 
 export default function AddCommittee() {
-  const [authContext, authed] = useAuth();
+  const { axiosInstance, isLoggedIn } = useApi();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [committeeName, setCommitteeName] = useState("");
@@ -32,7 +31,7 @@ export default function AddCommittee() {
   const handleCreate = () => {
     setLoading(true);
 
-    authContext
+    axiosInstance
       .post("/committees", {
         committee_name: committeeName,
         committee_abbreviation: "this should be deleted",
@@ -57,7 +56,7 @@ export default function AddCommittee() {
 
   return (
     <>
-      {authed && (
+      {isLoggedIn ? (
         <Button
           variant="outlined"
           sx={{ m: 2 }}
@@ -66,7 +65,7 @@ export default function AddCommittee() {
         >
           Add Committee
         </Button>
-      )}
+      ) : null}
       <Dialog
         open={dialogOpen}
         onClose={closeDialog}
