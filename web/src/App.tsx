@@ -1,5 +1,4 @@
 import AppHeader from "./components/header/header";
-import AppFooter from "./components/footer/footer";
 import CommitteeHub from "./components/committee/committeePage";
 import { Route, Routes } from "react-router-dom";
 import { HeaderProvider } from "./contexts/headerContext";
@@ -23,7 +22,6 @@ function App() {
                 <Route path="/delegation/:id" Component={DelegationPage} />
               </Routes>
             </Box>
-            <AppFooter />
           </Box>
         </HeaderProvider>
       </AuthProvider>
