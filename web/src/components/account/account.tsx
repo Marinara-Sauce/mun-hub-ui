@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { AdminUser } from "../../model/adminUser";
-import { useAuth } from "../../contexts/authContext";
+import { useApi } from "../../contexts/authContext";
 import { AxiosInstance } from "axios";
 
 interface TokenResponse {
@@ -25,24 +25,24 @@ interface TokenResponse {
 }
 
 export default function Account() {
-  const [axiosInstance, authed, login, logout, user] = useAuth();
+  const auth = useApi();
 
   const [loginFormVisible, setLoginFormVisible] = useState(false);
 
   const onLoggedIn = (token: TokenResponse) => {
     setLoginFormVisible(false);
-    login(token);
+    auth.loginUser(token);
   };
 
   const onLogout = () => {
-    logout();
+    auth.logoutUser();
   };
 
-  if (!authed) {
+  if (!auth.isLoggedIn) {
     return (
       <>
         <LoginPopup
-          axiosInstance={axiosInstance}
+          axiosInstance={auth.axiosInstance}
           open={loginFormVisible}
           onClose={() => setLoginFormVisible(false)}
           onLoggedIn={onLoggedIn}
@@ -56,7 +56,7 @@ export default function Account() {
 
   return (
     <Box sx={{ display: "flex", alignItems: "center", m: 1 }}>
-      <Typography>Welcome, {user?.first_name}!</Typography>
+      <Typography>Welcome, {auth.currentUser?.first_name}!</Typography>
       <IconButton
         color="primary"
         sx={{

@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import { useHeader } from "../../contexts/headerContext";
 import ErrorModal from "../error/errorModal";
 import { Box, CircularProgress } from "@mui/material";
-import { useAuth } from "../../contexts/authContext";
+import { useApi } from "../../contexts/authContext";
 import AdminControls from "./components/adminControls/adminControls";
 import { CommitteeProvider, useCommittee } from "./contexts/committeeContext";
 import Widget from "../widget/widget";
@@ -18,7 +18,7 @@ function CommitteeLayout() {
   const { id } = useParams();
 
   // Contexts
-  const authed = useAuth()[1];
+  const { isLoggedIn } = useApi();
   const { committee, loading } = useCommittee();
   const setHeader = useHeader()[1];
 
@@ -70,7 +70,7 @@ function CommitteeLayout() {
       ) : (
         <>
           <Box sx={{ display: "flex", flexDirection: "column"}}>
-            <Box>{authed ? <AdminControls /> : null}</Box>
+            <Box>{isLoggedIn ? <AdminControls /> : null}</Box>
             <Box sx={{ flex: "1", display: "flex", maxHeight: "75%" }}>
               <Box sx={{ flexBasis: "30%" }}>
                 <Widget title="My Delegation">

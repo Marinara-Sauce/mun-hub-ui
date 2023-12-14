@@ -9,11 +9,11 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import { useAuth } from "../../../../../contexts/authContext";
+import { useApi } from "../../../../../contexts/authContext";
 
 export default function DeleteCommittee() {
   const { id } = useParams();
-  const [axiosInstance] = useAuth();
+  const { axiosInstance } = useApi();
   const navigate = useNavigate();
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);

@@ -5,16 +5,16 @@ import WorkingPaperList from "./workingPaperList/workingPaperList";
 import { useState } from "react";
 import ManageWorkingPapers from "./manageWorkingPapers/manageWorkingPapers";
 import { useCommittee } from "../../contexts/committeeContext";
-import { useAuth } from "../../../../contexts/authContext";
+import { useApi } from "../../../../contexts/authContext";
 
 export default function WorkingPapers() {
-  const authed = useAuth()[1];
+  const { isLoggedIn } = useApi();
   const { committee } = useCommittee();
 
   const [editing, setEditing] = useState(false);
   
   return (
-    <Widget title="Working Papers" onEdit={authed ? () => setEditing(true) : undefined}>
+    <Widget title="Working Papers" onEdit={isLoggedIn ? () => setEditing(true) : undefined}>
       <table className="table">
         <thead>
           <tr className="table-header">
