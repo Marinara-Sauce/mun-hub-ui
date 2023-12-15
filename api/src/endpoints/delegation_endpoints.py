@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from src.database.database import SessionLocal
-from src.schemas.delegation_schema import Delegation
+from src.schemas.delegation_schema import DelegationCreate
 from src.operations import delegation_operations
 
 router = APIRouter()
@@ -35,7 +35,7 @@ def get_delegations_by_id(delegation_id: str, db=Depends(get_db)):
 
 # Create a delegation
 @router.post("/delegations", tags=["Delegations"])
-def create_delegation(delegation: Delegation, db=Depends(get_db)):
+def create_delegation(delegation: DelegationCreate, db=Depends(get_db)):
     return delegation_operations.create_delegation(db, delegation)
 
 

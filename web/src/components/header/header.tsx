@@ -3,6 +3,7 @@ import "./header.css";
 import { useHeader } from "../../contexts/headerContext";
 import { Link } from "react-router-dom";
 import Account from "../account/account";
+import DelegationAdminControls from "../delegation/components/delegationAdminControls/delegationAdminControls";
 
 export default function AppHeader() {
   const [header] = useHeader();
@@ -19,6 +20,7 @@ export default function AppHeader() {
         <Button component={Link} to="/delegation" sx={{ m: 1 }}>
           Delegations
         </Button>
+        <DelegationAdminControls />
         <Account />
       </Box>
     </Box>
