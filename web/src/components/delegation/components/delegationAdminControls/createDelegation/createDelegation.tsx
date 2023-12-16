@@ -22,8 +22,7 @@ export default function CreateDelegation() {
     setLoading(true);
 
     axiosInstance.post("/delegations", {
-        delegation_name: currentName,
-        delegation_id: 0
+        delegation_name: currentName
     }).then(() => {
         setLoading(false);
         setCurrentName("");
@@ -36,7 +35,7 @@ export default function CreateDelegation() {
     return (
       <Button
         variant="outlined"
-        sx={{ m: 2 }}
+        sx={{ width: "100%" }}
         startIcon={<AddIcon />}
         onClick={() => setIsCreating(true)}
       >

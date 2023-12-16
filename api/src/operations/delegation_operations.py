@@ -1,6 +1,6 @@
 from typing import Optional
 
-from src.models.models import Delegation
+from src.models.models import Delegation, Participant, WorkingPaperDelegation
 
 from sqlalchemy.orm import Session
 
@@ -35,3 +35,29 @@ def update_delegation(db: Session, delegation_id: str, new_delegation_name: str)
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
+def delete_delegation(db: Session, delegation_id: int) -> bool:
+    # Delete all participations in working papers
+    working_papers_rels = db.query(WorkingPaperDelegation).filter(WorkingPaperDelegation.delegation_id == delegation_id).all()
+    
+    for p in working_papers_rels:
+        db.delete(p)
+        
+    db.commit()
+
+    # Delete all participants
+    participants = db.query(Participant).filter(Participant.delegation_id == delegation_id).all()
+    
+    for p in participants:
+        db.delete(p)
+        
+    db.commit()
+    
+    # Delete the delegation
+    db_delegation = db.query(Delegation).filter(Delegation.delegation_id == delegation_id).first()
+    
+    db.delete(db_delegation)
+    db.commit()
+    
+    return True

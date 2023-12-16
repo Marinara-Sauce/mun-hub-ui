@@ -48,3 +48,9 @@ def update_delegation(delegation_id: str, new_delegation_name: str, db=Depends(g
         return {"message": f"Delegation ID [{delegation_id}] not found"}
     else:
         return result
+
+
+# Delete a delegation
+@router.delete("/delegations/{delegation_id}", tags=["Delegations"])
+def delete_delegation(delegation_id: int, db=Depends(get_db)):
+    return delegation_operations.delete_delegation(db, delegation_id)

@@ -1,8 +1,8 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { useApi } from "../../../../contexts/authContext";
 import { useState } from "react";
-import LoadingButton from "../../../shared/loadingButton/loadingButton";
 import CreateDelegation from "./createDelegation/createDelegation";
+import EditDelegations from "./editDelegations/editDelegations";
 
 export default function DelegationAdminControls() {
     const { isLoggedIn } = useApi();
@@ -22,7 +22,10 @@ export default function DelegationAdminControls() {
             <Dialog open={dialogOpen} onClose={closeDialog}>
                 <DialogTitle>Manage Delegations</DialogTitle>
                 <DialogContent>
-                    <CreateDelegation />
+                    <Box sx={{display: "flex", flexDirection: "column", gap: 1}}>
+                        <CreateDelegation />
+                        <EditDelegations />
+                    </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button>Close</Button>
