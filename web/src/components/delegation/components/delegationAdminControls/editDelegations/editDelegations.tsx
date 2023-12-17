@@ -73,18 +73,18 @@ export default function EditDelegations() {
   const [delegationSearch, setDelegationSearch] = useState<string>();
 
   useEffect(() => {
-    axiosInstance.get("/delegations").then((r) => setDelegations(r.data));
+    fetchDelegations();
   }, []);
+
+  function fetchDelegations() {
+    axiosInstance.get("/delegations").then((r) => setDelegations(r.data));
+  }
 
   function onDeleteClicked(delegation: Delegation) {
     axiosInstance
       .delete(`/delegations/${delegation.delegation_id}`)
       .then(() => {
-        setDelegations(
-          delegations.filter(
-            (d) => d.delegation_id !== delegation.delegation_id,
-          ),
-        );
+        fetchDelegations();
       });
   }
 
