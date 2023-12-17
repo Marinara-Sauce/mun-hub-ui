@@ -13,6 +13,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmModal from "../../../../shared/confirmModal/confirmModal";
+import TextFieldDialog from "../../../../shared/textFieldDialog/textFieldDialog";
 
 function EditableDelegation({
   delegation,
@@ -21,14 +22,20 @@ function EditableDelegation({
 }: {
   delegation: Delegation;
   onDeleteClicked: (delegation: Delegation) => void;
-  onRenameClicked: (delegation: Delegation) => void;
+  onRenameClicked: (delegation: Delegation, newName: string) => void;
 }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
 
   function handleDelete() {
     setActionLoading(true);
     onDeleteClicked(delegation);
+  }
+
+  function handleRename(newName: string) {
+    setActionLoading(true);
+    onRenameClicked(delegation, newName);
   }
 
   return (
@@ -45,12 +52,20 @@ function EditableDelegation({
         Are you sure you want to delete this delegation? The delegation will be
         removed from every committee and working group. This cannot be undone.
       </ConfirmModal>
+      <TextFieldDialog
+        title="Rename Delegation"
+        open={renameDialogOpen}
+        buttonLoading={actionLoading}
+        textFieldLabel={"New Delegation Name"}
+        onSubmit={handleRename}
+        onClose={() => setRenameDialogOpen(false)}
+      />
       <Box sx={{ display: "flex" }}>
         <Typography sx={{ flex: 1 }}>{delegation.delegation_name}</Typography>
         <IconButton
           aria-label="Rename"
           color="primary"
-          onClick={() => onRenameClicked(delegation)}
+          onClick={() => setRenameDialogOpen(true)}
         >
           <DriveFileRenameOutlineIcon />
         </IconButton>
@@ -88,7 +103,13 @@ export default function EditDelegations() {
       });
   }
 
-  function onRenameClicked(delegation: Delegation) {}
+  function onRenameClicked(delegation: Delegation, newName: string) {
+    axiosInstance
+      .put(
+        `/delegations/${delegation.delegation_id}?new_delegation_name=${newName}`,
+      )
+      .then(() => fetchDelegations());
+  }
 
   return (
     <>

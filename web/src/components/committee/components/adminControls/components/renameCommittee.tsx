@@ -1,6 +1,4 @@
-import {
-  Button,
-} from "@mui/material";
+import { Button } from "@mui/material";
 import { useState } from "react";
 import { useCommittee } from "../../../contexts/committeeContext";
 import TextFieldDialog from "../../../../shared/textFieldDialog/textFieldDialog";
@@ -33,7 +31,14 @@ export default function RenameCommittee() {
 
   return (
     <>
-      <TextFieldDialog open={renameDialogOpen} title={"Rename Committee"} buttonLoading={renameLoading} onSubmit={handleRename} onClose={() => setRenameDialogOpen(false)} />
+      <TextFieldDialog
+        open={renameDialogOpen}
+        title={"Rename Committee"}
+        buttonLoading={renameLoading}
+        textFieldLabel={"New Committee Name"}
+        onSubmit={handleRename}
+        onClose={() => setRenameDialogOpen(false)}
+      />
       <Button
         variant="contained"
         sx={{ flex: 1, margin: 1 }}
