@@ -110,6 +110,7 @@ insert into delegations (delegation_id, delegation_name) values (97, 'Thailand')
 insert into delegations (delegation_id, delegation_name) values (98, 'Portugal');
 insert into delegations (delegation_id, delegation_name) values (99, 'Mongolia');
 insert into delegations (delegation_id, delegation_name) values (100, 'China');
+ALTER SEQUENCE delegations_delegation_id_seq start with 101;
 
 insert into participants (participant_id, delegation_id, committee_id) values (1, 14, 5) ON CONFLICT DO NOTHING;
 insert into participants (participant_id, delegation_id, committee_id) values (2, 5, 10) ON CONFLICT DO NOTHING;

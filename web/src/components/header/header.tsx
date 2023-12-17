@@ -3,12 +3,19 @@ import "./header.css";
 import { useHeader } from "../../contexts/headerContext";
 import { Link } from "react-router-dom";
 import Account from "../account/account";
+import DelegationAdminControls from "../delegation/components/delegationAdminControls/delegationAdminControls";
 
 export default function AppHeader() {
   const [header] = useHeader();
 
   return (
-    <Box className="page-header" sx={{ backgroundColor: "gainsboro", boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)" }}>
+    <Box
+      className="page-header"
+      sx={{
+        backgroundColor: "gainsboro",
+        boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
+      }}
+    >
       <Box className="left-bar" sx={{ ml: 1 }}>
         <h2>{header}</h2>
       </Box>
@@ -19,6 +26,7 @@ export default function AppHeader() {
         <Button component={Link} to="/delegation" sx={{ m: 1 }}>
           Delegations
         </Button>
+        <DelegationAdminControls />
         <Account />
       </Box>
     </Box>

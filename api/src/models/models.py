@@ -65,7 +65,7 @@ class Delegation(Base):
     __tablename__ = "delegations"
 
     # id
-    delegation_id = Column(Integer, primary_key=True, index=True, unique=True)
+    delegation_id = Column(Integer, primary_key=True, index=True, unique=True, autoincrement=True)
 
     # data
     delegation_name = Column(String)

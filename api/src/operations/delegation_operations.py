@@ -1,11 +1,8 @@
 from typing import Optional
 
-from src.models.models import Delegation
-DELEGATION_ID_PREFIX = "DELEGATION"
+from src.models.models import Delegation, Participant, WorkingPaperDelegation
 
 from sqlalchemy.orm import Session
-
-from src.database.create_id import create_id
 
 from src.schemas.delegation_schema import DelegationCreate
 
@@ -19,8 +16,7 @@ def get_delegate_by_id(db: Session, delegation_id: str) -> Optional[Delegation]:
 
 
 def create_delegation(db: Session, user: DelegationCreate) -> Delegation:
-    db_user = Delegation(delegation_id=create_id(DELEGATION_ID_PREFIX),
-                         delegation_name=user.delegation_name)
+    db_user = Delegation(delegation_name=user.delegation_name)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -39,3 +35,29 @@ def update_delegation(db: Session, delegation_id: str, new_delegation_name: str)
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
+def delete_delegation(db: Session, delegation_id: int) -> bool:
+    # Delete all participations in working papers
+    working_papers_rels = db.query(WorkingPaperDelegation).filter(WorkingPaperDelegation.delegation_id == delegation_id).all()
+    
+    for p in working_papers_rels:
+        db.delete(p)
+        
+    db.commit()
+
+    # Delete all participants
+    participants = db.query(Participant).filter(Participant.delegation_id == delegation_id).all()
+    
+    for p in participants:
+        db.delete(p)
+        
+    db.commit()
+    
+    # Delete the delegation
+    db_delegation = db.query(Delegation).filter(Delegation.delegation_id == delegation_id).first()
+    
+    db.delete(db_delegation)
+    db.commit()
+    
+    return True

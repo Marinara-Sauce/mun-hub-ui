@@ -1,15 +1,8 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  CircularProgress,
-  Button,
-} from "@mui/material";
+import { Button } from "@mui/material";
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useApi } from "../../../../../contexts/authContext";
+import ConfirmModal from "../../../../shared/confirmModal/confirmModal";
 
 export default function DeleteCommittee() {
   const { id } = useParams();
@@ -38,28 +31,19 @@ export default function DeleteCommittee() {
 
   return (
     <>
-      <Dialog open={deleteDialogOpen} onClose={handleClose}>
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete this committee? This will delete the
-            committee, working papers, and working groups assosciated with this
-            committee.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          {deleteLoading ? (
-            <CircularProgress />
-          ) : (
-            <Button onClick={handleDelete} color="error" variant="contained">
-              Delete
-            </Button>
-          )}
-        </DialogActions>
-      </Dialog>
+      <ConfirmModal
+        open={deleteDialogOpen}
+        buttonLoading={deleteLoading}
+        dialogTitle="Delete Committee"
+        confirmButtonText="Delete"
+        destructive
+        onConfirm={handleDelete}
+        onClose={handleClose}
+      >
+        Are you sure you want to delete this committee? This will delete the
+        committee, working papers, and working groups assosciated with this
+        committee.
+      </ConfirmModal>
       <Button
         variant="contained"
         color="error"

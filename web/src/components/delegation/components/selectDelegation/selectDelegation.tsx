@@ -12,19 +12,16 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import { Delegation } from "../../../../model/delegation";
+import { useApi } from "../../../../contexts/authContext";
 
 export default function SelectDelegation() {
+  const { axiosInstance } = useApi();
+
   const [delegations, setDelegations] = useState<Delegation[]>([]);
+  const [delegationSearch, setDelegationSearch] = useState<string>();
 
   useEffect(() => {
-    fetch(`http://localhost:8000/delegations`) // TODO: Place this in some env file
-      .then((r) => r.json())
-      .then((d) => {
-        setDelegations(d);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    axiosInstance.get("/delegations").then((r) => setDelegations(r.data));
   }, []);
 
   return (
@@ -50,17 +47,24 @@ export default function SelectDelegation() {
             </InputAdornment>
           ),
         }}
+        value={delegationSearch}
+        onChange={(event) => setDelegationSearch(event.target.value)}
       />
       <List>
-        {delegations.map((c) => (
-          <ListItem key={c.delegation_id}>
-            <ListItemButton
-              component={Link}
-              to={`/delegation/${c.delegation_id}`}
-            >
-              <ListItemText>{c.delegation_name}</ListItemText>
-            </ListItemButton>
-          </ListItem>
+        {delegations.map((c: Delegation) => (
+          <>
+            {!delegationSearch ||
+            c.delegation_name.includes(delegationSearch) ? (
+              <ListItem key={c.delegation_id}>
+                <ListItemButton
+                  component={Link}
+                  to={`/delegation/${c.delegation_id}`}
+                >
+                  <ListItemText>{c.delegation_name}</ListItemText>
+                </ListItemButton>
+              </ListItem>
+            ) : null}
+          </>
         ))}
       </List>
     </Drawer>

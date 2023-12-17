@@ -4,12 +4,14 @@ import { MouseEventHandler } from "react";
 export default function LoadingButton({
   loading,
   variant = "contained",
+  disabled = false,
   color,
   onClick,
   children,
 }: {
   loading: boolean;
   variant?: "contained" | "text" | "outlined";
+  disabled?: boolean;
   color?:
     | "inherit"
     | "primary"
@@ -26,7 +28,12 @@ export default function LoadingButton({
       {loading ? (
         <CircularProgress />
       ) : (
-        <Button variant={variant} color={color} onClick={onClick}>
+        <Button
+          variant={variant}
+          color={color}
+          onClick={onClick}
+          disabled={disabled}
+        >
           {children}
         </Button>
       )}
