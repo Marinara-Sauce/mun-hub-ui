@@ -10,21 +10,35 @@ import { APIProvider } from "./contexts/authContext";
 
 function App() {
   return (
-      <APIProvider>
-        <HeaderProvider>
-          <Box sx={{display: "flex", flexDirection: "column", height: "100vh", flex: "1"}}>
-            <AppHeader />
-            <Box sx={{ overflow: "auto", display: "flex", flexDirection: "column", height: "100vh" }}>
-              <Routes>
-                <Route path="/committee" Component={SelectCommittee} />
-                <Route path="/committee/:id" Component={CommitteeHub} />
-                <Route path="/delegation" Component={SelectDelegation} />
-                <Route path="/delegation/:id" Component={DelegationPage} />
-              </Routes>
-            </Box>
+    <APIProvider>
+      <HeaderProvider>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            height: "100vh",
+            flex: "1",
+          }}
+        >
+          <AppHeader />
+          <Box
+            sx={{
+              overflow: "auto",
+              display: "flex",
+              flexDirection: "column",
+              height: "100vh",
+            }}
+          >
+            <Routes>
+              <Route path="/committee" Component={SelectCommittee} />
+              <Route path="/committee/:id" Component={CommitteeHub} />
+              <Route path="/delegation" Component={SelectDelegation} />
+              <Route path="/delegation/:id" Component={DelegationPage} />
+            </Routes>
           </Box>
-        </HeaderProvider>
-      </APIProvider>
+        </Box>
+      </HeaderProvider>
+    </APIProvider>
   );
 }
 

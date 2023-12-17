@@ -53,14 +53,15 @@ export default function SelectDelegation() {
       <List>
         {delegations.map((c: Delegation) => (
           <>
-            {!delegationSearch || c.delegation_name.includes(delegationSearch) ? (
+            {!delegationSearch ||
+            c.delegation_name.includes(delegationSearch) ? (
               <ListItem key={c.delegation_id}>
-              <ListItemButton
-                component={Link}
-                to={`/delegation/${c.delegation_id}`}
-              >
-                <ListItemText>{c.delegation_name}</ListItemText>
-              </ListItemButton>
+                <ListItemButton
+                  component={Link}
+                  to={`/delegation/${c.delegation_id}`}
+                >
+                  <ListItemText>{c.delegation_name}</ListItemText>
+                </ListItemButton>
               </ListItem>
             ) : null}
           </>

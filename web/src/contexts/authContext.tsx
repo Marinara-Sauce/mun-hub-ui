@@ -17,11 +17,11 @@ export interface TokenResponse {
 }
 
 export type IAPIContext = {
-  axiosInstance: AxiosInstance,
-  isLoggedIn: boolean,
-  loginUser: (token: TokenResponse) => void,
-  logoutUser: () => void,
-  currentUser?: AdminUser,
+  axiosInstance: AxiosInstance;
+  isLoggedIn: boolean;
+  loginUser: (token: TokenResponse) => void;
+  logoutUser: () => void;
+  currentUser?: AdminUser;
 };
 
 const DataContext = createContext<IAPIContext>({
@@ -89,7 +89,9 @@ export function APIProvider({ children }: { children: ReactNode }) {
   }, [axiosInstance]);
 
   return (
-    <DataContext.Provider value={{axiosInstance, isLoggedIn, loginUser, logoutUser, currentUser}}>
+    <DataContext.Provider
+      value={{ axiosInstance, isLoggedIn, loginUser, logoutUser, currentUser }}
+    >
       {children}
     </DataContext.Provider>
   );

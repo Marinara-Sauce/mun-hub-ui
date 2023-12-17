@@ -7,70 +7,92 @@ import { useApi } from "../../../../../contexts/authContext";
 import EditableWorkingPaper from "./components/editableWorkingPaper";
 
 interface WorkingPaperRequest {
-    paper_link: string;
-    working_group_name: string;
-    committee_id: number;
-    delegation_ids: number[];
+  paper_link: string;
+  working_group_name: string;
+  committee_id: number;
+  delegation_ids: number[];
 }
 export default function ManageWorkingPapers({
-    currentWorkingPapers,
-    exitEditMode,
+  currentWorkingPapers,
+  exitEditMode,
 }: {
-    currentWorkingPapers: WorkingPaper[];
-    exitEditMode: () => void;
+  currentWorkingPapers: WorkingPaper[];
+  exitEditMode: () => void;
 }) {
-    const { axiosInstance } = useApi();
-    const { committee, refreshCommittee } = useCommittee();
-    
-    const [workingPapers, setWorkingPapers] = useState<WorkingPaper[]>([...currentWorkingPapers]);
+  const { axiosInstance } = useApi();
+  const { committee, refreshCommittee } = useCommittee();
 
-    const [loading, setLoading] = useState(false);
+  const [workingPapers, setWorkingPapers] = useState<WorkingPaper[]>([
+    ...currentWorkingPapers,
+  ]);
 
-    function getNextPaperId() {
-        if (workingPapers.length === 0) return 1;
+  const [loading, setLoading] = useState(false);
 
-        return workingPapers[workingPapers.length - 1].working_paper_id + 1;
-    }
+  function getNextPaperId() {
+    if (workingPapers.length === 0) return 1;
 
-    function addPaper() {
-        setWorkingPapers([...workingPapers, {
-            working_group_name: '',
-            working_paper_id: getNextPaperId(),
-            committee_id: committee.committee_id,
-            paper_link: '', 
-            delegations: []
-        }]);
-    };
+    return workingPapers[workingPapers.length - 1].working_paper_id + 1;
+  }
 
-    function onSaveWorkingPapers() {
-        setLoading(true);
+  function addPaper() {
+    setWorkingPapers([
+      ...workingPapers,
+      {
+        working_group_name: "",
+        working_paper_id: getNextPaperId(),
+        committee_id: committee.committee_id,
+        paper_link: "",
+        delegations: [],
+      },
+    ]);
+  }
 
-        const workingPaperRequest: WorkingPaperRequest[] = workingPapers.map((wp) => {
-            return {
-                paper_link: wp.paper_link,
-                working_group_name: wp.working_group_name,
-                committee_id: committee.committee_id,
-                delegation_ids: wp.delegations.map((d) => d.delegation_id),
-            }
-        });
+  function onSaveWorkingPapers() {
+    setLoading(true);
 
-        axiosInstance.patch(`/committees/${committee.committee_id}/working-papers`, workingPaperRequest).then(() => {
-            setLoading(false);
-            refreshCommittee();
-            exitEditMode();
-        });
-    }
+    const workingPaperRequest: WorkingPaperRequest[] = workingPapers.map(
+      (wp) => {
+        return {
+          paper_link: wp.paper_link,
+          working_group_name: wp.working_group_name,
+          committee_id: committee.committee_id,
+          delegation_ids: wp.delegations.map((d) => d.delegation_id),
+        };
+      },
+    );
 
-    return (
-        <>
-            {workingPapers.map((paper, index) => (
-                <tr key={index}>
-                    <EditableWorkingPaper key={index} workingPaper={paper} />
-                </tr>
-            ))}
-            <Button variant="contained" sx={{m: 1}} onClick={addPaper}>+ Add Paper</Button>
-            <LoadingButton variant="contained" loading={loading} onClick={onSaveWorkingPapers}>Save</LoadingButton>
-            <Button sx={{m: 1}} onClick={exitEditMode} >Cancel</Button>
-        </>
-    )
+    axiosInstance
+      .patch(
+        `/committees/${committee.committee_id}/working-papers`,
+        workingPaperRequest,
+      )
+      .then(() => {
+        setLoading(false);
+        refreshCommittee();
+        exitEditMode();
+      });
+  }
+
+  return (
+    <>
+      {workingPapers.map((paper, index) => (
+        <tr key={index}>
+          <EditableWorkingPaper key={index} workingPaper={paper} />
+        </tr>
+      ))}
+      <Button variant="contained" sx={{ m: 1 }} onClick={addPaper}>
+        + Add Paper
+      </Button>
+      <LoadingButton
+        variant="contained"
+        loading={loading}
+        onClick={onSaveWorkingPapers}
+      >
+        Save
+      </LoadingButton>
+      <Button sx={{ m: 1 }} onClick={exitEditMode}>
+        Cancel
+      </Button>
+    </>
+  );
 }

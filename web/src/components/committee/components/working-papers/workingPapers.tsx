@@ -12,9 +12,12 @@ export default function WorkingPapers() {
   const { committee } = useCommittee();
 
   const [editing, setEditing] = useState(false);
-  
+
   return (
-    <Widget title="Working Papers" onEdit={isLoggedIn ? () => setEditing(true) : undefined}>
+    <Widget
+      title="Working Papers"
+      onEdit={isLoggedIn ? () => setEditing(true) : undefined}
+    >
       <table className="table">
         <thead>
           <tr className="table-header">
@@ -24,10 +27,14 @@ export default function WorkingPapers() {
           </tr>
         </thead>
         <tbody>
-          {editing ? 
-            <ManageWorkingPapers currentWorkingPapers={committee.working_papers} exitEditMode={() => setEditing(false)} /> : 
+          {editing ? (
+            <ManageWorkingPapers
+              currentWorkingPapers={committee.working_papers}
+              exitEditMode={() => setEditing(false)}
+            />
+          ) : (
             <WorkingPaperList workingPapers={committee.working_papers} />
-          }
+          )}
         </tbody>
       </table>
     </Widget>

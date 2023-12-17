@@ -28,7 +28,12 @@ export default function LoadingButton({
       {loading ? (
         <CircularProgress />
       ) : (
-        <Button variant={variant} color={color} onClick={onClick} disabled={disabled}>
+        <Button
+          variant={variant}
+          color={color}
+          onClick={onClick}
+          disabled={disabled}
+        >
           {children}
         </Button>
       )}

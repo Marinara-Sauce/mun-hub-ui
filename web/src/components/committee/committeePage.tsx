@@ -69,7 +69,7 @@ function CommitteeLayout() {
         <CircularProgress />
       ) : (
         <>
-          <Box sx={{ display: "flex", flexDirection: "column"}}>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Box>{isLoggedIn ? <AdminControls /> : null}</Box>
             <Box sx={{ flex: "1", display: "flex", maxHeight: "75%" }}>
               <Box sx={{ flexBasis: "30%" }}>
@@ -80,7 +80,9 @@ function CommitteeLayout() {
                 {procedure === 3 ? <Attendance /> : null}
                 <SpeakersList />
               </Box>
-              <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+              <Box
+                sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
+              >
                 <Announcements />
                 <Widget title="Publications">
                   <p>Not yet implemented :(</p>
