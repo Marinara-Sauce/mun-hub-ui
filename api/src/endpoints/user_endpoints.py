@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
-from requests import Session
+from sqlalchemy.orm import Session
 from src.operations.authentication import generate_token, verify_password
 
 from src.database.database import SessionLocal

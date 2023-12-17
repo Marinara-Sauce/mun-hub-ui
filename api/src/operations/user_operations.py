@@ -1,5 +1,5 @@
 from typing import Optional
-from requests import Session
+from sqlalchemy.orm import Session
 from src.models.models import AdminUser
 
 
