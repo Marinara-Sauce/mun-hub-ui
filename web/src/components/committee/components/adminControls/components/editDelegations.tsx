@@ -175,23 +175,23 @@ export default function EditDelegations() {
                     ) : null,
                   )}
                 </List>
-                <DialogActions sx={{ display: "flex" }}>
-                  {saving ? (
-                    <CircularProgress />
-                  ) : (
-                    <Button
-                      sx={{ flex: "1" }}
-                      variant="contained"
-                      onClick={onSaveChanges}
-                    >
-                      Save Changes
-                    </Button>
-                  )}
-                  <Button onClick={onCancel}>Cancel Changes</Button>
-                </DialogActions>
               </Box>
             )}
           </DialogContent>
+          <DialogActions sx={{ display: "flex" }}>
+            {saving ? (
+              <CircularProgress />
+            ) : (
+              <Button
+                sx={{ flex: "1" }}
+                variant="contained"
+                onClick={onSaveChanges}
+              >
+                Save Changes
+              </Button>
+            )}
+            <Button onClick={onCancel}>Cancel Changes</Button>
+          </DialogActions>
         </Dialog>
       ) : null}
       <Button

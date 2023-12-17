@@ -1,14 +1,9 @@
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  CircularProgress,
   Button,
-  TextField,
 } from "@mui/material";
 import { useState } from "react";
 import { useCommittee } from "../../../contexts/committeeContext";
+import TextFieldDialog from "../../../../shared/textFieldDialog/textFieldDialog";
 
 export default function RenameCommittee() {
   const { committee, updateCommittee } = useCommittee();
@@ -16,23 +11,17 @@ export default function RenameCommittee() {
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [renameLoading, setRenameLoading] = useState(false);
 
-  const [newName, setNewName] = useState("");
-
   const handleRenameClicked = () => {
     setRenameDialogOpen(true);
   };
 
-  const handleClose = () => {
-    setRenameDialogOpen(false);
-  };
-
-  const handleRename = () => {
+  const handleRename = (name: string) => {
     setRenameLoading(true);
     if (committee) {
       updateCommittee(
         {
           ...committee,
-          committee_name: newName,
+          committee_name: name,
         },
         () => {
           setRenameDialogOpen(false);
@@ -44,36 +33,7 @@ export default function RenameCommittee() {
 
   return (
     <>
-      <Dialog open={renameDialogOpen} onClose={handleClose}>
-        <DialogTitle>Rename Committee</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="New Committee Name"
-            type="text"
-            fullWidth
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          {renameLoading ? (
-            <CircularProgress />
-          ) : (
-            <Button
-              onClick={handleRename}
-              variant="contained"
-              disabled={newName.length === 0}
-            >
-              Rename
-            </Button>
-          )}
-        </DialogActions>
-      </Dialog>
+      <TextFieldDialog open={renameDialogOpen} title={"Rename Committee"} buttonLoading={renameLoading} onSubmit={handleRename} onClose={() => setRenameDialogOpen(false)} />
       <Button
         variant="contained"
         sx={{ flex: 1, margin: 1 }}
