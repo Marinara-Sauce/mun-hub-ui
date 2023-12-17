@@ -1,12 +1,12 @@
-import AppHeader from "./components/header/header";
-import CommitteeHub from "./components/committee/committeePage";
+import AppHeader from "./components/header";
+import CommitteeHub from "./components/committee";
 import { Route, Routes } from "react-router-dom";
 import { HeaderProvider } from "./contexts/headerContext";
-import SelectCommittee from "./components/committee/components/selectCommittee/selectCommittee";
-import SelectDelegation from "./components/delegation/components/selectDelegation/selectDelegation";
-import DelegationPage from "./components/delegation/delegationPage";
+import SelectCommittee from "./components/committee/components/selectCommittee";
+import SelectDelegation from "./components/delegation/components/selectDelegation";
+import DelegationPage from "./components/delegation";
 import { Box } from "@mui/material";
-import { APIProvider } from "./contexts/authContext";
+import { APIProvider } from "./contexts/apiContext";
 
 function App() {
   return (
