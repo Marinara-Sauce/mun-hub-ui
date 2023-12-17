@@ -3,6 +3,7 @@ import { Delegation } from "../../../../../model/delegation";
 import { useApi } from "../../../../../contexts/authContext";
 import {
   Box,
+  CircularProgress,
   IconButton,
   InputAdornment,
   List,
@@ -14,6 +15,7 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmModal from "../../../../shared/confirmModal/confirmModal";
 import TextFieldDialog from "../../../../shared/textFieldDialog/textFieldDialog";
+import CreateDelegation from "../createDelegation/createDelegation";
 
 function EditableDelegation({
   delegation,
@@ -84,6 +86,7 @@ function EditableDelegation({
 export default function EditDelegations() {
   const { axiosInstance } = useApi();
 
+  const [loading, setLoading] = useState(false);
   const [delegations, setDelegations] = useState<Delegation[]>([]);
   const [delegationSearch, setDelegationSearch] = useState<string>();
 
@@ -92,7 +95,11 @@ export default function EditDelegations() {
   }, []);
 
   function fetchDelegations() {
-    axiosInstance.get("/delegations").then((r) => setDelegations(r.data));
+    setLoading(true);
+    axiosInstance.get("/delegations").then((r) => {
+      setLoading(false);
+      setDelegations(r.data);
+    });
   }
 
   function onDeleteClicked(delegation: Delegation) {
@@ -113,6 +120,7 @@ export default function EditDelegations() {
 
   return (
     <>
+      <CreateDelegation onDelegationAdded={() => fetchDelegations()} />
       <TextField
         label="Search"
         InputProps={{
@@ -125,20 +133,25 @@ export default function EditDelegations() {
         value={delegationSearch}
         onChange={(event) => setDelegationSearch(event.target.value)}
       />
-      <List>
-        {delegations.map((c: Delegation) => (
-          <>
-            {!delegationSearch ||
-            c.delegation_name.includes(delegationSearch) ? (
-              <EditableDelegation
-                delegation={c}
-                onDeleteClicked={onDeleteClicked}
-                onRenameClicked={onRenameClicked}
-              />
-            ) : null}
-          </>
-        ))}
-      </List>
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <List>
+          {delegations.map((c: Delegation) => (
+            <>
+              {!delegationSearch ||
+              c.delegation_name.includes(delegationSearch) ? (
+                <EditableDelegation
+                  key={c.delegation_id}
+                  delegation={c}
+                  onDeleteClicked={onDeleteClicked}
+                  onRenameClicked={onRenameClicked}
+                />
+              ) : null}
+            </>
+          ))}
+        </List>
+      )}
     </>
   );
 }

@@ -1,7 +1,6 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { useApi } from "../../../../contexts/authContext";
 import { useState } from "react";
-import CreateDelegation from "./createDelegation/createDelegation";
 import EditDelegations from "./editDelegations/editDelegations";
 
 export default function DelegationAdminControls() {
@@ -23,7 +22,6 @@ export default function DelegationAdminControls() {
                 <DialogTitle>Manage Delegations</DialogTitle>
                 <DialogContent>
                     <Box sx={{display: "flex", flexDirection: "column", gap: 1}}>
-                        <CreateDelegation />
                         <EditDelegations />
                     </Box>
                 </DialogContent>

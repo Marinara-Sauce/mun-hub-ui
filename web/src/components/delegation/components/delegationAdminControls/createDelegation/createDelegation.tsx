@@ -5,7 +5,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useApi } from "../../../../../contexts/authContext";
 
-export default function CreateDelegation() {
+export default function CreateDelegation({ onDelegationAdded }: { onDelegationAdded: () => void }) {
     const { axiosInstance } = useApi();
 
   const [isCreating, setIsCreating] = useState(false);
@@ -25,6 +25,7 @@ export default function CreateDelegation() {
         delegation_name: currentName
     }).then(() => {
         setLoading(false);
+        onDelegationAdded();
         setCurrentName("");
     });
 
