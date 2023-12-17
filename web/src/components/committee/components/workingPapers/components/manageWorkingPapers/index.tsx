@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { WorkingPaper } from "../../../../../../model/workingPaper";
 import { Button } from "@mui/material";
-import LoadingButton from "../../../../../shared/loadingButton/loadingButton";
+import LoadingButton from "../../../../../shared/loadingButton";
 import { useCommittee } from "../../../../contexts/committeeContext";
-import { useApi } from "../../../../../../contexts/authContext";
+import { useApi } from "../../../../../../contexts/apiContext";
 import EditableWorkingPaper from "./components/editableWorkingPaper";
 
 interface WorkingPaperRequest {

@@ -5,7 +5,7 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import Widget from "../../../widget/widget";
+import Widget from "../../../shared/widget";
 import "./speakers-list.css";
 import React from "react";
 

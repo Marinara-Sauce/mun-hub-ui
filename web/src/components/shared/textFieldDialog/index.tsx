@@ -7,7 +7,7 @@ import {
   Button,
 } from "@mui/material";
 import { useState } from "react";
-import LoadingButton from "../loadingButton/loadingButton";
+import LoadingButton from "../loadingButton";
 
 export default function TextFieldDialog({
   open,

@@ -1,11 +1,11 @@
-import Widget from "../../../widget/widget";
+import Widget from "../../../shared/widget";
 
 import "./workingPapers.css";
 import WorkingPaperList from "./components/workingPaperList";
 import { useState } from "react";
 import ManageWorkingPapers from "./components/manageWorkingPapers";
 import { useCommittee } from "../../contexts/committeeContext";
-import { useApi } from "../../../../contexts/authContext";
+import { useApi } from "../../../../contexts/apiContext";
 import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 
 export default function WorkingPapers() {

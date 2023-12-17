@@ -9,7 +9,7 @@ import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useApi } from "../../../../../contexts/authContext";
+import { useApi } from "../../../../../contexts/apiContext";
 
 export default function CreateDelegation({
   onDelegationAdded,

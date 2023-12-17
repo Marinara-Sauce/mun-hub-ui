@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
-import { useApi } from "../../../../contexts/authContext";
+import { useApi } from "../../../../contexts/apiContext";
 import { useNavigate } from "react-router-dom";
 
 export default function AddCommittee() {

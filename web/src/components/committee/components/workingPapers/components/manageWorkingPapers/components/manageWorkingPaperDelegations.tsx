@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { useCommittee } from "../../../../../contexts/committeeContext";
 import { Delegation } from "../../../../../../../model/delegation";
-import { useApi } from "../../../../../../../contexts/authContext";
+import { useApi } from "../../../../../../../contexts/apiContext";
 
 function DelegationNotInWorkingGroup({
   delegation,

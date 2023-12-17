@@ -1,9 +1,8 @@
 import { Box, Button } from "@mui/material";
-import "./header.css";
 import { useHeader } from "../../contexts/headerContext";
 import { Link } from "react-router-dom";
 import Account from "../account";
-import DelegationAdminControls from "../delegation/components/delegationAdminControls/delegationAdminControls";
+import DelegationAdminControls from "../delegation/components/delegationAdminControls";
 
 export default function AppHeader() {
   const [header] = useHeader();
@@ -14,12 +13,14 @@ export default function AppHeader() {
       sx={{
         backgroundColor: "gainsboro",
         boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
+        display: "flex",
+        alignItems: "center"
       }}
     >
-      <Box className="left-bar" sx={{ ml: 1 }}>
+      <Box className="left-bar" sx={{ ml: 1, flex: 1 }}>
         <h2>{header}</h2>
       </Box>
-      <Box className="right-bar" sx={{ mr: 1 }}>
+      <Box className="right-bar" sx={{ mr: 1, display: "flex" }}>
         <Button component={Link} to="/committee" sx={{ m: 1 }}>
           Committees
         </Button>

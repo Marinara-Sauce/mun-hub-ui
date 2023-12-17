@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { useCookies } from "react-cookie";
-import { AdminUser } from "../model/adminUser";
+import { AdminUser } from "../../model/adminUser";
 
 export interface TokenResponse {
   access_token: string;

@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 import { useCommittee } from "../../../../contexts/committeeContext";
 import { CommitteePollingType } from "../../../../../../model/committee";
-import LoadingButton from "../../../../../shared/loadingButton/loadingButton";
+import LoadingButton from "../../../../../shared/loadingButton";
 
 export default function AttendanceProcedureControls() {
   const [dialogOpen, setDialogOpen] = useState(false);

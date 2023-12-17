@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { AdminUser } from "../../model/adminUser";
-import { useApi } from "../../contexts/authContext";
+import { useApi } from "../../contexts/apiContext";
 import { AxiosInstance } from "axios";
 
 interface TokenResponse {

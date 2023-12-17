@@ -6,9 +6,9 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { useApi } from "../../../../contexts/authContext";
+import { useApi } from "../../../../contexts/apiContext";
 import { useState } from "react";
-import EditDelegations from "./editDelegations/editDelegations";
+import EditDelegations from "./editDelegations";
 
 export default function DelegationAdminControls() {
   const { isLoggedIn } = useApi();

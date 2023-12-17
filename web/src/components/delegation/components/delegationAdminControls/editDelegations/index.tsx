@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Delegation } from "../../../../../model/delegation";
-import { useApi } from "../../../../../contexts/authContext";
+import { useApi } from "../../../../../contexts/apiContext";
 import {
   Box,
   CircularProgress,
@@ -13,9 +13,9 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ConfirmModal from "../../../../shared/confirmModal/confirmModal";
-import TextFieldDialog from "../../../../shared/textFieldDialog/textFieldDialog";
-import CreateDelegation from "../createDelegation/createDelegation";
+import ConfirmModal from "../../../../shared/confirmModal";
+import TextFieldDialog from "../../../../shared/textFieldDialog";
+import CreateDelegation from "../createDelegation";
 
 function EditableDelegation({
   delegation,

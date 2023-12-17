@@ -1,8 +1,8 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import { useApi } from "../../../../../../contexts/authContext";
-import ConfirmModal from "../../../../../shared/confirmModal/confirmModal";
+import { useApi } from "../../../../../../contexts/apiContext";
+import ConfirmModal from "../../../../../shared/confirmModal";
 
 export default function DeleteCommittee() {
   const { id } = useParams();

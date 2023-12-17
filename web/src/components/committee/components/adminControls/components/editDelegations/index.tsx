@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Delegation } from "../../../../../../model/delegation";
-import { useApi } from "../../../../../../contexts/authContext";
+import { useApi } from "../../../../../../contexts/apiContext";
 import { useCommittee } from "../../../../contexts/committeeContext";
 import { useParams } from "react-router-dom";
 

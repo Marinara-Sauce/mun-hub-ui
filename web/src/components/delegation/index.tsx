@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Delegation } from "../../model/delegation";
 import { useHeader } from "../../contexts/headerContext";
-import Widget from "../widget/widget";
-import CommitteesTable from "./components/committeesTable/committeesTable";
+import Widget from "../shared/widget";
+import CommitteesTable from "./components/committeesTable";
 
 export default function DelegationPage() {
   const { id } = useParams();

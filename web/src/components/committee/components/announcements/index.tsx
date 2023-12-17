@@ -1,4 +1,4 @@
-import Widget from "../../../widget/widget";
+import Widget from "../../../shared/widget";
 import {
   Committee,
   CommitteeStatus,
@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useCommittee } from "../../contexts/committeeContext";
-import { useApi } from "../../../../contexts/authContext";
+import { useApi } from "../../../../contexts/apiContext";
 import { useState } from "react";
 import AnnouncementsJoditEditor from "./components/joditEditor";
 

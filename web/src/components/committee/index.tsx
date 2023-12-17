@@ -7,12 +7,12 @@ import WorkingPapers from "./components/workingPapers";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useHeader } from "../../contexts/headerContext";
-import ErrorModal from "../error/errorModal";
+import ErrorModal from "../error";
 import { Box, CircularProgress } from "@mui/material";
-import { useApi } from "../../contexts/authContext";
+import { useApi } from "../../contexts/apiContext";
 import AdminControls from "./components/adminControls";
 import { CommitteeProvider, useCommittee } from "./contexts/committeeContext";
-import Widget from "../widget/widget";
+import Widget from "../shared/widget";
 
 function CommitteeLayout() {
   const { id } = useParams();

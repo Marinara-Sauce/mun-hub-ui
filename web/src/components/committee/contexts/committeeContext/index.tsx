@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import { Committee, CommitteePollingType } from "../../../../model/committee";
-import { useApi } from "../../../../contexts/authContext";
+import { useApi } from "../../../../contexts/apiContext";
 
 export type ICommitteeContext = {
   committee: Committee;

@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { ReactNode, useState } from "react";
-import LoadingButton from "../loadingButton/loadingButton";
+import LoadingButton from "../loadingButton";
 
 export default function ConfirmModal({
   open,

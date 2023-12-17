@@ -1,5 +1,5 @@
 import { Button, Box } from "@mui/material";
-import Widget from "../../../widget/widget";
+import Widget from "../../../shared/widget";
 
 export default function SpeakersList() {
   return (

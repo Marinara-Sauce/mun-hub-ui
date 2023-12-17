@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import Widget from "../../../widget/widget";
+import Widget from "../../../shared/widget";
 import DeleteCommittee from "./components/deleteCommittee";
 import RenameCommittee from "./components/renameCommittee";
 import EditDelegations from "./components/editDelegations";
