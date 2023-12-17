@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
-import { useCommittee } from "../../../contexts/committeeContext";
-import TextFieldDialog from "../../../../shared/textFieldDialog/textFieldDialog";
+import { useCommittee } from "../../../../contexts/committeeContext";
+import TextFieldDialog from "../../../../../shared/textFieldDialog/textFieldDialog";
 
 export default function RenameCommittee() {
   const { committee, updateCommittee } = useCommittee();

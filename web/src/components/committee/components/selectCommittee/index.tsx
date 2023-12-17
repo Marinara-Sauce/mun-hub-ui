@@ -7,13 +7,12 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  Button,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import { Committee } from "../../../../model/committee";
 import { Link } from "react-router-dom";
-import AddCommittee from "../addCommittee/addCommittee";
+import AddCommittee from "../addCommittee";
 
 export default function SelectCommittee() {
   const [committees, setCommittees] = useState<Committee[]>([]);

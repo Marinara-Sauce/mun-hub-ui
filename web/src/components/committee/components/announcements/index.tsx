@@ -16,7 +16,7 @@ import {
 import { useCommittee } from "../../contexts/committeeContext";
 import { useApi } from "../../../../contexts/authContext";
 import { useState } from "react";
-import AnnouncementsJoditEditor from "./components/joditEditor/joditEditor";
+import AnnouncementsJoditEditor from "./components/joditEditor";
 
 export default function Announcements() {
   const { committee, updateCommittee } = useCommittee();

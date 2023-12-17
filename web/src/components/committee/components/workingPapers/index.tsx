@@ -1,11 +1,12 @@
 import Widget from "../../../widget/widget";
 
 import "./workingPapers.css";
-import WorkingPaperList from "./workingPaperList/workingPaperList";
+import WorkingPaperList from "./components/workingPaperList";
 import { useState } from "react";
-import ManageWorkingPapers from "./manageWorkingPapers/manageWorkingPapers";
+import ManageWorkingPapers from "./components/manageWorkingPapers";
 import { useCommittee } from "../../contexts/committeeContext";
 import { useApi } from "../../../../contexts/authContext";
+import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 
 export default function WorkingPapers() {
   const { isLoggedIn } = useApi();
@@ -18,15 +19,15 @@ export default function WorkingPapers() {
       title="Working Papers"
       onEdit={isLoggedIn ? () => setEditing(true) : undefined}
     >
-      <table className="table">
-        <thead>
-          <tr className="table-header">
+      <Table className="table" sx={{textAlign: "left"}}>
+        <TableHead>
+          <TableRow className="table-header">
             <th>Working Group Name</th>
             <th>Group Members</th>
             <th>Paper Link</th>
-          </tr>
-        </thead>
-        <tbody>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {editing ? (
             <ManageWorkingPapers
               currentWorkingPapers={committee.working_papers}
@@ -35,8 +36,8 @@ export default function WorkingPapers() {
           ) : (
             <WorkingPaperList workingPapers={committee.working_papers} />
           )}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </Widget>
   );
 }

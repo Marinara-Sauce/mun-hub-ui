@@ -13,9 +13,9 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Delegation } from "../../../../../model/delegation";
-import { useApi } from "../../../../../contexts/authContext";
-import { useCommittee } from "../../../contexts/committeeContext";
+import { Delegation } from "../../../../../../model/delegation";
+import { useApi } from "../../../../../../contexts/authContext";
+import { useCommittee } from "../../../../contexts/committeeContext";
 import { useParams } from "react-router-dom";
 
 function DelegationNotInCommittee({

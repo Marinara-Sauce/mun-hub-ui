@@ -1,8 +1,8 @@
-import Announcements from "./components/announcements/announcements";
-import Attendance from "./components/attendance/attendance";
-import SpeakersList from "./components/speakers-list/speakers-list";
-import Voting from "./components/voting/voting";
-import WorkingPapers from "./components/working-papers/workingPapers";
+import Announcements from "./components/announcements";
+import Attendance from "./components/attendance";
+import SpeakersList from "./components/speakers-list";
+import Voting from "./components/voting";
+import WorkingPapers from "./components/workingPapers";
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -10,7 +10,7 @@ import { useHeader } from "../../contexts/headerContext";
 import ErrorModal from "../error/errorModal";
 import { Box, CircularProgress } from "@mui/material";
 import { useApi } from "../../contexts/authContext";
-import AdminControls from "./components/adminControls/adminControls";
+import AdminControls from "./components/adminControls";
 import { CommitteeProvider, useCommittee } from "./contexts/committeeContext";
 import Widget from "../widget/widget";
 

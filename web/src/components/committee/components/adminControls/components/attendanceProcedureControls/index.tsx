@@ -7,9 +7,9 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { useCommittee } from "../../../contexts/committeeContext";
-import { CommitteePollingType } from "../../../../../model/committee";
-import LoadingButton from "../../../../shared/loadingButton/loadingButton";
+import { useCommittee } from "../../../../contexts/committeeContext";
+import { CommitteePollingType } from "../../../../../../model/committee";
+import LoadingButton from "../../../../../shared/loadingButton/loadingButton";
 
 export default function AttendanceProcedureControls() {
   const [dialogOpen, setDialogOpen] = useState(false);

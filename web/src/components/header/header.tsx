@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material";
 import "./header.css";
 import { useHeader } from "../../contexts/headerContext";
 import { Link } from "react-router-dom";
-import Account from "../account/account";
+import Account from "../account";
 import DelegationAdminControls from "../delegation/components/delegationAdminControls/delegationAdminControls";
 
 export default function AppHeader() {

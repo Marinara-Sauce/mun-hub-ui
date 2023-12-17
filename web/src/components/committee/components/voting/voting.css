@@ -1,8 +1,0 @@
-.buttonRow {
-  display: flex;
-}
-
-.buttonRow button {
-  flex: 1;
-  margin: 0px 2px;
-}
