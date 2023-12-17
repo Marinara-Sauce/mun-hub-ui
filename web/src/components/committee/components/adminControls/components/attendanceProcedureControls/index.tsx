@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useCommittee } from "../../../../contexts/committeeContext";
-import { CommitteePollingType } from "../../../../../../model/committee";
+import { CommitteePollingType } from "../../../../../../model/interfaces";
 import LoadingButton from "../../../../../shared/loadingButton";
 
 export default function AttendanceProcedureControls() {

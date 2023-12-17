@@ -11,7 +11,7 @@ import {
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
-import { Delegation } from "../../../../model/delegation";
+import { Delegation } from "../../../../model/interfaces";
 import { useApi } from "../../../../contexts/apiContext";
 
 export default function SelectDelegation() {

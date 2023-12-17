@@ -1,4 +1,4 @@
-import { WorkingPaper } from "../../../../../../model/workingPaper";
+import { WorkingPaper } from "../../../../../../model/interfaces";
 
 export default function WorkingPaperList({
   workingPapers,

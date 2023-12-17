@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { Delegation } from "../../../../model/delegation";
+import { Delegation } from "../../../../model/interfaces";
 
 export default function WorkingPaperTable({
   delegation,

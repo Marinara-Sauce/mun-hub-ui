@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
-import { Committee } from "../../../../model/committee";
+import { Committee } from "../../../../model/interfaces";
 import { Link } from "react-router-dom";
 import AddCommittee from "../addCommittee";
 

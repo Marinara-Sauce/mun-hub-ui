@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { WorkingPaper } from "../../../../../../../model/workingPaper";
+import { WorkingPaper } from "../../../../../../../model/interfaces";
 import {
   Box,
   Button,
@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useCommittee } from "../../../../../contexts/committeeContext";
-import { Delegation } from "../../../../../../../model/delegation";
+import { Delegation } from "../../../../../../../model/interfaces";
 import { useApi } from "../../../../../../../contexts/apiContext";
 
 function DelegationNotInWorkingGroup({

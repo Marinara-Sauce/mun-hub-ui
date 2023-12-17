@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { WorkingPaper } from "../../../../../../model/workingPaper";
+import { WorkingPaper } from "../../../../../../model/interfaces";
 import { Button } from "@mui/material";
 import LoadingButton from "../../../../../shared/loadingButton";
 import { useCommittee } from "../../../../contexts/committeeContext";

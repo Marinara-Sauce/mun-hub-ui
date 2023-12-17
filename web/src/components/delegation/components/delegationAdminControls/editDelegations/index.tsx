@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Delegation } from "../../../../../model/delegation";
+import { Delegation } from "../../../../../model/interfaces";
 import { useApi } from "../../../../../contexts/apiContext";
 import {
   Box,
