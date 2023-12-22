@@ -5,25 +5,21 @@ import { Delegation } from "../../model/interfaces";
 import { useHeader } from "../../contexts/headerContext";
 import Widget from "../shared/widget";
 import CommitteesTable from "./components/committeesTable";
+import { useApi } from "../../contexts/apiContext";
 
 export default function DelegationPage() {
   const { id } = useParams();
+
+  const { axiosInstance } = useApi();
 
   const [delegation, setDelegation] = useState<Delegation>();
 
   const setHeader = useHeader()[1];
 
   useEffect(() => {
-    fetch(`http://localhost:8000/delegations/${id}`) // TODO: Place this in some env file
-      .then((r) => r.json())
-      .then((d: Delegation) => {
-        setDelegation(d as Delegation);
-        console.log(d);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
+    axiosInstance.get(`/delegations/${id}`)
+      .then((response) => setDelegation(response.data));
+  }, [id]);
 
   useEffect(
     () => setHeader(delegation ? delegation.delegation_name : "Delegations"),

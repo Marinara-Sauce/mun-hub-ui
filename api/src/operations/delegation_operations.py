@@ -1,6 +1,6 @@
 from typing import Optional
 
-from src.models.models import Delegation, Participant, WorkingPaperDelegation
+from src.models.models import Committee, Delegation, Participant, WorkingPaper, WorkingPaperDelegation
 
 from sqlalchemy.orm import Session
 
@@ -13,6 +13,20 @@ def get_delegations(db: Session) -> list[Delegation]:
 
 def get_delegate_by_id(db: Session, delegation_id: str) -> Optional[Delegation]:
     return db.query(Delegation).filter(Delegation.delegation_id == delegation_id).first()
+
+
+def get_working_papers_with_delegations(db: Session, delegation_id: str) -> list[WorkingPaper]:
+    working_groups = db.query(WorkingPaperDelegation).filter(WorkingPaperDelegation.delegation_id == delegation_id).all()
+    working_group_ids = [wg.working_paper_id for wg in working_groups]
+
+    return db.query(WorkingPaper).filter(WorkingPaper.working_paper_id in working_group_ids).all()
+    
+
+def get_committees_delegations_in(db: Session, delegation_id: str) -> [Committee]:
+    participants = db.query(Participant).filter(Participant.delegation_id == delegation_id).all()
+    participant_committee_ids = [p.committee_id for p in participants]
+    
+    return db.query(Committee).filter(Committee.committee_id in participant_committee_ids).all()
 
 
 def create_delegation(db: Session, user: DelegationCreate) -> Delegation:
