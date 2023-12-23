@@ -8,7 +8,7 @@ insert into committees (committee_id, committee_name, committee_abbreviation, co
 insert into committees (committee_id, committee_name, committee_abbreviation, committee_description, committee_status, committee_announcement) values (8, 'Infrastructure Committee', 'INFA', 'A model UN committee focusing on healthcare access', 'IN_SESSION', 'Announcement: Model UN committee session will be held in Room 301.');
 insert into committees (committee_id, committee_name, committee_abbreviation, committee_description, committee_status, committee_announcement) values (9, 'Social Welfare Committee', 'SWC', 'A model UN committee focused on climate change', 'SUSPENDED_SESSION', 'Reminder: Committee chairs will hold a briefing session before the conference starts.');
 insert into committees (committee_id, committee_name, committee_abbreviation, committee_description, committee_status, committee_announcement) values (10, 'Trade Committee', 'TRAD', 'A model UN committee promoting gender equality', 'UNMOD', 'Announcement: Model UN committee session will be held in Room 301.');
-alter sequence committees_committee_id_seq start with 11;
+alter sequence committees_committee_id_seq restart with 11;
 
 insert into delegations (delegation_id, delegation_name) values (1, 'Brazil');
 insert into delegations (delegation_id, delegation_name) values (2, 'Haiti');
@@ -110,7 +110,7 @@ insert into delegations (delegation_id, delegation_name) values (97, 'Thailand')
 insert into delegations (delegation_id, delegation_name) values (98, 'Portugal');
 insert into delegations (delegation_id, delegation_name) values (99, 'Mongolia');
 insert into delegations (delegation_id, delegation_name) values (100, 'China');
-ALTER SEQUENCE delegations_delegation_id_seq start with 101;
+ALTER SEQUENCE delegations_delegation_id_seq restart with 101;
 
 insert into participants (participant_id, delegation_id, committee_id) values (1, 14, 5) ON CONFLICT DO NOTHING;
 insert into participants (participant_id, delegation_id, committee_id) values (2, 5, 10) ON CONFLICT DO NOTHING;
@@ -212,7 +212,7 @@ insert into participants (participant_id, delegation_id, committee_id) values (9
 insert into participants (participant_id, delegation_id, committee_id) values (98, 1, 6) ON CONFLICT DO NOTHING;
 insert into participants (participant_id, delegation_id, committee_id) values (99, 55, 3) ON CONFLICT DO NOTHING;
 insert into participants (participant_id, delegation_id, committee_id) values (100, 82, 2) ON CONFLICT DO NOTHING;
-alter sequence participants_participant_id_seq start with 101;
+alter sequence participants_participant_id_seq restart with 101;
 
 insert into workingpapers (working_paper_id, committee_id, paper_link, working_group_name) values (1, 8, 'imgur.com', 'Apple');
 insert into workingpapers (working_paper_id, committee_id, paper_link, working_group_name) values (2, 4, 'huffingtonpost.com', 'Orange');
