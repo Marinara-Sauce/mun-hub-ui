@@ -31,6 +31,8 @@ const DataContext = createContext<IAPIContext>({
   logoutUser: () => {},
 });
 
+const baseUrl = process.env.API_URL;
+
 export function APIProvider({ children }: { children: ReactNode }) {
   const [cookie, setCookie, removeCookie] = useCookies([
     "token",
@@ -39,7 +41,7 @@ export function APIProvider({ children }: { children: ReactNode }) {
   ]);
 
   const axiosInstance = axios.create({
-    baseURL: "http://localhost:8000",
+    baseURL: baseUrl,
     headers: {
       "Content-Type": "application/json",
     },
