@@ -6,6 +6,8 @@ import { useHeader } from "../../contexts/headerContext";
 import Widget from "../shared/widget";
 import CommitteesTable from "./components/committeesTable";
 import { useApi } from "../../contexts/apiContext";
+import WorkingPapers from "../committee/components/workingPapers";
+import WorkingPaperTable from "./components/workingPaperTable";
 
 export default function DelegationPage() {
   const { id } = useParams();
@@ -17,7 +19,7 @@ export default function DelegationPage() {
   const setHeader = useHeader()[1];
 
   useEffect(() => {
-    axiosInstance.get(`/delegations/${id}`)
+    axiosInstance.get(`/delegations/advanced/${id}`)
       .then((response) => setDelegation(response.data));
   }, [id]);
 
@@ -36,7 +38,7 @@ export default function DelegationPage() {
         <CommitteesTable delegation={delegation} />
       </Widget>
       <Widget title="Working Papers">
-        <CommitteesTable delegation={delegation} />
+        <WorkingPaperTable delegation={delegation} />
       </Widget>
     </Box>
   );
