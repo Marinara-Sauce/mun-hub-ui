@@ -1,5 +1,6 @@
 import { Table, TableBody, TableHead, TableRow, Typography } from "@mui/material";
 import { Delegation } from "../../../../model/interfaces";
+import { CommitteeStatusToString } from "../../../../functions/conversions";
 
 export default function CommitteesTable({
   delegation,
@@ -25,7 +26,7 @@ export default function CommitteesTable({
                   {row.committee_name}
                 </a>
               </td>
-              <td>{row.committee_status}</td>
+              <td>{CommitteeStatusToString(row.committee_status)}</td>
             </tr>
           ))
         )}
