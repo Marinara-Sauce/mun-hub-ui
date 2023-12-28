@@ -26,7 +26,15 @@ export default function WorkingPaperTable({
               {/* A delegation can only be in a working group if they're also in that committee, so this should work. */}
               <td>{delegation.committees.find((c) => c.committee_id === wp.committee_id)?.committee_name}</td>
               <td>{wp.working_group_name}</td>
-              <td>{wp.paper_link}</td>
+              <td>
+                <a
+                  href={wp.paper_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {wp.paper_link}
+                </a>
+              </td>
             </TableRow>
           ))
         )}
