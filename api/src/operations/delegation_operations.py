@@ -15,18 +15,26 @@ def get_delegate_by_id(db: Session, delegation_id: str) -> Optional[Delegation]:
     return db.query(Delegation).filter(Delegation.delegation_id == delegation_id).first()
 
 
-def get_working_papers_with_delegations(db: Session, delegation_id: str) -> list[WorkingPaper]:
-    working_groups = db.query(WorkingPaperDelegation).filter(WorkingPaperDelegation.delegation_id == delegation_id).all()
-    working_group_ids = [wg.working_paper_id for wg in working_groups]
+def get_working_papers_with_delegations(db: Session, delegation_id: str) -> [WorkingPaper]:
+    working_papers = (
+        db.query(WorkingPaper)
+        .join(WorkingPaperDelegation, WorkingPaperDelegation.working_paper_id == WorkingPaper.working_paper_id)
+        .filter(WorkingPaperDelegation.delegation_id == delegation_id)
+        .all()
+    )
 
-    return db.query(WorkingPaper).filter(WorkingPaper.working_paper_id in working_group_ids).all()
+    return working_papers
     
 
 def get_committees_delegations_in(db: Session, delegation_id: str) -> [Committee]:
-    participants = db.query(Participant).filter(Participant.delegation_id == delegation_id).all()
-    participant_committee_ids = [p.committee_id for p in participants]
+    committees = (
+        db.query(Committee)
+        .join(Participant, Participant.committee_id == Committee.committee_id)
+        .filter(Participant.delegation_id == delegation_id)
+        .all()
+    )
     
-    return db.query(Committee).filter(Committee.committee_id in participant_committee_ids).all()
+    return committees
 
 
 def create_delegation(db: Session, user: DelegationCreate) -> Delegation:
