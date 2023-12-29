@@ -1,37 +1,39 @@
-import { Typography } from "@mui/material";
+import { Table, TableBody, TableHead, TableRow, Typography } from "@mui/material";
 import { Delegation } from "../../../../model/interfaces";
+import PaperLink from "../../../shared/paperLink";
 
 export default function WorkingPaperTable({
   delegation,
 }: {
   delegation: Delegation;
-}) {
+}) {  
+  console.log(delegation);
+
   return (
-    <table className="table">
-      <thead>
-        <tr className="table-header">
+    <Table sx={{ textAlign: "left" }}>
+      <TableHead>
+        <TableRow className="table-header">
           <th>Committee Name</th>
           <th>Working Group Name</th>
-          <th>Working Group Members</th>
           <th>Working Group Link</th>
-        </tr>
-      </thead>
-      <tbody>
-        {!delegation.workingPapers || delegation.workingPapers.length == 0 ? (
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {!delegation.working_papers || delegation.working_papers.length == 0 ? (
           <Typography sx={{ m: 1 }}>No Data to Show :(</Typography>
         ) : (
-          delegation.committees.map((row, index) => (
-            <tr key={index}>
+          delegation.working_papers.map((wp, index) => (
+            <TableRow key={index}>
+              {/* A delegation can only be in a working group if they're also in that committee, so this should work. */}
+              <td>{delegation.committees.find((c) => c.committee_id === wp.committee_id)?.committee_name}</td>
+              <td>{wp.working_group_name}</td>
               <td>
-                <a href={`/committee/${row.committee_id}`}>
-                  {row.committee_name}
-                </a>
+                <PaperLink link={wp.paper_link} />
               </td>
-              <td>{row.committee_status}</td>
-            </tr>
+            </TableRow>
           ))
         )}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }

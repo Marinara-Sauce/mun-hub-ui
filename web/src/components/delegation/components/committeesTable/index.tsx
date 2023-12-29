@@ -1,5 +1,6 @@
-import { Typography } from "@mui/material";
+import { Table, TableBody, TableHead, TableRow, Typography } from "@mui/material";
 import { Delegation } from "../../../../model/interfaces";
+import { CommitteeStatusToString } from "../../../../functions/conversions";
 
 export default function CommitteesTable({
   delegation,
@@ -7,14 +8,14 @@ export default function CommitteesTable({
   delegation: Delegation;
 }) {
   return (
-    <table className="table">
-      <thead>
-        <tr className="table-header">
+    <Table className="table" sx={{textAlign: "left"}}>
+      <TableHead>
+        <TableRow className="table-header">
           <th>Committee Name</th>
           <th>Committee Status</th>
-        </tr>
-      </thead>
-      <tbody>
+        </TableRow>
+      </TableHead>
+      <TableBody>
         {!delegation.committees || delegation.committees.length == 0 ? (
           <Typography sx={{ m: 1 }}>No Data to Show :(</Typography>
         ) : (
@@ -25,11 +26,11 @@ export default function CommitteesTable({
                   {row.committee_name}
                 </a>
               </td>
-              <td>{row.committee_status}</td>
+              <td>{CommitteeStatusToString(row.committee_status)}</td>
             </tr>
           ))
         )}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }
