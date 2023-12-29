@@ -1,5 +1,6 @@
 import { Table, TableBody, TableHead, TableRow, Typography } from "@mui/material";
 import { Delegation } from "../../../../model/interfaces";
+import PaperLink from "../../../shared/paperLink";
 
 export default function WorkingPaperTable({
   delegation,
@@ -27,13 +28,7 @@ export default function WorkingPaperTable({
               <td>{delegation.committees.find((c) => c.committee_id === wp.committee_id)?.committee_name}</td>
               <td>{wp.working_group_name}</td>
               <td>
-                <a
-                  href={wp.paper_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {wp.paper_link}
-                </a>
+                <PaperLink link={wp.paper_link} />
               </td>
             </TableRow>
           ))

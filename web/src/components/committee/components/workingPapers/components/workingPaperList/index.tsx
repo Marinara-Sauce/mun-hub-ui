@@ -1,4 +1,5 @@
 import { WorkingPaper } from "../../../../../../model/interfaces";
+import PaperLink from "../../../../../shared/paperLink";
 
 export default function WorkingPaperList({
   workingPapers,
@@ -20,13 +21,7 @@ export default function WorkingPaperList({
                 {paper.delegations.map((d) => d.delegation_name).join(", ")}
               </td>
               <td>
-                <a
-                  href={paper.paper_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {paper.paper_link}
-                </a>
+                <PaperLink link={paper.paper_link} />
               </td>
             </tr>
           ))}
