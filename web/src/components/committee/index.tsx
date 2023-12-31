@@ -13,44 +13,15 @@ import { useApi } from "../../contexts/apiContext";
 import AdminControls from "./components/adminControls";
 import { CommitteeProvider, useCommittee } from "./contexts/committeeContext";
 import Widget from "../shared/widget";
+import { CommitteePollingType } from "../../model/interfaces";
 
 function CommitteeLayout() {
-  const { id } = useParams();
-
   // Contexts
   const { isLoggedIn } = useApi();
   const { committee, loading } = useCommittee();
   const setHeader = useHeader()[1];
 
-  // Committee States
-  const [procedure, setProcedure] = useState<number>(1);
   const [errorOpen, setErrorOpen] = useState<boolean>(false);
-
-  // Connect to websocket for polling
-  useEffect(() => {
-    const socket = new WebSocket(`ws://localhost:8000/committees/${id}/ws`);
-
-    socket.onopen = () => {
-      console.log("Websocket is open");
-    };
-
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setProcedure(data);
-    };
-
-    const heartbeatInterval = setInterval(() => {
-      if (socket.readyState === WebSocket.OPEN) {
-        socket.send("heartbeat");
-      }
-    }, 1000);
-
-    socket.onclose = () => {
-      clearInterval(heartbeatInterval);
-    };
-
-    return () => socket.close();
-  });
 
   // Update page header
   useEffect(
@@ -76,8 +47,13 @@ function CommitteeLayout() {
                 <Widget title="My Delegation">
                   <p>Not Yet Implemented :(</p>
                 </Widget>
-                {procedure === 2 ? <Voting /> : null}
-                {procedure === 3 ? <Attendance /> : null}
+                {committee.committee_poll === CommitteePollingType.VOTING ? (
+                  <Voting />
+                ) : null}
+                {committee.committee_poll ===
+                CommitteePollingType.ATTENDANCE ? (
+                  <Attendance />
+                ) : null}
                 <SpeakersList />
               </Box>
               <Box

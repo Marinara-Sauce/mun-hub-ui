@@ -6,29 +6,39 @@ import {
   DialogTitle,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCommittee } from "../../../../contexts/committeeContext";
 import { CommitteePollingType } from "../../../../../../model/interfaces";
 import LoadingButton from "../../../../../shared/loadingButton";
 
 export default function AttendanceProcedureControls() {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { committee, setCommitteePoll } = useCommittee();
+  const { committee, updateCommittee } = useCommittee();
   const [loading, setLoading] = useState(false);
 
   const [inAttendance, setInAttendance] = useState<boolean>(
     committee.committee_poll === CommitteePollingType.ATTENDANCE,
   );
 
+  useEffect(
+    () =>
+      setInAttendance(
+        committee.committee_poll === CommitteePollingType.ATTENDANCE,
+      ),
+    [committee],
+  );
+
   function toggleAttendance() {
     setLoading(true);
-    setCommitteePoll(
-      inAttendance
-        ? CommitteePollingType.NONE
-        : CommitteePollingType.ATTENDANCE,
+    updateCommittee(
+      {
+        ...committee,
+        committee_poll: inAttendance
+          ? CommitteePollingType.NONE
+          : CommitteePollingType.ATTENDANCE,
+      },
       () => {
         setLoading(false);
-        setInAttendance(!inAttendance);
       },
     );
   }
