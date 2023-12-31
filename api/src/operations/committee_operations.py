@@ -50,30 +50,6 @@ def patch_committee(db: Session, committee_update: CommitteeUpdate) -> Optional[
     db.refresh(old_committee)
     
     return old_committee
-    
-
-def change_committee_poll(db: Session, committee_id: str, new_poll: CommitteePollingTypes):
-    """
-    Change the poll of a committee.
-
-    :param db: Database session object
-    :param committee_id: Committee object to change
-    :param new_status: New poll for the community
-    :return: True if successful, False otherwise
-    """
-    # try getting committee object
-    committee = get_committee_by_id(db, committee_id)
-
-    if committee is None:
-        return False
-
-    # update
-    committee.committee_poll = new_poll
-
-    # commit
-    db.commit()
-    
-    return True
 
 
 def delete_committee(db: Session, committee_id: str):

@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Committee, CommitteePollingType } from "../../../../model/interfaces";
+import { Committee } from "../../../../model/interfaces";
 import { useApi } from "../../../../contexts/apiContext";
 
 export type ICommitteeContext = {
@@ -13,7 +13,6 @@ export type ICommitteeContext = {
   loading: boolean;
   error: string;
   updateCommittee: (updatedCommittee: Committee, then: () => void) => void;
-  setCommitteePoll: (new_poll: CommitteePollingType, then: () => void) => void;
   refreshCommittee: () => void;
 };
 
@@ -34,7 +33,6 @@ const CommitteeContext = createContext<ICommitteeContext>({
   loading: false,
   error: "",
   updateCommittee: () => {},
-  setCommitteePoll: () => {},
   refreshCommittee: () => {},
 });
 
@@ -51,6 +49,34 @@ export function CommitteeProvider({
 
   useEffect(() => refreshCommittee(), [committee_id]);
 
+  useEffect(() => {
+    const socket = new WebSocket(
+      `ws://localhost:8000/committees/${committee_id}/ws`,
+    );
+
+    socket.onopen = () => {
+      console.log("Websocket is open");
+    };
+
+    socket.onmessage = (event) => {
+      console.log(event);
+      event.data === "UPDATE" && refreshCommittee();
+    };
+
+    const heartbeatInterval = setInterval(() => {
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send("heartbeat");
+      }
+    }, 1000);
+
+    socket.onclose = () => {
+      clearInterval(heartbeatInterval);
+      console.log("Websocket is closed");
+    };
+
+    return () => socket.close();
+  }, [committee_id]);
+
   function updateCommittee(updatedCommittee: Committee, then: () => void) {
     axiosInstance.patch("/committees", updatedCommittee).then((response) => {
       setCommittee({
@@ -59,18 +85,6 @@ export function CommitteeProvider({
       });
       then();
     });
-  }
-
-  function setCommitteePoll(new_poll: CommitteePollingType, then: () => void) {
-    axiosInstance
-      .put(`/committees/${committee_id}/poll?new_poll=${new_poll}`)
-      .then(() => {
-        setCommittee({
-          ...committee,
-          committee_poll: new_poll,
-        });
-        then();
-      });
   }
 
   function refreshCommittee() {
@@ -94,7 +108,6 @@ export function CommitteeProvider({
         loading,
         error: "",
         updateCommittee,
-        setCommitteePoll,
         refreshCommittee,
       }}
     >
