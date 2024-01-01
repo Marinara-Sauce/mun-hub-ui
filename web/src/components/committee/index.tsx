@@ -14,6 +14,7 @@ import AdminControls from "./components/adminControls";
 import { CommitteeProvider, useCommittee } from "./contexts/committeeContext";
 import Widget from "../shared/widget";
 import { CommitteePollingType } from "../../model/interfaces";
+import SelectDelegation from "./components/selectDelegation";
 
 function CommitteeLayout() {
   // Contexts
@@ -45,7 +46,7 @@ function CommitteeLayout() {
             <Box sx={{ flex: "1", display: "flex", maxHeight: "75%" }}>
               <Box sx={{ flexBasis: "30%" }}>
                 <Widget title="My Delegation">
-                  <p>Not Yet Implemented :(</p>
+                  <SelectDelegation />
                 </Widget>
                 {committee.committee_poll === CommitteePollingType.VOTING ? (
                   <Voting />

@@ -5,15 +5,17 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Committee } from "../../../../model/interfaces";
+import { Committee, Delegation } from "../../../../model/interfaces";
 import { useApi } from "../../../../contexts/apiContext";
 
 export type ICommitteeContext = {
   committee: Committee;
+  userDelegation?: Delegation;
   loading: boolean;
   error: string;
   updateCommittee: (updatedCommittee: Committee, then: () => void) => void;
   refreshCommittee: () => void;
+  applyUserDelegation: (delegation: string) => void;
 };
 
 const defaultCommittee: Committee = {
@@ -34,6 +36,7 @@ const CommitteeContext = createContext<ICommitteeContext>({
   error: "",
   updateCommittee: () => {},
   refreshCommittee: () => {},
+  applyUserDelegation: () => {},
 });
 
 export function CommitteeProvider({
@@ -44,10 +47,29 @@ export function CommitteeProvider({
   children: ReactNode;
 }) {
   const { axiosInstance } = useApi();
+
+  // The current pages committee
   const [committee, setCommittee] = useState<Committee>(defaultCommittee);
+  // The current user's delegation
+  const [userDelegation, setUserDelegation] = useState<Delegation>();
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => refreshCommittee(), [committee_id]);
+
+  useEffect(() => {
+    const delegationName = localStorage.getItem("delegation");
+
+    if (!delegationName) {
+      return;
+    }
+
+    const foundDelegation = committee.delegations.find(
+      (d) => d.delegation_name.toLowerCase() === delegationName.toLowerCase(),
+    );
+
+    setUserDelegation(foundDelegation);
+  }, [committee, localStorage.getItem("delegation")]);
 
   useEffect(() => {
     const socket = new WebSocket(
@@ -77,6 +99,13 @@ export function CommitteeProvider({
     return () => socket.close();
   }, [committee_id]);
 
+  function applyUserDelegation(delegation: string) {
+    localStorage.setItem("delegation", delegation);
+    setUserDelegation(
+      committee.delegations.find((d) => d.delegation_name === delegation),
+    );
+  }
+
   function updateCommittee(updatedCommittee: Committee, then: () => void) {
     axiosInstance.patch("/committees", updatedCommittee).then((response) => {
       setCommittee({
@@ -105,10 +134,12 @@ export function CommitteeProvider({
     <CommitteeContext.Provider
       value={{
         committee,
+        userDelegation,
         loading,
         error: "",
         updateCommittee,
         refreshCommittee,
+        applyUserDelegation,
       }}
     >
       {children}
