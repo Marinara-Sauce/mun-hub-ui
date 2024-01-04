@@ -1,6 +1,6 @@
 from enum import IntEnum
 
-from sqlalchemy import Boolean, Column, Integer, String, ForeignKey, Enum, UniqueConstraint
+from sqlalchemy import Boolean, Column, DateTime, Integer, String, ForeignKey, Enum, UniqueConstraint, func
 from sqlalchemy.orm import relationship
 
 from src.database.database import Base
@@ -72,35 +72,23 @@ class Delegation(Base):
 
 
 class SpeakerList(Base):
-    __tablename__ = "speakerlists"
+    __tablename__ = "speakerlist"
 
     # id
-    speakerlist_id = Column(Integer, primary_key=True, index=True, unique=True)
+    speakerlist_id = Column(Integer, primary_key=True, index=True, unique=True, autoincrement=True)
 
     # foreign ids
     committee_id = Column(Integer, ForeignKey("committees.committee_id"))
+    delegation_id = Column(Integer, ForeignKey("delegations.delegation_id"))
 
     # data
-    speakerlist_name = Column(String)
-
+    spoke = Column(Boolean, nullable=False, default=False)
+    timestamp = Column(DateTime, server_default=func.now())
+    
     # relationships
-    committee = relationship("Committee", back_populates="speakerlists")
-    speakerlistentries = relationship("SpeakerListEntry", back_populates="speakerlist")
-
-
-class SpeakerListEntry(Base):
-    __tablename__ = "speakerlistentries"
-
-    # id
-    speakerlistentry_id = Column(Integer, primary_key=True, index=True, unique=True)
-
-    # foreign ids
-    speakerlist_id = Column(Integer, ForeignKey("speakerlists.speakerlist_id"))
-    participant_id = Column(Integer, ForeignKey("participants.participant_id"))
-
-    # relationships
-    speakerlist = relationship("SpeakerList", back_populates="speakerlistentries")
-
+    committee = relationship("Committee", backref="speakerlist")
+    delegation = relationship("Delegation", backref="speakerlist")
+    
 
 class WorkingPaper(Base):
     __tablename__ = "workingpapers"

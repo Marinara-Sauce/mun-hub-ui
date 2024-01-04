@@ -1,11 +1,12 @@
-from typing import List, Optional
+from typing import Optional
 from fastapi import HTTPException, status
+from sqlalchemy import desc
 
 from sqlalchemy.orm import Session
+from src.schemas.speakerlist_schema import SpeakerListBase, SpeakerListCreate
 from src.schemas.workingpaper_schema import WorkingPaperCreate
-from src.schemas.workingpaper_schema import WorkingPaper as SchemaWorkingPaper
 
-from src.models.models import Committee, CommitteePollingTypes, Participant, WorkingPaper, WorkingPaperDelegation
+from src.models.models import Committee, Participant, SpeakerList, WorkingPaper, WorkingPaperDelegation
 from src.schemas.committee_schema import CommitteeCreate, CommitteeUpdate
 
 
@@ -194,6 +195,30 @@ def delete_working_paper(db: Session, working_paper_id: int):
         db.delete(d)
         
     db.delete(working_paper)
+    db.commit()
+    
+    return True
+
+
+def get_committee_speaker_list(db: Session, committee_id: int):
+    speakers = db.query(SpeakerList).filter(SpeakerList.committee_id == committee_id).filter(SpeakerList.spoke == False).order_by(SpeakerList.timestamp).all()
+    
+    return speakers
+
+
+def add_delegation_to_speaker_list(db: Session, committee_id: int, delegation_id: int):
+    # First check that the delegation isn't already in the list
+    delegation_in_list = db.query(SpeakerList).filter(SpeakerList.committee_id == committee_id).filter(SpeakerList.delegation_id == delegation_id).filter(SpeakerList.spoke == False).all()
+    
+    if len(delegation_in_list) > 0:
+        return False
+
+    db_speaker_list_entry = SpeakerList(
+        delegation_id=delegation_id,
+        committee_id=committee_id
+    )
+    
+    db.add(db_speaker_list_entry)
     db.commit()
     
     return True

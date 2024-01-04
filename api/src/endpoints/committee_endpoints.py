@@ -85,6 +85,17 @@ async def patch_committee(committee: committee_schema.CommitteeUpdate, user: Ann
     raise HTTPException(status_code=404, detail=f"Committee of ID {committee.committee_id} not found.")
 
 
+# Get the speeakers list
+@router.get("/committees/{committee_id}/speaker-list", tags=["Committees"])
+def get_speakers_list(committee_id: int, db: Session = Depends(get_db)):
+    return committee_operations.get_committee_speaker_list(db, committee_id)
+
+
+@router.post("/committees/{committee_id}/speaker-list", tags=["Committees"])
+def add_delegaion_to_speaker_list(committee_id: int, delegation_id: int, db: Session = Depends(get_db)):
+    return committee_operations.add_delegation_to_speaker_list(db, committee_id, delegation_id)
+
+
 # delete a committee
 @router.delete("/committees/{committee_id}", tags=["Committees"])
 async def delete_committee(committee_id: str, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
