@@ -40,10 +40,10 @@ export default function SelectDelegation() {
                 label="Delegation"
                 id="selectDelegation"
                 sx={{flex: "1", m: 1}}
-                value={selectedDelegation}
+                value={selectedDelegation || ''}
                 onChange={(event) => setSelectedDelegation(event.target.value)}
             >
-                {committee.delegations.map((d) => <MenuItem value={d.delegation_name}>{d.delegation_name}</MenuItem>)}
+                {committee.delegations.map((d) => <MenuItem key={d.delegation_id} value={d.delegation_name}>{d.delegation_name}</MenuItem>)}
             </Select>
             <IconButton aria-label="select" disabled={!selectedDelegation} onClick={setDelegation}>
                 <CheckIcon />
