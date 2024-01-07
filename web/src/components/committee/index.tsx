@@ -44,9 +44,11 @@ function CommitteeLayout() {
           <Box>{isLoggedIn ? <AdminControls /> : null}</Box>
           <Box sx={{ display: "flex" }}>
             <Box sx={{ flexBasis: "45%" }}>
-              <Widget title="My Delegation">
-                <SelectDelegation />
-              </Widget>
+              {!isLoggedIn ? (
+                <Widget title="My Delegation">
+                  <SelectDelegation />
+                </Widget>
+              ) : null}
               {committee.committee_poll === CommitteePollingType.VOTING ? (
                 <Voting />
               ) : null}
