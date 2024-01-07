@@ -239,3 +239,13 @@ def add_delegation_to_speaker_list(db: Session, committee_id: int, delegation_id
     db.commit()
     
     return True
+
+
+def remove_delegation_from_speaker_list(db: Session, speaker_list_id: int):
+    speaker_list_entry = db.query(SpeakerList).filter(SpeakerList.speakerlist_id == speaker_list_id).first()
+    setattr(speaker_list_entry, "spoke", True)
+    
+    db.commit()
+    db.refresh(speaker_list_entry)
+    
+    return True

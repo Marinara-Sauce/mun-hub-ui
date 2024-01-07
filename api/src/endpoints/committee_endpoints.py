@@ -91,9 +91,16 @@ def get_speakers_list(committee_id: int, db: Session = Depends(get_db)):
     return committee_operations.get_committee_speaker_list(db, committee_id)
 
 
+# Add delegation to the speakers list
 @router.post("/committees/{committee_id}/speaker-list", tags=["Committees"])
 def add_delegaion_to_speaker_list(committee_id: int, delegation_id: int, db: Session = Depends(get_db)):
     return committee_operations.add_delegation_to_speaker_list(db, committee_id, delegation_id)
+
+
+# Remove entry from the speaker list
+@router.delete("/committees/speaker-list/{speaker_list_id}", tags=["Committees"])
+def remove_delegation_from_speaker_list(speaker_list_id: int, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
+    return committee_operations.remove_delegation_from_speaker_list(db, speaker_list_id)
 
 
 # delete a committee

@@ -63,6 +63,10 @@ export default function SpeakersList() {
     );
   }
 
+  function removeFromSpeakerList(speaker_list_entry: SpeakerListEntry) {
+    axiosInstance.delete(`/committees/speaker-list/${speaker_list_entry.speakerlist_id}`);
+  }
+
   const handleChange = (event: SelectChangeEvent) => {
     setDisplayCount(+event.target.value);
   };
@@ -90,7 +94,7 @@ export default function SpeakersList() {
                     {i + 1}. {s.delegation_name}
                   </ListItem>
                   {isLoggedIn ? (
-                    <IconButton>
+                    <IconButton onClick={() => removeFromSpeakerList(s)}>
                       <CloseIcon />
                     </IconButton>
                   ) : null}
