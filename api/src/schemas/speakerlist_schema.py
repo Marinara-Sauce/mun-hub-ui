@@ -1,39 +1,20 @@
+from src.schemas.delegation_schema import Delegation
 from pydantic import BaseModel
-
-from src.schemas.committee_schema import Committee
-
-# speaker list ENTRY
-
-class SpeakerListEntryBase(BaseModel):
-    speakerlistentry_id: str
-
-
-class SpeakerListEntryCreate(SpeakerListEntryBase):
-    pass
-
-
-class SpeakerListEntry(SpeakerListEntryBase):
-    speakerlist_id: str
-    participant_id: str
-
-    class Config:
-        orm_mode = True
 
 
 class SpeakerListBase(BaseModel):
-    speakerlist_name: str
-
-
+    committee_id: int
+    delegation_id: int
+    
+    
 class SpeakerListCreate(SpeakerListBase):
     pass
 
 
 class SpeakerList(SpeakerListBase):
-    speakerlist_id: str
-    committee_id: str
-
-    committee: list[Committee] = []
-    speakerlist_entries: list[SpeakerListEntry] = []
+    speakerlist_id: int
+    spoke: bool = False
+    timestamp: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True

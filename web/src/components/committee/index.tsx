@@ -1,6 +1,6 @@
 import Announcements from "./components/announcements";
 import Attendance from "./components/attendance";
-import SpeakersList from "./components/speakers-list";
+import SpeakersList from "./components/speakersList";
 import Voting from "./components/voting";
 import WorkingPapers from "./components/workingPapers";
 
@@ -40,35 +40,32 @@ function CommitteeLayout() {
       {loading ? (
         <CircularProgress />
       ) : (
-        <>
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Box>{isLoggedIn ? <AdminControls /> : null}</Box>
-            <Box sx={{ flex: "1", display: "flex", maxHeight: "75%" }}>
-              <Box sx={{ flexBasis: "30%" }}>
+        <Box>
+          <Box>{isLoggedIn ? <AdminControls /> : null}</Box>
+          <Box sx={{ display: "flex" }}>
+            <Box sx={{ flexBasis: "45%" }}>
+              {!isLoggedIn ? (
                 <Widget title="My Delegation">
                   <SelectDelegation />
                 </Widget>
-                {committee.committee_poll === CommitteePollingType.VOTING ? (
-                  <Voting />
-                ) : null}
-                {committee.committee_poll ===
-                CommitteePollingType.ATTENDANCE ? (
-                  <Attendance />
-                ) : null}
-                <SpeakersList />
-              </Box>
-              <Box
-                sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
-              >
-                <Announcements />
-                <Widget title="Publications">
-                  <p>Not yet implemented :(</p>
-                </Widget>
-                <WorkingPapers />
-              </Box>
+              ) : null}
+              {committee.committee_poll === CommitteePollingType.VOTING ? (
+                <Voting />
+              ) : null}
+              {committee.committee_poll === CommitteePollingType.ATTENDANCE ? (
+                <Attendance />
+              ) : null}
+              <SpeakersList />
+            </Box>
+            <Box sx={{ width: "100%" }}>
+              <Announcements />
+              <Widget title="Publications">
+                <p>Not yet implemented :(</p>
+              </Widget>
+              <WorkingPapers />
             </Box>
           </Box>
-        </>
+        </Box>
       )}
     </>
   );

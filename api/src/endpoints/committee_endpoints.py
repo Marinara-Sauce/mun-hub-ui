@@ -1,11 +1,12 @@
 from typing import Annotated, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
+from src.schemas.speakerlist_schema import SpeakerList
 from sqlalchemy.orm import Session
-from src.schemas.workingpaper_schema import WorkingPaper, WorkingPaperCreate
+from src.schemas.workingpaper_schema import WorkingPaperCreate
 
 from src.database.database import SessionLocal
-from src.models.models import AdminUser, CommitteePollingTypes
+from src.models.models import AdminUser
 from src.schemas import committee_schema
 from src.operations import committee_operations
 
@@ -38,15 +39,14 @@ class CommitteeConnectionManager:
         self.active_connections[committee_id].remove(websocket)
         print(f"Disconnect: {len(self.active_connections[committee_id])}")
                 
-    async def broadcast_committee(self, committee_id: int):
+    async def broadcast_committee(self, committee_id: int, update_txt: str = "UPDATE"):
         if committee_id in self.active_connections:
             for con in self.active_connections[committee_id]:
                 print("Sending update...")
-                await con.send_text("UPDATE")
+                await con.send_text(update_txt)
         else:
             print(f"Committee {committee_id} not in arr")
  
-
 manager = CommitteeConnectionManager()
 
 # Get all
@@ -83,6 +83,36 @@ async def patch_committee(committee: committee_schema.CommitteeUpdate, user: Ann
         return response
     
     raise HTTPException(status_code=404, detail=f"Committee of ID {committee.committee_id} not found.")
+
+
+# Get the speeakers list
+@router.get("/committees/{committee_id}/speaker-list", tags=["Committees"])
+def get_speakers_list(committee_id: int, db: Session = Depends(get_db)):
+    return committee_operations.get_committee_speaker_list(db, committee_id)
+
+
+# Add delegation to the speakers list
+@router.post("/committees/{committee_id}/speaker-list", tags=["Committees"])
+async def add_delegaion_to_speaker_list(committee_id: int, delegation_id: int, db: Session = Depends(get_db)):
+    update = committee_operations.add_delegation_to_speaker_list(db, committee_id, delegation_id)
+    
+    if update:
+        await manager.broadcast_committee(committee_id, "SPEAKER")
+        return True
+
+    return False
+
+
+# Remove entry from the speaker list
+@router.delete("/committees/{committee_id}/speaker-list", tags=["Committees"])
+async def remove_delegation_from_speaker_list(committee_id: int, speaker_list_id: int, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
+    update = committee_operations.remove_delegation_from_speaker_list(db, speaker_list_id)
+    
+    if update:
+        await manager.broadcast_committee(committee_id, "SPEAKER")
+        return True
+    
+    return False
 
 
 # delete a committee

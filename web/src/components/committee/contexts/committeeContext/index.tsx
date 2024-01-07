@@ -3,6 +3,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { Committee, Delegation } from "../../../../model/interfaces";
@@ -16,6 +17,7 @@ export type ICommitteeContext = {
   updateCommittee: (updatedCommittee: Committee, then: () => void) => void;
   refreshCommittee: () => void;
   applyUserDelegation: (delegation: string) => void;
+  socket?: WebSocket;
 };
 
 const defaultCommittee: Committee = {
@@ -28,6 +30,7 @@ const defaultCommittee: Committee = {
   committee_description: "",
   delegations: [],
   working_papers: [],
+  speaker_list_open: false
 };
 
 const CommitteeContext = createContext<ICommitteeContext>({
@@ -55,6 +58,8 @@ export function CommitteeProvider({
 
   const [loading, setLoading] = useState(true);
 
+  const [socket, setSocket] = useState<WebSocket>();
+
   useEffect(() => refreshCommittee(), [committee_id]);
 
   useEffect(() => {
@@ -76,12 +81,13 @@ export function CommitteeProvider({
       `ws://localhost:8000/committees/${committee_id}/ws`,
     );
 
+    setSocket(socket);
+
     socket.onopen = () => {
       console.log("Websocket is open");
     };
 
     socket.onmessage = (event) => {
-      console.log(event);
       event.data === "UPDATE" && refreshCommittee();
     };
 
@@ -140,6 +146,7 @@ export function CommitteeProvider({
         updateCommittee,
         refreshCommittee,
         applyUserDelegation,
+        socket,
       }}
     >
       {children}
