@@ -1,6 +1,8 @@
 import {
   Box,
   Button,
+  FormControl,
+  FormHelperText,
   IconButton,
   InputLabel,
   List,
@@ -28,7 +30,7 @@ interface SpeakerListEntry {
 }
 
 export default function SpeakersList() {
-  const { committee, userDelegation, updateCommittee } = useCommittee();
+  const { committee, userDelegation, updateCommittee, socket } = useCommittee();
   const { axiosInstance, isLoggedIn } = useApi();
 
   const [currentList, setCurrentList] = useState<SpeakerListEntry[]>([]);
@@ -36,11 +38,24 @@ export default function SpeakersList() {
 
   const [addingToListLoading, setAddingToListLoading] = useState(false);
 
+  useEffect(() => fetchList(), [setCurrentList, committee]);
+
+  // Listen for speaker list messages on the websocket
   useEffect(() => {
+    if (!socket) {
+      return;
+    }
+
+    socket.onmessage = (event) => {
+      event.data == "SPEAKER" && fetchList();
+    }
+  }, [socket]);
+
+  function fetchList() {
     axiosInstance
       .get(`/committees/${committee.committee_id}/speaker-list`)
       .then((res) => setCurrentList(res.data));
-  }, [setCurrentList, committee]);
+  }
 
   function onAddToList() {
     setAddingToListLoading(true);
@@ -103,7 +118,7 @@ export default function SpeakersList() {
             </>
           ))}
         </List>
-        <Box sx={{ display: "flex", gap: 1 }}>
+        <Box sx={{ display: "flex", gap: 1, m: 1 }}>
           {isLoggedIn ? (
             <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
               <Typography>Speaker List Open</Typography>
@@ -118,23 +133,26 @@ export default function SpeakersList() {
               variant="contained"
               disabled={!addButtonEnabled}
               onClick={onAddToList}
+              sx={{flex: 1}}
             >
               Add My Delegation to List
             </LoadingButton>
           )}
           <Box>
-            <InputLabel id="select-num-items-label"># To Display</InputLabel>
-            <Select
-              labelId="select-num-items-label"
-              id="select-num-items"
-              label="# To Display"
-              value={"" + displayCount}
-              onChange={handleChange}
-            >
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={25}>25</MenuItem>
-              <MenuItem value={50}>50</MenuItem>
-            </Select>
+            <FormControl variant="standard" fullWidth sx={{minWidth: 55}}>
+              <InputLabel id="select-num-items-label"># Results</InputLabel>
+              <Select
+                labelId="select-num-items-label"
+                id="select-num-items"
+                label="# To Display"
+                value={"" + displayCount}
+                onChange={handleChange}
+              >
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={25}>25</MenuItem>
+                <MenuItem value={50}>50</MenuItem>
+              </Select>
+            </FormControl>
           </Box>
         </Box>
       </>
