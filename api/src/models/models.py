@@ -49,7 +49,6 @@ class Committee(Base):
 
     # participants in delegation
     delegations = relationship("Delegation", secondary="participants")
-    speakerlists = relationship("SpeakerList", back_populates="committee", cascade="all,delete")
     working_papers = relationship("WorkingPaper", back_populates="committee", cascade="all,delete")
 
     # data
@@ -59,6 +58,7 @@ class Committee(Base):
     committee_status = Column(Enum(CommitteeSessionTypes), default=CommitteeSessionTypes.OUT_OF_SESSION)
     committee_announcement = Column(String, default="")
     committee_poll = Column(Enum(CommitteePollingTypes), default=CommitteePollingTypes.NONE)
+    speaker_list_open = Column(Boolean, default=False, nullable=False)
 
 
 class Delegation(Base):
@@ -87,7 +87,6 @@ class SpeakerList(Base):
     
     # relationships
     committee = relationship("Committee", backref="speakerlist")
-    delegation = relationship("Delegation", backref="speakerlist")
     
 
 class WorkingPaper(Base):

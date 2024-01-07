@@ -1,12 +1,12 @@
 from typing import Optional
 from fastapi import HTTPException, status
-from sqlalchemy import desc
+from sqlalchemy.orm import aliased, joinedload
 
 from sqlalchemy.orm import Session
 from src.schemas.speakerlist_schema import SpeakerListBase, SpeakerListCreate
 from src.schemas.workingpaper_schema import WorkingPaperCreate
 
-from src.models.models import Committee, Participant, SpeakerList, WorkingPaper, WorkingPaperDelegation
+from src.models.models import Committee, Delegation, Participant, SpeakerList, WorkingPaper, WorkingPaperDelegation
 from src.schemas.committee_schema import CommitteeCreate, CommitteeUpdate
 
 
@@ -201,9 +201,26 @@ def delete_working_paper(db: Session, working_paper_id: int):
 
 
 def get_committee_speaker_list(db: Session, committee_id: int):
-    speakers = db.query(SpeakerList).filter(SpeakerList.committee_id == committee_id).filter(SpeakerList.spoke == False).order_by(SpeakerList.timestamp).all()
+    delegations_alias = aliased(Delegation)
+
+    speakers = (
+        db.query(SpeakerList, delegations_alias.delegation_name)
+            .join(delegations_alias, SpeakerList.delegation_id == delegations_alias.delegation_id)
+            .filter(SpeakerList.committee_id == committee_id)
+            .filter(SpeakerList.spoke == False)
+            .order_by(SpeakerList.timestamp)
+            .all()
+    )
     
-    return speakers
+    # The query returns two objects, this combines them into one
+    combined_results = []
+
+    for s in speakers:
+        speaker_object = s[0]
+        speaker_object.delegation_name = s[1]
+        combined_results.append(speaker_object)
+    
+    return combined_results
 
 
 def add_delegation_to_speaker_list(db: Session, committee_id: int, delegation_id: int):

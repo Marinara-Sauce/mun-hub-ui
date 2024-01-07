@@ -1,3 +1,4 @@
+from src.schemas.delegation_schema import Delegation
 from pydantic import BaseModel
 
 
@@ -14,6 +15,6 @@ class SpeakerList(SpeakerListBase):
     speakerlist_id: int
     spoke: bool = False
     timestamp: str
-    
+
     class Config:
         from_attributes = True

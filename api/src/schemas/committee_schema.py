@@ -29,6 +29,7 @@ class Committee(CommitteeBase):
     committee_description: str = "No description."
     committee_status: CommitteeSessionTypes = CommitteeSessionTypes.OUT_OF_SESSION
     committee_poll: CommitteePollingTypes = CommitteePollingTypes.NONE
+    speaker_list_open: bool = False
 
     delegations: list[Delegation] = []
     working_papers: list[WorkingPaper] = []

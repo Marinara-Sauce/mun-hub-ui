@@ -1,6 +1,6 @@
 import Announcements from "./components/announcements";
 import Attendance from "./components/attendance";
-import SpeakersList from "./components/speakers-list";
+import SpeakersList from "./components/speakersList";
 import Voting from "./components/voting";
 import WorkingPapers from "./components/workingPapers";
 
