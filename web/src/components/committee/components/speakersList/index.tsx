@@ -79,7 +79,7 @@ export default function SpeakersList() {
   }
 
   function removeFromSpeakerList(speaker_list_entry: SpeakerListEntry) {
-    axiosInstance.delete(`/committees/speaker-list/${speaker_list_entry.speakerlist_id}`);
+    axiosInstance.delete(`/committees/${committee.committee_id}/speaker-list?speaker_list_id=${speaker_list_entry.speakerlist_id}`);
   }
 
   const handleChange = (event: SelectChangeEvent) => {

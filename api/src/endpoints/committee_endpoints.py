@@ -104,9 +104,15 @@ async def add_delegaion_to_speaker_list(committee_id: int, delegation_id: int, d
 
 
 # Remove entry from the speaker list
-@router.delete("/committees/speaker-list/{speaker_list_id}", tags=["Committees"])
-def remove_delegation_from_speaker_list(speaker_list_id: int, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
-    return committee_operations.remove_delegation_from_speaker_list(db, speaker_list_id)
+@router.delete("/committees/{committee_id}/speaker-list", tags=["Committees"])
+async def remove_delegation_from_speaker_list(committee_id: int, speaker_list_id: int, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
+    update = committee_operations.remove_delegation_from_speaker_list(db, speaker_list_id)
+    
+    if update:
+        await manager.broadcast_committee(committee_id, "SPEAKER")
+        return True
+    
+    return False
 
 
 # delete a committee
