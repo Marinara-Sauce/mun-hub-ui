@@ -48,7 +48,7 @@ export default function SpeakersList() {
 
     socket.onmessage = (event) => {
       event.data == "SPEAKER" && fetchList();
-    }
+    };
   }, [socket]);
 
   function fetchList() {
@@ -79,7 +79,9 @@ export default function SpeakersList() {
   }
 
   function removeFromSpeakerList(speaker_list_entry: SpeakerListEntry) {
-    axiosInstance.delete(`/committees/${committee.committee_id}/speaker-list?speaker_list_id=${speaker_list_entry.speakerlist_id}`);
+    axiosInstance.delete(
+      `/committees/${committee.committee_id}/speaker-list?speaker_list_id=${speaker_list_entry.speakerlist_id}`,
+    );
   }
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -133,13 +135,13 @@ export default function SpeakersList() {
               variant="contained"
               disabled={!addButtonEnabled}
               onClick={onAddToList}
-              sx={{flex: 1}}
+              sx={{ flex: 1 }}
             >
               Add My Delegation to List
             </LoadingButton>
           )}
           <Box>
-            <FormControl variant="standard" fullWidth sx={{minWidth: 55}}>
+            <FormControl variant="standard" fullWidth sx={{ minWidth: 55 }}>
               <InputLabel id="select-num-items-label"># Results</InputLabel>
               <Select
                 labelId="select-num-items-label"
