@@ -1,12 +1,13 @@
-from typing import List, Optional
+from typing import Optional
 from fastapi import HTTPException, status
+from sqlalchemy.orm import aliased, joinedload
 
 from sqlalchemy.orm import Session
-from src.schemas.workingpaper_schema import WorkingPaperCreate
-from src.schemas.workingpaper_schema import WorkingPaper as SchemaWorkingPaper
+from schemas.speakerlist_schema import SpeakerListBase, SpeakerListCreate
+from schemas.workingpaper_schema import WorkingPaperCreate
 
-from src.models.models import Committee, CommitteePollingTypes, Participant, WorkingPaper, WorkingPaperDelegation
-from src.schemas.committee_schema import CommitteeCreate, CommitteeUpdate
+from models.models import Committee, Delegation, Participant, SpeakerList, WorkingPaper, WorkingPaperDelegation
+from schemas.committee_schema import CommitteeCreate, CommitteeUpdate
 
 
 def get_committees(db: Session):
@@ -50,30 +51,6 @@ def patch_committee(db: Session, committee_update: CommitteeUpdate) -> Optional[
     db.refresh(old_committee)
     
     return old_committee
-    
-
-def change_committee_poll(db: Session, committee_id: str, new_poll: CommitteePollingTypes):
-    """
-    Change the poll of a committee.
-
-    :param db: Database session object
-    :param committee_id: Committee object to change
-    :param new_status: New poll for the community
-    :return: True if successful, False otherwise
-    """
-    # try getting committee object
-    committee = get_committee_by_id(db, committee_id)
-
-    if committee is None:
-        return False
-
-    # update
-    committee.committee_poll = new_poll
-
-    # commit
-    db.commit()
-    
-    return True
 
 
 def delete_committee(db: Session, committee_id: str):
@@ -219,5 +196,56 @@ def delete_working_paper(db: Session, working_paper_id: int):
         
     db.delete(working_paper)
     db.commit()
+    
+    return True
+
+
+def get_committee_speaker_list(db: Session, committee_id: int):
+    delegations_alias = aliased(Delegation)
+
+    speakers = (
+        db.query(SpeakerList, delegations_alias.delegation_name)
+            .join(delegations_alias, SpeakerList.delegation_id == delegations_alias.delegation_id)
+            .filter(SpeakerList.committee_id == committee_id)
+            .filter(SpeakerList.spoke == False)
+            .order_by(SpeakerList.timestamp)
+            .all()
+    )
+    
+    # The query returns two objects, this combines them into one
+    combined_results = []
+
+    for s in speakers:
+        speaker_object = s[0]
+        speaker_object.delegation_name = s[1]
+        combined_results.append(speaker_object)
+    
+    return combined_results
+
+
+def add_delegation_to_speaker_list(db: Session, committee_id: int, delegation_id: int):
+    # First check that the delegation isn't already in the list
+    delegation_in_list = db.query(SpeakerList).filter(SpeakerList.committee_id == committee_id).filter(SpeakerList.delegation_id == delegation_id).filter(SpeakerList.spoke == False).all()
+    
+    if len(delegation_in_list) > 0:
+        return False
+
+    db_speaker_list_entry = SpeakerList(
+        delegation_id=delegation_id,
+        committee_id=committee_id
+    )
+    
+    db.add(db_speaker_list_entry)
+    db.commit()
+    
+    return True
+
+
+def remove_delegation_from_speaker_list(db: Session, speaker_list_id: int):
+    speaker_list_entry = db.query(SpeakerList).filter(SpeakerList.speakerlist_id == speaker_list_id).first()
+    setattr(speaker_list_entry, "spoke", True)
+    
+    db.commit()
+    db.refresh(speaker_list_entry)
     
     return True

@@ -16,13 +16,14 @@ export interface Committee {
   committee_poll: CommitteePollingType;
   delegations: Delegation[];
   working_papers: WorkingPaper[];
+  speaker_list_open: boolean;
 }
 
 export interface Delegation {
   delegation_id: number;
   delegation_name: string;
   committees: Committee[];
-  workingPapers: string[];
+  working_papers: WorkingPaper[];
 }
 
 export interface WorkingPaper {

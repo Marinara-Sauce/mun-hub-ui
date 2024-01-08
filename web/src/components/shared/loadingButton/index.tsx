@@ -1,4 +1,4 @@
-import { Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress, SxProps } from "@mui/material";
 import { MouseEventHandler } from "react";
 
 export default function LoadingButton({
@@ -8,6 +8,7 @@ export default function LoadingButton({
   color,
   onClick,
   children,
+  sx,
 }: {
   loading: boolean;
   variant?: "contained" | "text" | "outlined";
@@ -22,6 +23,7 @@ export default function LoadingButton({
     | "warning";
   onClick?: MouseEventHandler<HTMLButtonElement>;
   children: string;
+  sx?: SxProps;
 }) {
   return (
     <>
@@ -33,6 +35,7 @@ export default function LoadingButton({
           color={color}
           onClick={onClick}
           disabled={disabled}
+          sx={sx}
         >
           {children}
         </Button>

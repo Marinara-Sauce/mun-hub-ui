@@ -2,14 +2,14 @@ from typing import Annotated, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
 from sqlalchemy.orm import Session
-from src.schemas.workingpaper_schema import WorkingPaper, WorkingPaperCreate
+from schemas.workingpaper_schema import WorkingPaperCreate
 
-from src.database.database import SessionLocal
-from src.models.models import AdminUser, CommitteePollingTypes
-from src.schemas import committee_schema
-from src.operations import committee_operations
+from database.database import SessionLocal
+from models.models import AdminUser
+from schemas import committee_schema
+from operations import committee_operations
 
-from src.operations.authentication import get_current_user
+from operations.authentication import get_current_user
 
 router = APIRouter()
 
@@ -24,24 +24,28 @@ def get_db():
 
 class CommitteeConnectionManager:
     def __init__(self):
-        self.active_connections: dict[str, list[WebSocket]] = {}
+        self.active_connections: dict[int, list[WebSocket]] = {}
     
-    async def connect(self, websocket: WebSocket, committee_id: str):
+    async def connect(self, websocket: WebSocket, committee_id: int):
         await websocket.accept()
         if committee_id not in self.active_connections:
             self.active_connections[committee_id] = []
             
         self.active_connections[committee_id].append(websocket)
+        print(f"Connect: {len(self.active_connections[committee_id])}")
     
-    def disconnect(self, websocket: WebSocket, committee_id: str):
+    def disconnect(self, websocket: WebSocket, committee_id: int):
         self.active_connections[committee_id].remove(websocket)
-    
-    async def broadcast_poll_change(self, committee_id: str, poll: CommitteePollingTypes):
+        print(f"Disconnect: {len(self.active_connections[committee_id])}")
+                
+    async def broadcast_committee(self, committee_id: int, update_txt: str = "UPDATE"):
         if committee_id in self.active_connections:
             for con in self.active_connections[committee_id]:
-                await con.send_json(poll)
+                print("Sending update...")
+                await con.send_text(update_txt)
+        else:
+            print(f"Committee {committee_id} not in arr")
  
-
 manager = CommitteeConnectionManager()
 
 # Get all
@@ -70,26 +74,44 @@ def create_committee(committee: committee_schema.CommitteeCreate, user: Annotate
 
 # Patch committee
 @router.patch("/committees", tags=["Committees"])
-def patch_committee(committee: committee_schema.CommitteeUpdate, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
+async def patch_committee(committee: committee_schema.CommitteeUpdate, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)) -> Optional[committee_schema.Committee]:
     response = committee_operations.patch_committee(db, committee)
     
     if response:
+        await manager.broadcast_committee(committee.committee_id)
         return response
     
     raise HTTPException(status_code=404, detail=f"Committee of ID {committee.committee_id} not found.")
 
 
-# change poll
-@router.put("/committees/{committee_id}/poll", tags=["Committees"])
-async def change_committee_poll(committee_id: str, new_poll: CommitteePollingTypes, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
-    response = committee_operations.change_committee_poll(db, committee_id, new_poll)
+# Get the speeakers list
+@router.get("/committees/{committee_id}/speaker-list", tags=["Committees"])
+def get_speakers_list(committee_id: int, db: Session = Depends(get_db)):
+    return committee_operations.get_committee_speaker_list(db, committee_id)
+
+
+# Add delegation to the speakers list
+@router.post("/committees/{committee_id}/speaker-list", tags=["Committees"])
+async def add_delegaion_to_speaker_list(committee_id: int, delegation_id: int, db: Session = Depends(get_db)):
+    update = committee_operations.add_delegation_to_speaker_list(db, committee_id, delegation_id)
     
-    # check for valid change
-    if response:
-        await manager.broadcast_poll_change(committee_id, new_poll)
-        return {"message": "Poll changed."}
-    else:
-        raise HTTPException(status_code=404, detail=f"Committee of ID {committee_id} not found.")
+    if update:
+        await manager.broadcast_committee(committee_id, "SPEAKER")
+        return True
+
+    return False
+
+
+# Remove entry from the speaker list
+@router.delete("/committees/{committee_id}/speaker-list", tags=["Committees"])
+async def remove_delegation_from_speaker_list(committee_id: int, speaker_list_id: int, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
+    update = committee_operations.remove_delegation_from_speaker_list(db, speaker_list_id)
+    
+    if update:
+        await manager.broadcast_committee(committee_id, "SPEAKER")
+        return True
+    
+    return False
 
 
 # delete a committee
@@ -153,7 +175,7 @@ def patch_committee_working_papers(committee_id: int, working_papers: List[Worki
 
 # websocket for polls
 @router.websocket("/committees/{committee_id}/ws")
-async def committee_websocket_endpoint(websocket: WebSocket, committee_id: str):
+async def committee_websocket_endpoint(websocket: WebSocket, committee_id: int):
     await manager.connect(websocket, committee_id)
     try:
         while True:

@@ -1,10 +1,10 @@
 from typing import Optional
 
-from src.models.models import Delegation, Participant, WorkingPaperDelegation
+from models.models import Committee, Delegation, Participant, WorkingPaper, WorkingPaperDelegation
 
 from sqlalchemy.orm import Session
 
-from src.schemas.delegation_schema import DelegationCreate
+from schemas.delegation_schema import DelegationCreate
 
 
 def get_delegations(db: Session) -> list[Delegation]:
@@ -13,6 +13,28 @@ def get_delegations(db: Session) -> list[Delegation]:
 
 def get_delegate_by_id(db: Session, delegation_id: str) -> Optional[Delegation]:
     return db.query(Delegation).filter(Delegation.delegation_id == delegation_id).first()
+
+
+def get_working_papers_with_delegations(db: Session, delegation_id: str) -> [WorkingPaper]:
+    working_papers = (
+        db.query(WorkingPaper)
+        .join(WorkingPaperDelegation, WorkingPaperDelegation.working_paper_id == WorkingPaper.working_paper_id)
+        .filter(WorkingPaperDelegation.delegation_id == delegation_id)
+        .all()
+    )
+
+    return working_papers
+    
+
+def get_committees_delegations_in(db: Session, delegation_id: str) -> [Committee]:
+    committees = (
+        db.query(Committee)
+        .join(Participant, Participant.committee_id == Committee.committee_id)
+        .filter(Participant.delegation_id == delegation_id)
+        .all()
+    )
+    
+    return committees
 
 
 def create_delegation(db: Session, user: DelegationCreate) -> Delegation:

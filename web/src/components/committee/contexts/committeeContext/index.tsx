@@ -3,18 +3,21 @@ import {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
-import { Committee, CommitteePollingType } from "../../../../model/interfaces";
+import { Committee, Delegation } from "../../../../model/interfaces";
 import { useApi } from "../../../../contexts/apiContext";
 
 export type ICommitteeContext = {
   committee: Committee;
+  userDelegation?: Delegation;
   loading: boolean;
   error: string;
   updateCommittee: (updatedCommittee: Committee, then: () => void) => void;
-  setCommitteePoll: (new_poll: CommitteePollingType, then: () => void) => void;
   refreshCommittee: () => void;
+  applyUserDelegation: (delegation: string) => void;
+  socket?: WebSocket;
 };
 
 const defaultCommittee: Committee = {
@@ -27,6 +30,7 @@ const defaultCommittee: Committee = {
   committee_description: "",
   delegations: [],
   working_papers: [],
+  speaker_list_open: false
 };
 
 const CommitteeContext = createContext<ICommitteeContext>({
@@ -34,8 +38,8 @@ const CommitteeContext = createContext<ICommitteeContext>({
   loading: false,
   error: "",
   updateCommittee: () => {},
-  setCommitteePoll: () => {},
   refreshCommittee: () => {},
+  applyUserDelegation: () => {},
 });
 
 export function CommitteeProvider({
@@ -46,10 +50,67 @@ export function CommitteeProvider({
   children: ReactNode;
 }) {
   const { axiosInstance } = useApi();
+
+  // The current pages committee
   const [committee, setCommittee] = useState<Committee>(defaultCommittee);
+  // The current user's delegation
+  const [userDelegation, setUserDelegation] = useState<Delegation>();
+
   const [loading, setLoading] = useState(true);
 
+  const [socket, setSocket] = useState<WebSocket>();
+
   useEffect(() => refreshCommittee(), [committee_id]);
+
+  useEffect(() => {
+    const delegationName = localStorage.getItem("delegation");
+
+    if (!delegationName) {
+      return;
+    }
+
+    const foundDelegation = committee.delegations.find(
+      (d) => d.delegation_name.toLowerCase() === delegationName.toLowerCase(),
+    );
+
+    setUserDelegation(foundDelegation);
+  }, [committee, localStorage.getItem("delegation")]);
+
+  useEffect(() => {
+    const socket = new WebSocket(
+      `ws://localhost:8000/committees/${committee_id}/ws`,
+    );
+
+    setSocket(socket);
+
+    socket.onopen = () => {
+      console.log("Websocket is open");
+    };
+
+    socket.onmessage = (event) => {
+      event.data === "UPDATE" && refreshCommittee();
+    };
+
+    const heartbeatInterval = setInterval(() => {
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send("heartbeat");
+      }
+    }, 1000);
+
+    socket.onclose = () => {
+      clearInterval(heartbeatInterval);
+      console.log("Websocket is closed");
+    };
+
+    return () => socket.close();
+  }, [committee_id]);
+
+  function applyUserDelegation(delegation: string) {
+    localStorage.setItem("delegation", delegation);
+    setUserDelegation(
+      committee.delegations.find((d) => d.delegation_name === delegation),
+    );
+  }
 
   function updateCommittee(updatedCommittee: Committee, then: () => void) {
     axiosInstance.patch("/committees", updatedCommittee).then((response) => {
@@ -59,18 +120,6 @@ export function CommitteeProvider({
       });
       then();
     });
-  }
-
-  function setCommitteePoll(new_poll: CommitteePollingType, then: () => void) {
-    axiosInstance
-      .put(`/committees/${committee_id}/poll?new_poll=${new_poll}`)
-      .then(() => {
-        setCommittee({
-          ...committee,
-          committee_poll: new_poll,
-        });
-        then();
-      });
   }
 
   function refreshCommittee() {
@@ -91,11 +140,13 @@ export function CommitteeProvider({
     <CommitteeContext.Provider
       value={{
         committee,
+        userDelegation,
         loading,
         error: "",
         updateCommittee,
-        setCommitteePoll,
         refreshCommittee,
+        applyUserDelegation,
+        socket,
       }}
     >
       {children}
