@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from src.schemas.delegation_schema import Delegation
+from schemas.delegation_schema import Delegation
 
 # Working Papers
 class WorkingPaperBase(BaseModel):

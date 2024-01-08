@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import text
 
-from src.database import database as database
-from src.endpoints import delegation_endpoints, committee_endpoints, user_endpoints
+from database import database as database
+from endpoints import delegation_endpoints, committee_endpoints, user_endpoints
 
 app = FastAPI()
 

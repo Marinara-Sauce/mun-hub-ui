@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 
-from src.database.database import SessionLocal
-from src.schemas.delegation_schema import DelegationCreate
-from src.operations import delegation_operations
+from database.database import SessionLocal
+from schemas.delegation_schema import DelegationCreate
+from operations import delegation_operations
 
 router = APIRouter()
 

@@ -1,4 +1,4 @@
-from src.schemas.delegation_schema import Delegation
+from schemas.delegation_schema import Delegation
 from pydantic import BaseModel
 
 
