@@ -1,16 +1,15 @@
 from typing import Annotated, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
-from src.schemas.speakerlist_schema import SpeakerList
 from sqlalchemy.orm import Session
-from src.schemas.workingpaper_schema import WorkingPaperCreate
+from schemas.workingpaper_schema import WorkingPaperCreate
 
-from src.database.database import SessionLocal
-from src.models.models import AdminUser
-from src.schemas import committee_schema
-from src.operations import committee_operations
+from database.database import SessionLocal
+from models.models import AdminUser
+from schemas import committee_schema
+from operations import committee_operations
 
-from src.operations.authentication import get_current_user
+from operations.authentication import get_current_user
 
 router = APIRouter()
 

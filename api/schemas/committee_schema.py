@@ -1,8 +1,8 @@
 from pydantic import BaseModel
-from src.schemas.delegation_schema import Delegation
-from src.schemas.workingpaper_schema import WorkingPaper
+from schemas.delegation_schema import Delegation
+from schemas.workingpaper_schema import WorkingPaper
 
-from src.models.models import CommitteePollingTypes, CommitteeSessionTypes
+from models.models import CommitteePollingTypes, CommitteeSessionTypes
 
 class CommitteeBase(BaseModel):
     committee_name: str

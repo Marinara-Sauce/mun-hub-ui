@@ -3,11 +3,11 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import aliased, joinedload
 
 from sqlalchemy.orm import Session
-from src.schemas.speakerlist_schema import SpeakerListBase, SpeakerListCreate
-from src.schemas.workingpaper_schema import WorkingPaperCreate
+from schemas.speakerlist_schema import SpeakerListBase, SpeakerListCreate
+from schemas.workingpaper_schema import WorkingPaperCreate
 
-from src.models.models import Committee, Delegation, Participant, SpeakerList, WorkingPaper, WorkingPaperDelegation
-from src.schemas.committee_schema import CommitteeCreate, CommitteeUpdate
+from models.models import Committee, Delegation, Participant, SpeakerList, WorkingPaper, WorkingPaperDelegation
+from schemas.committee_schema import CommitteeCreate, CommitteeUpdate
 
 
 def get_committees(db: Session):

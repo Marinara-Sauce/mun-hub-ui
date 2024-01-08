@@ -1,6 +1,6 @@
 from typing import Optional
 from sqlalchemy.orm import Session
-from src.models.models import AdminUser
+from models.models import AdminUser
 
 
 # get user by id

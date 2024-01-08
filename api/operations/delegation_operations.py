@@ -1,10 +1,10 @@
 from typing import Optional
 
-from src.models.models import Committee, Delegation, Participant, WorkingPaper, WorkingPaperDelegation
+from models.models import Committee, Delegation, Participant, WorkingPaper, WorkingPaperDelegation
 
 from sqlalchemy.orm import Session
 
-from src.schemas.delegation_schema import DelegationCreate
+from schemas.delegation_schema import DelegationCreate
 
 
 def get_delegations(db: Session) -> list[Delegation]:

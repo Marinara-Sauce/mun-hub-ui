@@ -2,11 +2,12 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from src.operations.authentication import generate_token, verify_password
+from operations.authentication import generate_token, verify_password
 
-from src.database.database import SessionLocal
-from src.operations.user_operations import get_user_by_username
-from src.schemas.user_schema import AdminUser
+from database.database import SessionLocal
+from operations.user_operations import get_user_by_username
+from schemas.user_schema import AdminUser
+from settings import settings
 
 router = APIRouter()
 
@@ -33,5 +34,5 @@ def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Sessio
     
     user.__delattr__("password")
     token = generate_token(user.user_id)
-    return {"access_token": token, "token_type": "bearer", "expiration": 30, "user": user} # TODO: Not hard code the 30 minutes
+    return {"access_token": token, "token_type": "bearer", "expiration": settings.token_life_time, "user": user} # TODO: Not hard code the 30 minutes
 

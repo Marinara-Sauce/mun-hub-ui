@@ -2,11 +2,12 @@ from typing import Annotated
 import bcrypt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+from settings import settings
 import jwt
 import datetime
 
-SECRET_KEY = 'example-key'
-ALGORITHM = "HS256"
+SECRET_KEY = settings.secret_key
+ALGORITHM = settings.hash_algorithm
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -36,7 +37,7 @@ def verify_password(in_password: str, hashed_password: str):
     return bcrypt.checkpw(in_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 
-def generate_token(username: str, expiration_minutes=30):  # TODO: Make this configurable
+def generate_token(username: str):
     """
     Generates a JWT token for user authentication.
 
@@ -44,9 +45,10 @@ def generate_token(username: str, expiration_minutes=30):  # TODO: Make this con
     :param expiration_minutes: Token expiration time in minutes (default is 30 minutes).
     :return: A JWT token as a string.
     """
+
     payload = {
         'username': username,
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=expiration_minutes)
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=settings.token_life_time)
     }
     token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
     return token
