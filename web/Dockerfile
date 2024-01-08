@@ -9,6 +9,9 @@ RUN yarn build
 # Stage 2 - the production environment
 FROM httpd:2.4
 
+# Copy HTTPD.conf
+COPY ./docker/httpd.conf /usr/local/apache2/conf
+
 # Copy the built React app to the Nginx web root
 COPY --from=build-deps /usr/src/app/build /usr/local/apache2/htdocs
 
