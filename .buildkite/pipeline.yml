@@ -1,0 +1,13 @@
+steps:
+  - label: "Setup Environment Vars"
+    command: "./scripts/set-env.sh"
+    artifacts:
+      - "./web/.env"
+      
+  - label: "Deploy API"
+    command: "./scripts/deploy-api.sh"
+    cancel_on_build_failing: true
+    
+  - label: "Deploy UI"
+    command: "./scripts/deploy-ui.sh"
+    cancel_on_build_failing: true
