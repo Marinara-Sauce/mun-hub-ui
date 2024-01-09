@@ -13,20 +13,16 @@ import { useEffect, useState } from "react";
 import { Committee } from "../../../../model/interfaces";
 import { Link } from "react-router-dom";
 import AddCommittee from "../addCommittee";
+import { useApi } from "../../../../contexts/apiContext";
 
 export default function SelectCommittee() {
+  const { axiosInstance } = useApi();
   const [committees, setCommittees] = useState<Committee[]>([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/committees`) // TODO: Place this in some env file
-      .then((r) => r.json())
-      .then((d) => {
-        setCommittees(d);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
+    axiosInstance.get("/committees")
+      .then((r) => setCommittees(r.data))
+  });
 
   return (
     <Drawer anchor="left" open={true} sx={{ width: "50%" }}>
