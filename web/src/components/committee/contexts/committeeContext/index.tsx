@@ -78,7 +78,7 @@ export function CommitteeProvider({
 
   useEffect(() => {
     const socket = new WebSocket(
-      `ws://localhost:8000/committees/${committee_id}/ws`,
+      `${process.env.REACT_APP_WS_URL}/committees/${committee_id}/ws`,
     );
 
     setSocket(socket);
