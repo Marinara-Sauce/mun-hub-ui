@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Checkbox,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -142,9 +141,8 @@ export default function EditDelegations() {
                   />
                   {delegationsInCommittee.map((d) =>
                     d.delegation_name.startsWith(inDelegationSearch) ? (
-                      <ListItem divider sx={{ pl: "0", pr: "0" }}>
+                      <ListItem key={d.delegation_id} divider sx={{ pl: "0", pr: "0" }}>
                         <DelegationInCommittee
-                          key={d.delegation_id}
                           delegation={d}
                           onRemove={removeDelegation}
                         />
@@ -165,9 +163,8 @@ export default function EditDelegations() {
                   />
                   {delegationsNotInCommittee.map((d) =>
                     d.delegation_name.startsWith(notInDelegationSearch) ? (
-                      <ListItem divider sx={{ pl: "0", pr: "0" }}>
+                      <ListItem key={d.delegation_id} divider sx={{ pl: "0", pr: "0" }}>
                         <DelegationNotInCommittee
-                          key={d.delegation_id}
                           delegation={d}
                           onAdd={addDelegation}
                         />

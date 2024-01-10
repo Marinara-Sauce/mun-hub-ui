@@ -1,7 +1,5 @@
 import Widget from "../../../shared/widget";
-import {
-  Committee,
-  CommitteeStatus} from "../../../../model/interfaces";
+import { CommitteeStatus } from "../../../../model/interfaces";
 import { CommitteeStatusToString } from "../../../../functions/conversions";
 import {
   Box,

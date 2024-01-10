@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import { useCommittee } from "../../../../../contexts/committeeContext";
 import { Delegation } from "../../../../../../../model/interfaces";
-import { useApi } from "../../../../../../../contexts/apiContext";
 
 function DelegationNotInWorkingGroup({
   delegation,
@@ -118,9 +117,8 @@ export default function ManageWorkingPaperDelegations({
             />
             {delegationsInWorkingGroup.map((d) =>
               d.delegation_name.startsWith(inDelegationSearch) ? (
-                <ListItem divider sx={{ pl: "0", pr: "0" }}>
+                <ListItem key={d.delegation_id} divider sx={{ pl: "0", pr: "0" }}>
                   <DelegationInWorkingGroup
-                    key={d.delegation_id}
                     delegation={d}
                     onRemove={removeDelegation}
                   />
@@ -139,9 +137,8 @@ export default function ManageWorkingPaperDelegations({
             />
             {delegationsNotInWorkingGroup.map((d) =>
               d.delegation_name.startsWith(notInDelegationSearch) ? (
-                <ListItem divider sx={{ pl: "0", pr: "0" }}>
+                <ListItem key={d.delegation_id} divider sx={{ pl: "0", pr: "0" }}>
                   <DelegationNotInWorkingGroup
-                    key={d.delegation_id}
                     delegation={d}
                     onAdd={addDelegation}
                   />

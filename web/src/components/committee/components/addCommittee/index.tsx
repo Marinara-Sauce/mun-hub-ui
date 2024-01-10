@@ -18,7 +18,6 @@ export default function AddCommittee() {
   const [loading, setLoading] = useState(false);
   const [committeeName, setCommitteeName] = useState("");
   const navigate = useNavigate();
-  const [error, setError] = useState("");
 
   const openDialog = () => {
     setDialogOpen(true);
@@ -38,14 +37,9 @@ export default function AddCommittee() {
       })
       .then((response) => {
         setLoading(false);
-        setError("");
         setDialogOpen(false);
         navigate(`/committee/${response.data.committee_id}`);
       })
-      .catch((err) => {
-        setLoading(false);
-        setError(err.response.data.detail);
-      });
   };
 
   const handleCommitteeNameChange = (
