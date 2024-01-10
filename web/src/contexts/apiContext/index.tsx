@@ -25,11 +25,13 @@ export type IAPIContext = {
 };
 
 const DataContext = createContext<IAPIContext>({
-  axiosInstance: axios.create({ baseURL: "http://localhost:8000" }),
+  axiosInstance: axios.create({ baseURL: "" }),
   isLoggedIn: false,
   loginUser: () => {},
   logoutUser: () => {},
 });
+
+const baseUrl = process.env.REACT_APP_API_URL;
 
 export function APIProvider({ children }: { children: ReactNode }) {
   const [cookie, setCookie, removeCookie] = useCookies([
@@ -39,7 +41,7 @@ export function APIProvider({ children }: { children: ReactNode }) {
   ]);
 
   const axiosInstance = axios.create({
-    baseURL: "http://localhost:8000",
+    baseURL: baseUrl,
     headers: {
       "Content-Type": "application/json",
     },
