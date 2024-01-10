@@ -1,9 +1,11 @@
 steps:
 
+  - block: ":rocket: Deploy to Dev?"
+
   - label: "Deploy API"
     command: "./.buildkite/scripts/deploy-api.sh"
     cancel_on_build_failing: true
-    
+
   - label: "Deploy UI"
     command: "./.buildkite/scripts/deploy-web.sh"
     cancel_on_build_failing: true

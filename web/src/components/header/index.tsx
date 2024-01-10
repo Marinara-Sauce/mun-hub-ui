@@ -14,7 +14,7 @@ export default function AppHeader() {
         backgroundColor: "gainsboro",
         boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
         display: "flex",
-        alignItems: "center"
+        alignItems: "center",
       }}
     >
       <Box className="left-bar" sx={{ ml: 1, flex: 1 }}>

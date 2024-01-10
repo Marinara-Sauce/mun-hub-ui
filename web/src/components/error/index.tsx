@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import ReactDOM from "react-dom";
 import { Modal, Box, Typography, Button } from "@mui/material";
 
 interface ErrorModalProps {

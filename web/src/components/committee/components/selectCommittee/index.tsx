@@ -20,8 +20,7 @@ export default function SelectCommittee() {
   const [committees, setCommittees] = useState<Committee[]>([]);
 
   useEffect(() => {
-    axiosInstance.get("/committees")
-      .then((r) => setCommittees(r.data))
+    axiosInstance.get("/committees").then((r) => setCommittees(r.data));
   });
 
   return (

@@ -3,7 +3,6 @@ import {
   createContext,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import { Committee, Delegation } from "../../../../model/interfaces";
@@ -30,7 +29,7 @@ const defaultCommittee: Committee = {
   committee_description: "",
   delegations: [],
   working_papers: [],
-  speaker_list_open: false
+  speaker_list_open: false,
 };
 
 const CommitteeContext = createContext<ICommitteeContext>({
