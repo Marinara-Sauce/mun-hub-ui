@@ -18,7 +18,8 @@ export default function DelegationPage() {
   const setHeader = useHeader()[1];
 
   useEffect(() => {
-    axiosInstance.get(`/delegations/advanced/${id}`)
+    axiosInstance
+      .get(`/delegations/advanced/${id}`)
       .then((response) => setDelegation(response.data));
   }, [id]);
 

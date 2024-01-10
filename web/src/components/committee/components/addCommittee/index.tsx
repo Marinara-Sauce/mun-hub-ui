@@ -39,7 +39,7 @@ export default function AddCommittee() {
         setLoading(false);
         setDialogOpen(false);
         navigate(`/committee/${response.data.committee_id}`);
-      })
+      });
   };
 
   const handleCommitteeNameChange = (

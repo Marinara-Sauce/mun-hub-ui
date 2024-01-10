@@ -19,7 +19,7 @@ export default function WorkingPapers() {
       title="Working Papers"
       onEdit={isLoggedIn ? () => setEditing(true) : undefined}
     >
-      <Table className="table" sx={{textAlign: "left"}}>
+      <Table className="table" sx={{ textAlign: "left" }}>
         <TableHead>
           <TableRow className="table-header">
             <th>Working Group Name</th>

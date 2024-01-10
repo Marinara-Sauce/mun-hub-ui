@@ -141,7 +141,11 @@ export default function EditDelegations() {
                   />
                   {delegationsInCommittee.map((d) =>
                     d.delegation_name.startsWith(inDelegationSearch) ? (
-                      <ListItem key={d.delegation_id} divider sx={{ pl: "0", pr: "0" }}>
+                      <ListItem
+                        key={d.delegation_id}
+                        divider
+                        sx={{ pl: "0", pr: "0" }}
+                      >
                         <DelegationInCommittee
                           delegation={d}
                           onRemove={removeDelegation}
@@ -163,7 +167,11 @@ export default function EditDelegations() {
                   />
                   {delegationsNotInCommittee.map((d) =>
                     d.delegation_name.startsWith(notInDelegationSearch) ? (
-                      <ListItem key={d.delegation_id} divider sx={{ pl: "0", pr: "0" }}>
+                      <ListItem
+                        key={d.delegation_id}
+                        divider
+                        sx={{ pl: "0", pr: "0" }}
+                      >
                         <DelegationNotInCommittee
                           delegation={d}
                           onAdd={addDelegation}

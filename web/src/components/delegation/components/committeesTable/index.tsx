@@ -1,4 +1,10 @@
-import { Table, TableBody, TableHead, TableRow, Typography } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { Delegation } from "../../../../model/interfaces";
 import { CommitteeStatusToString } from "../../../../functions/conversions";
 
@@ -8,7 +14,7 @@ export default function CommitteesTable({
   delegation: Delegation;
 }) {
   return (
-    <Table className="table" sx={{textAlign: "left"}}>
+    <Table className="table" sx={{ textAlign: "left" }}>
       <TableHead>
         <TableRow className="table-header">
           <th>Committee Name</th>

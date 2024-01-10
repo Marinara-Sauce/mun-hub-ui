@@ -117,7 +117,11 @@ export default function ManageWorkingPaperDelegations({
             />
             {delegationsInWorkingGroup.map((d) =>
               d.delegation_name.startsWith(inDelegationSearch) ? (
-                <ListItem key={d.delegation_id} divider sx={{ pl: "0", pr: "0" }}>
+                <ListItem
+                  key={d.delegation_id}
+                  divider
+                  sx={{ pl: "0", pr: "0" }}
+                >
                   <DelegationInWorkingGroup
                     delegation={d}
                     onRemove={removeDelegation}
@@ -137,7 +141,11 @@ export default function ManageWorkingPaperDelegations({
             />
             {delegationsNotInWorkingGroup.map((d) =>
               d.delegation_name.startsWith(notInDelegationSearch) ? (
-                <ListItem key={d.delegation_id} divider sx={{ pl: "0", pr: "0" }}>
+                <ListItem
+                  key={d.delegation_id}
+                  divider
+                  sx={{ pl: "0", pr: "0" }}
+                >
                   <DelegationNotInWorkingGroup
                     delegation={d}
                     onAdd={addDelegation}
