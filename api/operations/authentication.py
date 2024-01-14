@@ -2,14 +2,24 @@ from typing import Annotated
 import bcrypt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+from requests import Session
+from models.models import AdminUser
 from settings import settings
 import jwt
 import datetime
+from database.database import SessionLocal
 
 SECRET_KEY = settings.secret_key
 ALGORITHM = settings.hash_algorithm
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 def hash_password(password: str, salt_rounds=12):
     """
@@ -37,17 +47,17 @@ def verify_password(in_password: str, hashed_password: str):
     return bcrypt.checkpw(in_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 
-def generate_token(username: str):
+def generate_token(user_id: int):
     """
     Generates a JWT token for user authentication.
 
-    :param username: The user's unique username.
+    :param username: The user's user id.
     :param expiration_minutes: Token expiration time in minutes (default is 30 minutes).
     :return: A JWT token as a string.
     """
-
+    
     payload = {
-        'username': username,
+        'user_id': user_id,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=settings.token_life_time)
     }
     token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
@@ -63,7 +73,7 @@ def verify_token(token: str):
     """
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload['username']
+        return payload['user_id']
     except jwt.ExpiredSignatureError:
         # Token has expired
         return None
@@ -72,14 +82,18 @@ def verify_token(token: str):
         return None
     
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-    user = verify_token(token)
-    if not user:
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):
+    user_id = verify_token(token)
+
+    if user_id == None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    
+    user = db.query(AdminUser).filter(AdminUser.user_id == user_id).first()
+    
     return user
     
 if __name__ == '__main__':
