@@ -31,7 +31,7 @@ session = database.SessionLocal()
 
 super_user = user_operations.get_user_by_username(session, settings.super_user_username)
 if super_user == None:
-    user_operations.add_user(session, AdminUserCreate(
+    user_operations.create_user(session, AdminUserCreate(
         first_name="Super",
         last_name="User",
         username=settings.super_user_username,

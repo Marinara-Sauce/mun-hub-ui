@@ -11,6 +11,13 @@ class AdminUserCreate(AdminUserBase):
     unhashed_password: str
 
 
+class AdminUserUpdate(AdminUserBase):
+    user_id: int
+    first_name: str
+    last_name: str
+    super_user: bool
+    
+    
 class AdminUser(AdminUserBase):
     user_id: int
 
