@@ -8,7 +8,7 @@ import operations.user_operations as user_operations
 from schemas.user_schema import AdminUserCreate
 from settings import settings
 
-app = FastAPI("/docs" if settings.enable_docs else None)
+app = FastAPI(docs_url="/docs" if settings.enable_docs else None)
 
 app.add_middleware(
     CORSMiddleware, 
