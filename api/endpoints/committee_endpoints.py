@@ -68,7 +68,7 @@ def get_committee_by_id(committee_id: str, db: Session = Depends(get_db)) -> Opt
 
 # Create
 @router.post("/committees", tags=["Committees"])
-def create_committee(committee: committee_schema.CommitteeCreate, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db), ):
+def create_committee(committee: committee_schema.CommitteeCreate, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
     return committee_operations.create_committee(db, committee)
 
 

@@ -1,9 +1,8 @@
 from typing import Optional
 from fastapi import HTTPException, status
-from sqlalchemy.orm import aliased, joinedload
+from sqlalchemy.orm import aliased
 
 from sqlalchemy.orm import Session
-from schemas.speakerlist_schema import SpeakerListBase, SpeakerListCreate
 from schemas.workingpaper_schema import WorkingPaperCreate
 
 from models.models import Committee, Delegation, Participant, SpeakerList, WorkingPaper, WorkingPaperDelegation
