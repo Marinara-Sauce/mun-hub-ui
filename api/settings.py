@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     token_life_time: int = 60
     super_user_username: str = "super"
     super_user_password: str = "changeme"
+    enable_docs: bool = False
 
 load_dotenv()
     

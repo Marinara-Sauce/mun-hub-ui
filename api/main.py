@@ -5,10 +5,10 @@ from database import database as database
 from endpoints import delegation_endpoints, committee_endpoints, user_endpoints
 
 import operations.user_operations as user_operations
-from schemas.user_schema import AdminUser, AdminUserCreate
+from schemas.user_schema import AdminUserCreate
 from settings import settings
 
-app = FastAPI()
+app = FastAPI("/docs" if settings.enable_docs else None)
 
 app.add_middleware(
     CORSMiddleware, 
