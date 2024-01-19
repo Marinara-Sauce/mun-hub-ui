@@ -38,6 +38,15 @@ def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Sessio
     return {"access_token": token, "token_type": "bearer", "expiration": settings.token_life_time, "user": user} # TODO: Not hard code the 30 minutes
 
 
+# get all users
+@router.get("/user", tags=["User"])
+def get_users(acting_user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
+    if not acting_user.super_user:
+        raise HTTPException(status_code=403, detail="You do not have permission to do this")
+    
+    return user_operations.get_all_users(db)
+
+
 # create a user
 @router.post("/user/create", tags=["User"])
 def create_user(user: AdminUserCreate, acting_user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
@@ -63,3 +72,12 @@ def patch_user(user: AdminUserUpdate, acting_user: Annotated[AdminUser, Depends(
         raise HTTPException(status_code=403, detail="You do not have permission to do this")
     
     return user_operations.patch_user(db, user)
+
+
+# delete a user
+@router.delete("/user", tags=["User"])
+def delete_user(user_id: int, acting_user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
+    if not acting_user.super_user:
+        raise HTTPException(status_code=403, detail="You do not have permission to do this")
+    
+    return user_operations.delete_user(db, user_id)

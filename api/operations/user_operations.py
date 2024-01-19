@@ -7,6 +7,11 @@ from schemas.user_schema import AdminUserCreate, AdminUserUpdate
 from operations.authentication import hash_password
 
 
+# get all users
+def get_all_users(db: Session):
+    return db.query(AdminUser).all()
+
+
 # get user by id
 def get_user_by_id(db: Session, user_id: int):
     user = db.query(AdminUser).filter(AdminUser.user_id == user_id).first()
