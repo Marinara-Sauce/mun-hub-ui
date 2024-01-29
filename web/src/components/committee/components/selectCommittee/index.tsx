@@ -21,7 +21,7 @@ export default function SelectCommittee() {
 
   useEffect(() => {
     axiosInstance.get("/committees").then((r) => setCommittees(r.data));
-  });
+  }, [axiosInstance]);
 
   return (
     <Drawer anchor="left" open={true} sx={{ width: "50%" }}>
