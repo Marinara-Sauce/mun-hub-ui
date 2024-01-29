@@ -104,8 +104,7 @@ function LoginPopup({
       })
       .catch((err) => {
         setLoading(false);
-        console.log(err);
-        // setError(err.response.data.detail);
+        setError(err.response.data.detail);
       });
   };
 
