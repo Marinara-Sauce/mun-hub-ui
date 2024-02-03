@@ -2,9 +2,11 @@ import { Dialog, DialogTitle, DialogContent, Box, TextField, Typography, Checkbo
 import { useState, useRef, useEffect } from "react";
 import { useApi } from "../../../../contexts/apiContext";
 import LoadingButton from "../../../shared/loadingButton";
+import { useUserList } from "../../contexts/userListContext";
 
 export default function CreateUser() {
   const { axiosInstance } = useApi();
+  const { refreshUsers } = useUserList();
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -42,6 +44,7 @@ export default function CreateUser() {
       .then(() => {
         setLoading(false);
         setDialogOpen(false);
+        refreshUsers();
       })
       .catch((error) => {
         setLoading(false);

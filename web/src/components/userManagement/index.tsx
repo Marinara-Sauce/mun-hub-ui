@@ -3,6 +3,7 @@ import { useApi } from "../../contexts/apiContext";
 import PageError from "../pageError";
 
 import UserList from "./components/userList";
+import { UserListProvider } from "./contexts/userListContext";
 
 export default function UserManagement() {
   const { isLoggedIn, currentUser } = useApi();
@@ -16,7 +17,9 @@ export default function UserManagement() {
   return (
     <>
       {canViewPage ? (
-        <UserList />
+        <UserListProvider>
+          <UserList />
+        </UserListProvider>
       ) : (
         <PageError
           title="403 - Forbidden"

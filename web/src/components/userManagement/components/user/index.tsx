@@ -6,9 +6,12 @@ import LoadingButton from "../../../shared/loadingButton";
 
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteUser from "../deleteUser";
+import { useUserList } from "../../contexts/userListContext";
 
 export default function User({ user }: { user: AdminUser }) {
     const { axiosInstance, currentUser } = useApi();
+    const { refreshUsers } = useUserList();
   
     const [editing, setEditing] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -32,6 +35,7 @@ export default function User({ user }: { user: AdminUser }) {
         })
         .then(() => {
           stopEditing();
+          refreshUsers();
         });
     }
   
@@ -116,13 +120,16 @@ export default function User({ user }: { user: AdminUser }) {
         <TableCell>{lastName}</TableCell>
         <TableCell>{superUser ? <CheckIcon /> : <CloseIcon />}</TableCell>
         <TableCell>
-          <Button
-            variant="contained"
-            sx={{ width: "100%" }}
-            onClick={() => setEditing(true)}
-          >
-            Edit
-          </Button>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Button
+              variant="contained"
+              sx={{ width: "100%" }}
+              onClick={() => setEditing(true)}
+            >
+              Edit
+            </Button>
+            <DeleteUser user={user} />
+          </Box>
         </TableCell>
       </TableRow>
     );
