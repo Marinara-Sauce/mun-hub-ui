@@ -11,8 +11,8 @@ export default function DeleteUser({ user }: { user: AdminUser }) {
   const { axiosInstance } = useApi();
   const { refreshUsers } = useUserList();
 
-  const [ loading, setLoading ] = useState(false);
-  const [ deleteOpen, setDeleteOpen ] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   function deleteUser() {
     setLoading(true);
@@ -25,12 +25,24 @@ export default function DeleteUser({ user }: { user: AdminUser }) {
 
   return (
     <>
-      <ConfirmModal open={deleteOpen} dialogTitle="Delete User" confirmButtonText="Delete" destructive buttonLoading={loading} onConfirm={deleteUser} onClose={() => setDeleteOpen(false)}>
+      <ConfirmModal
+        open={deleteOpen}
+        dialogTitle="Delete User"
+        confirmButtonText="Delete"
+        destructive
+        buttonLoading={loading}
+        onConfirm={deleteUser}
+        onClose={() => setDeleteOpen(false)}
+      >
         Are you sure you want to delete the user {user.username}?
       </ConfirmModal>
-      <IconButton aria-label="delete" onClick={() => setDeleteOpen(true)} disabled={user.user_id === 1}>
+      <IconButton
+        aria-label="delete"
+        onClick={() => setDeleteOpen(true)}
+        disabled={user.user_id === 1}
+      >
         <DeleteIcon />
       </IconButton>
     </>
-  )
+  );
 }

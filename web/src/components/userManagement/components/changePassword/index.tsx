@@ -1,4 +1,13 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { AdminUser } from "../../../../model/interfaces";
 import { useEffect, useRef, useState } from "react";
 import LoadingButton from "../../../shared/loadingButton";
@@ -7,9 +16,9 @@ import { useApi } from "../../../../contexts/apiContext";
 export default function ChangePassword({ user }: { user: AdminUser }) {
   const { axiosInstance } = useApi();
 
-  const [ changeDialogOpen, setChangeDialogOpen ] = useState(false);
-  const [ loading, setLoading ] = useState(false);
-  const [ error, setError ] = useState("");
+  const [changeDialogOpen, setChangeDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
@@ -23,27 +32,41 @@ export default function ChangePassword({ user }: { user: AdminUser }) {
     }
 
     setLoading(true);
-    
-    axiosInstance.post(`/user/update/password?user_id=${user.user_id}&new_password=${passwordRef.current?.value}`).then(() => {
-      setLoading(false);
-      setError("");
-      setChangeDialogOpen(false);
-    });
+
+    axiosInstance
+      .post(
+        `/user/update/password?user_id=${user.user_id}&new_password=${passwordRef.current?.value}`,
+      )
+      .then(() => {
+        setLoading(false);
+        setError("");
+        setChangeDialogOpen(false);
+      });
   }
-  
+
   return (
     <>
       <Dialog open={changeDialogOpen} onClose={() => setChangeDialogOpen(true)}>
         <DialogTitle>Change Password</DialogTitle>
         <DialogContent>
-          <Box sx={{display: "flex", flexDirection: "column", p: 1, gap: 1}}>
-            <TextField label="Password" type="password" inputRef={passwordRef} />
-            <TextField label="Confirm Password" type="password" inputRef={confirmPasswordRef} />
+          <Box sx={{ display: "flex", flexDirection: "column", p: 1, gap: 1 }}>
+            <TextField
+              label="Password"
+              type="password"
+              inputRef={passwordRef}
+            />
+            <TextField
+              label="Confirm Password"
+              type="password"
+              inputRef={confirmPasswordRef}
+            />
             <Typography color="error">{error}</Typography>
           </Box>
         </DialogContent>
         <DialogActions>
-          <LoadingButton loading={loading} onClick={changePassword}>Confirm</LoadingButton>
+          <LoadingButton loading={loading} onClick={changePassword}>
+            Confirm
+          </LoadingButton>
           <Button onClick={() => setChangeDialogOpen(false)}>Cancel</Button>
         </DialogActions>
       </Dialog>

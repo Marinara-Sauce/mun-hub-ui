@@ -1,4 +1,14 @@
-import { Dialog, DialogTitle, DialogContent, Box, TextField, Typography, Checkbox, DialogActions, Button } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Box,
+  TextField,
+  Typography,
+  Checkbox,
+  DialogActions,
+  Button,
+} from "@mui/material";
 import { useState, useRef, useEffect } from "react";
 import { useApi } from "../../../../contexts/apiContext";
 import LoadingButton from "../../../shared/loadingButton";
@@ -22,7 +32,13 @@ export default function CreateUser() {
   useEffect(() => setError(""), [dialogOpen]);
 
   function createUser() {
-    if (!usernameRef.current?.value || !firstNameRef.current?.value || !lastNameRef.current?.value || !passwordRef.current?.value || !confirmPasswordRef.current?.value) {
+    if (
+      !usernameRef.current?.value ||
+      !firstNameRef.current?.value ||
+      !lastNameRef.current?.value ||
+      !passwordRef.current?.value ||
+      !confirmPasswordRef.current?.value
+    ) {
       setError("All fields must be filled out!");
       return;
     }
