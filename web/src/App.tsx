@@ -7,6 +7,7 @@ import SelectDelegation from "./components/delegation/components/selectDelegatio
 import DelegationPage from "./components/delegation";
 import { Box } from "@mui/material";
 import { APIProvider } from "./contexts/apiContext";
+import UserManagement from "./components/userManagement";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
               <Route path="/committee/:id" Component={CommitteeHub} />
               <Route path="/delegation" Component={SelectDelegation} />
               <Route path="/delegation/:id" Component={DelegationPage} />
+              <Route path="/users" Component={UserManagement} />
             </Routes>
           </Box>
         </Box>

@@ -3,9 +3,12 @@ import { useHeader } from "../../contexts/headerContext";
 import { Link } from "react-router-dom";
 import Account from "../account";
 import DelegationAdminControls from "../delegation/components/delegationAdminControls";
+import { useApi } from "../../contexts/apiContext";
 
 export default function AppHeader() {
   const [header] = useHeader();
+
+  const { isLoggedIn, currentUser } = useApi();
 
   return (
     <Box
@@ -28,6 +31,7 @@ export default function AppHeader() {
           Delegations
         </Button>
         <DelegationAdminControls />
+        {isLoggedIn && currentUser?.super_user ? <Button component={Link} to="/users">Manage Users</Button> : null}
         <Account />
       </Box>
     </Box>
