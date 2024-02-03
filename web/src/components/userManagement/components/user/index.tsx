@@ -8,6 +8,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteUser from "../deleteUser";
 import { useUserList } from "../../contexts/userListContext";
+import ChangePassword from "../changePassword";
 
 export default function User({ user }: { user: AdminUser }) {
     const { axiosInstance, currentUser } = useApi();
@@ -85,13 +86,7 @@ export default function User({ user }: { user: AdminUser }) {
           </TableCell>
           <TableCell>
             <Box sx={{ display: "flex", gap: 1 }}>
-              <Button
-                variant="contained"
-                sx={{ width: "100%" }}
-                onClick={() => setEditing(true)}
-              >
-                Change Password
-              </Button>
+              <ChangePassword user={user} />
               <LoadingButton
                 variant="contained"
                 sx={{ width: "100%" }}
@@ -101,8 +96,6 @@ export default function User({ user }: { user: AdminUser }) {
                 Save
               </LoadingButton>
               <Button
-                variant="contained"
-                sx={{ width: "100%" }}
                 onClick={stopEditing}
               >
                 Cancel
