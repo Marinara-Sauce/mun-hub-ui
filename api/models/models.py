@@ -26,6 +26,15 @@ class CommitteePollingTypes(IntEnum):
     ATTENDANCE = 3
     
     
+class Vote(IntEnum):
+    """
+    A delegations vote
+    """
+    YES = 1
+    NO = 2
+    ABSTAIN = 3
+    
+    
 class Participant(Base):
     __tablename__ = "participants"
 
@@ -59,6 +68,35 @@ class Committee(Base):
     committee_announcement = Column(String, default="")
     committee_poll = Column(Enum(CommitteePollingTypes), default=CommitteePollingTypes.NONE)
     speaker_list_open = Column(Boolean, default=False, nullable=False)
+
+
+class VotingSessions(Base):
+    __tablename__ = "votingsessions"
+    
+    # id
+    voting_session_id = Column(Integer, primary_key=True, index=True, autoincrement=True, unique=True)
+    
+    # relationships
+    committee_id = Column(Integer, ForeignKey("committees.committee_id"))
+    
+    # data
+    live = Column(Boolean, default=True)
+    open_time = Column(DateTime, server_default=func.now())
+    close_time = Column(DateTime)
+        
+
+class Votes(Base):
+    __tablename__ = "votes"
+    
+    # id
+    vote_id = Column(Integer, primary_key=True, index=True, autoincrement=True, unique=True)
+    
+    # relationships
+    delegation_id = Column(Integer, ForeignKey("delegations.delegation_id"))
+    
+    # data
+    timestamp = Column(DateTime, server_default=func.now())
+    vote = Column(Enum(Vote))
 
 
 class Delegation(Base):
