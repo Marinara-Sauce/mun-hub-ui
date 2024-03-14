@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from database import database as database
-from endpoints import delegation_endpoints, committee_endpoints, user_endpoints
+from endpoints import delegation_endpoints, committee_endpoints, user_endpoints, voting_endpoints
 
 import operations.user_operations as user_operations
 from schemas.user_schema import AdminUserCreate
@@ -25,6 +25,7 @@ database.Base.metadata.create_all(bind=database.engine)
 app.include_router(committee_endpoints.router)
 app.include_router(delegation_endpoints.router)
 app.include_router(user_endpoints.router)
+app.include_router(voting_endpoints.router)
 
 # check for the super user in the database
 session = database.SessionLocal()

@@ -70,7 +70,7 @@ class Committee(Base):
     speaker_list_open = Column(Boolean, default=False, nullable=False)
 
 
-class VotingSessions(Base):
+class VotingSession(Base):
     __tablename__ = "votingsessions"
     
     # id
@@ -83,7 +83,8 @@ class VotingSessions(Base):
     live = Column(Boolean, default=True)
     open_time = Column(DateTime, server_default=func.now())
     close_time = Column(DateTime)
-        
+
+    votes = relationship("Votes", backref="votingsessions")
 
 class Votes(Base):
     __tablename__ = "votes"
@@ -92,6 +93,7 @@ class Votes(Base):
     vote_id = Column(Integer, primary_key=True, index=True, autoincrement=True, unique=True)
     
     # relationships
+    voting_session_id = Column(Integer, ForeignKey("votingsessions.voting_session_id"))
     delegation_id = Column(Integer, ForeignKey("delegations.delegation_id"))
     
     # data
