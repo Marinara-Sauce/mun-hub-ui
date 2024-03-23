@@ -30,16 +30,13 @@ class VotingConnectionManager:
             self.active_connections[committee_id] = []
             
         self.active_connections[committee_id].append(websocket)
-        print(f"Connect: {len(self.active_connections[committee_id])}")
-    
+ 
     def disconnect(self, websocket: WebSocket, committee_id: int):
         self.active_connections[committee_id].remove(websocket)
-        print(f"Disconnect: {len(self.active_connections[committee_id])}")
                 
     async def broadcast_vote(self, committee_id: int, update_json: VotingSession):
         if committee_id in self.active_connections:
             for con in self.active_connections[committee_id]:
-                print("Voting sending update...")
                 await con.send_json(update_json.to_dict())
         else:
             print(f"Committee {committee_id} not in arr")
