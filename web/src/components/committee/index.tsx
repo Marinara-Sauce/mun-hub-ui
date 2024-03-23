@@ -49,9 +49,7 @@ function CommitteeLayout() {
                   <SelectDelegation />
                 </Widget>
               ) : null}
-              {committee.committee_poll === CommitteePollingType.VOTING ? (
-                <Voting />
-              ) : null}
+              <Voting />
               {committee.committee_poll === CommitteePollingType.ATTENDANCE ? (
                 <Attendance />
               ) : null}
