@@ -17,6 +17,14 @@ def get_current_voting_session(db: Session, committee_id: int):
 
 
 def create_voting_session(db: Session, committee_id: int):
+    voting_session = db.query(VotingSession).filter(VotingSession.committee_id == committee_id).filter(VotingSession.live).options(joinedload(VotingSession.votes)).first()
+    
+    if voting_session:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="A vote is already live for this committee"
+        )
+    
     db_vote = VotingSession(committee_id=committee_id)
     
     db.add(db_vote)
