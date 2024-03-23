@@ -6,14 +6,13 @@ import { useApi } from "../../../../contexts/apiContext";
 import { VoteType, VotingSession } from "../../../../model/interfaces";
 
 export default function Voting() {
-
   const { axiosInstance, isLoggedIn } = useApi();
   const { committee, userDelegation } = useCommittee();
 
   const setSocket = useState<WebSocket>()[1];
-  const [ userVoted, setUserVoted ] = useState(false);
+  const [userVoted, setUserVoted] = useState(false);
 
-  const [ votingSessionState, setVotingSessionState ] = useState<VotingSession>();
+  const [votingSessionState, setVotingSessionState] = useState<VotingSession>();
 
   // Handles voting WS
   useEffect(() => {
@@ -28,7 +27,6 @@ export default function Voting() {
     };
 
     socket.onmessage = (event) => {
-      console.log(event.data);
       setVotingSessionState(JSON.parse(event.data));
     };
 
@@ -48,19 +46,27 @@ export default function Voting() {
 
   // Fetches current voting state on page load
   useEffect(() => {
-    axiosInstance.get(`/voting?committee_id=${committee.committee_id}`).then((data) =>
-      setVotingSessionState(data.data)
-  ).catch((r) => r.response.status === 404);
+    axiosInstance
+      .get(`/voting?committee_id=${committee.committee_id}`)
+      .then((data) => setVotingSessionState(data.data))
+      .catch((r) => r.response.status === 404);
   }, [committee.committee_id]);
 
   // Check if the user can vote (client side, there's a check on the API side too)
   useEffect(() => {
-    setUserVoted( votingSessionState?.votes.filter((vote) => vote.delegation_id === userDelegation?.delegation_id).length !== 0 );
+    setUserVoted(
+      votingSessionState?.votes.filter(
+        (vote) => vote.delegation_id === userDelegation?.delegation_id,
+      ).length !== 0,
+    );
   }, [votingSessionState, userDelegation]);
 
   function castVote(vote: VoteType) {
-    axiosInstance.post(`/voting/vote?committee_id=${committee.committee_id}&delegation_id=${userDelegation?.delegation_id}&vote=${vote}`)
-    .then(() => setUserVoted(true));
+    axiosInstance
+      .post(
+        `/voting/vote?committee_id=${committee.committee_id}&delegation_id=${userDelegation?.delegation_id}&vote=${vote}`,
+      )
+      .then(() => setUserVoted(true));
   }
 
   function startVote() {
@@ -73,64 +79,118 @@ export default function Voting() {
   }
 
   function getTotalVotesOfType(voteType: VoteType): number {
-    return votingSessionState ? votingSessionState?.votes.filter((v) => v.vote == voteType).length : 0;
+    return votingSessionState
+      ? votingSessionState?.votes.filter((v) => v.vote == voteType).length
+      : 0;
   }
 
-  const totalVotes = getTotalVotesOfType(VoteType.ABSTAIN) + getTotalVotesOfType(VoteType.NO) + getTotalVotesOfType(VoteType.YES);
-  const percentParticipation = (totalVotes - getTotalVotesOfType(VoteType.ABSTAIN)) / committee.delegations.length;
+  const totalVotes =
+    getTotalVotesOfType(VoteType.ABSTAIN) +
+    getTotalVotesOfType(VoteType.NO) +
+    getTotalVotesOfType(VoteType.YES);
+  const percentParticipation =
+    (totalVotes - getTotalVotesOfType(VoteType.ABSTAIN)) /
+    committee.delegations.length;
 
-  const insufficientQuorum: boolean = percentParticipation < (2/3);
-  const votePassed: boolean = !insufficientQuorum && getTotalVotesOfType(VoteType.YES) > getTotalVotesOfType(VoteType.NO);
+  const insufficientQuorum: boolean = percentParticipation < 2 / 3;
+  const votePassed: boolean =
+    !insufficientQuorum &&
+    getTotalVotesOfType(VoteType.YES) > getTotalVotesOfType(VoteType.NO);
 
   return (
     <>
-      {(votingSessionState && votingSessionState.live && userDelegation) || (isLoggedIn) ? (
-          <Widget title="Voting">
+      {(votingSessionState && votingSessionState.live && userDelegation) ||
+      isLoggedIn ? (
+        <Widget title="Voting">
           {isLoggedIn ? (
-            <Box>
+            <>
               {votingSessionState && votingSessionState.live ? (
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
                   <Box sx={{ display: "flex", gap: 1, textAlign: "center" }}>
                     <Box sx={{ flex: 1 }}>
                       <Typography>Yes</Typography>
-                      <Typography variant="h4">{getTotalVotesOfType(VoteType.YES)}</Typography>
+                      <Typography variant="h4">
+                        {getTotalVotesOfType(VoteType.YES)}
+                      </Typography>
                     </Box>
                     <Box sx={{ flex: 1 }}>
                       <Typography>No</Typography>
-                      <Typography variant="h4">{getTotalVotesOfType(VoteType.NO)}</Typography>
+                      <Typography variant="h4">
+                        {getTotalVotesOfType(VoteType.NO)}
+                      </Typography>
                     </Box>
                     <Box sx={{ flex: 1 }}>
                       <Typography>Abstain</Typography>
-                      <Typography variant="h4">{getTotalVotesOfType(VoteType.ABSTAIN)}</Typography>
+                      <Typography variant="h4">
+                        {getTotalVotesOfType(VoteType.ABSTAIN)}
+                      </Typography>
                     </Box>
                     <Box sx={{ flex: 1 }}>
                       <Typography>Unaccounted</Typography>
-                      <Typography variant="h4">{committee.delegations.length - totalVotes}</Typography>
+                      <Typography variant="h4">
+                        {committee.delegations.length - totalVotes}
+                      </Typography>
                     </Box>
                   </Box>
                   <Box sx={{ display: "flex", gap: 1 }}>
-                    <Typography sx={{ flex: 1 }}>Percentage of Quorum Voted: {Math.round(percentParticipation * 100)}%</Typography>
+                    <Typography sx={{ flex: 1 }}>
+                      Percentage of Quorum Voted:{" "}
+                      {Math.round(percentParticipation * 100)}%
+                    </Typography>
                     <Typography color={votePassed ? "green" : "error"}>
-                      {votePassed ? "Vote Passed" : insufficientQuorum ? "Insufficient Quorum" : "Vote Failed"}
+                      {votePassed
+                        ? "Vote Passed"
+                        : insufficientQuorum
+                        ? "Insufficient Quorum"
+                        : "Vote Failed"}
                     </Typography>
                   </Box>
-                  <Button sx={{ flex: 1 }} variant="contained" color="error" onClick={endVote}>End Vote</Button>
+                  <Button
+                    sx={{ flex: 1 }}
+                    variant="contained"
+                    color="error"
+                    onClick={endVote}
+                  >
+                    End Vote
+                  </Button>
                 </Box>
               ) : (
-                <Button variant="contained" sx={{ display: "flex", flex: 1 }} onClick={startVote}>Start Vote</Button>
+                <Button
+                  variant="contained"
+                  sx={{ display: "flex", width: "100%" }}
+                  onClick={startVote}
+                >
+                  Start Vote
+                </Button>
               )}
-            </Box>
+            </>
           ) : (
             <Box sx={{ display: "flex", gap: 1 }}>
-              {userVoted ? <Typography>{"You've already voted"}</Typography> : (
+              {userVoted ? (
+                <Typography>{"You've already voted"}</Typography>
+              ) : (
                 <>
-                  <Button variant="contained" color="success" sx={{ flex: 1 }} onClick={() => castVote(VoteType.YES)}>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    sx={{ flex: 1 }}
+                    onClick={() => castVote(VoteType.YES)}
+                  >
                     Yes
                   </Button>
-                  <Button variant="contained" color="error" sx={{ flex: 1 }} onClick={() => castVote(VoteType.NO)}>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    sx={{ flex: 1 }}
+                    onClick={() => castVote(VoteType.NO)}
+                  >
                     No
                   </Button>
-                  <Button variant="contained" sx={{ flex: 1 }} onClick={() => castVote(VoteType.ABSTAIN)}>
+                  <Button
+                    variant="contained"
+                    sx={{ flex: 1 }}
+                    onClick={() => castVote(VoteType.ABSTAIN)}
+                  >
                     Abstain
                   </Button>
                 </>

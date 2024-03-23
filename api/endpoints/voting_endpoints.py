@@ -1,8 +1,6 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
-from flask import Flask, jsonify
 from requests import Session
-from sqlalchemy import JSON
 
 from database.database import SessionLocal
 from models.models import AdminUser, Vote, VotingSession
