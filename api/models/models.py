@@ -85,6 +85,16 @@ class VotingSession(Base):
     close_time = Column(DateTime)
 
     votes = relationship("Votes", backref="votingsessions")
+    
+    def to_dict(self):
+        return {
+            "voting_session_id": self.voting_session_id,
+            "committee_id": self.committee_id,
+            "live": self.live,
+            "open_time": self.open_time.isoformat() if self.open_time else None,
+            "close_time": self.close_time.isoformat() if self.close_time else None,
+            "votes": [vote.to_dict() for vote in self.votes] if self.votes else [],
+        }
 
 class Votes(Base):
     __tablename__ = "votes"
@@ -99,6 +109,15 @@ class Votes(Base):
     # data
     timestamp = Column(DateTime, server_default=func.now())
     vote = Column(Enum(Vote))
+    
+    def to_dict(self):
+        return {
+            "vote_id": self.vote_id,
+            "voting_session_id": self.voting_session_id,
+            "delegation_id": self.delegation_id,
+            "timestamp": self.timestamp.isoformat(),
+            "vote": self.vote.value
+        }
 
 
 class Delegation(Base):

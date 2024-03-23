@@ -1,6 +1,8 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
+from flask import Flask, jsonify
 from requests import Session
+from sqlalchemy import JSON
 
 from database.database import SessionLocal
 from models.models import AdminUser, Vote, VotingSession
@@ -38,7 +40,7 @@ class VotingConnectionManager:
         if committee_id in self.active_connections:
             for con in self.active_connections[committee_id]:
                 print("Voting sending update...")
-                await con.send_json(update_json)
+                await con.send_json(update_json.to_dict())
         else:
             print(f"Committee {committee_id} not in arr")
  
@@ -72,8 +74,12 @@ def get_closed_votes(committee_id: int, user: Annotated[AdminUser, Depends(get_c
 
 
 @router.post("/voting/vote", tags=["Voting"])
-def cast_vote(committee_id: int, delegation_id: int, vote: Vote, db: Session = Depends(get_db)):
-    return voting_operations.cast_vote(db, committee_id, delegation_id, vote)
+async def cast_vote(committee_id: int, delegation_id: int, vote: Vote, db: Session = Depends(get_db)):
+    vote = voting_operations.cast_vote(db, committee_id, delegation_id, vote)
+    vote_session = get_current_vote(committee_id, db)
+    await manager.broadcast_vote(committee_id, vote_session)
+    
+    return vote
 
 
 # websocket for voting

@@ -34,6 +34,23 @@ export interface WorkingPaper {
   delegations: Delegation[];
 }
 
+export interface VotingSession {
+  live: boolean,
+  committee_id: number,
+  open_time: string,
+  close_time: string,
+  voting_session_id: number,
+  votes: Vote[],
+}
+
+export interface Vote {
+  timestamp: string,
+  delegation_id: number,
+  voting_session_id: number,
+  vote: VoteType,
+  vote_id: number,
+}
+
 export enum CommitteeStatus {
   IN_SESSION = 1,
   SUSPENDED_SESSION = 2,
@@ -46,4 +63,10 @@ export enum CommitteePollingType {
   NONE = 1,
   VOTING = 2,
   ATTENDANCE = 3
+}
+
+export enum VoteType {
+  YES = 1,
+  NO = 2,
+  ABSTAIN = 3
 }
