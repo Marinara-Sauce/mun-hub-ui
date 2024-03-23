@@ -73,8 +73,7 @@ def get_closed_votes(committee_id: int, user: Annotated[AdminUser, Depends(get_c
 @router.post("/voting/vote", tags=["Voting"])
 async def cast_vote(committee_id: int, delegation_id: int, vote: Vote, db: Session = Depends(get_db)):
     vote = voting_operations.cast_vote(db, committee_id, delegation_id, vote)
-    vote_session = get_current_vote(committee_id, db)
-    await manager.broadcast_vote(committee_id, vote_session)
+    await manager.broadcast_vote(committee_id, vote)
     
     return vote
 

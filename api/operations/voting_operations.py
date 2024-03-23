@@ -84,5 +84,6 @@ def cast_vote(db: Session, committee_id: int, delegation_id: int, vote: Vote):
     db.add(vote)
     db.commit()
     db.refresh(vote)
+    db.refresh(voting_session)
     
-    return vote
+    return voting_session
