@@ -1,0 +1,9 @@
+# Debug docker file, simply sets up the project
+# Can be used for unit tests, lint, runtime server, etc.
+FROM node:18.12.0 as build-deps
+
+WORKDIR /usr/src/app
+COPY package.json yarn.lock ./
+
+RUN yarn install
+COPY . ./
