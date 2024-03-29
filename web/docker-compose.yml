@@ -8,4 +8,14 @@ services:
     ports:
       - "80:80"
     restart: always
+
+  lint:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: node:18.12.0
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: yarn lint
       
