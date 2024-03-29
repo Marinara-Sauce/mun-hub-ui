@@ -7,8 +7,6 @@ ARG RUN_BUILD=true
 WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 
-RUN npm install -g yarn
-
 RUN yarn install
 COPY . ./
 
