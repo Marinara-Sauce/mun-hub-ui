@@ -1,11 +1,21 @@
 version: '3'
 
 services:
-  react-app:
+  app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.deploy
     ports:
       - "80:80"
     restart: always
+
+  lint:
+    build: 
+      context: .
+      dockerfile: Dockerfile.debug
+    image: node:18.12.0
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: yarn lint
       
