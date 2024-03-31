@@ -13,7 +13,6 @@ import { useApi } from "../../contexts/apiContext";
 import AdminControls from "./components/adminControls";
 import { CommitteeProvider, useCommittee } from "./contexts/committeeContext";
 import Widget from "../shared/widget";
-import { CommitteePollingType } from "../../model/interfaces";
 import SelectDelegation from "./components/selectDelegation";
 
 function CommitteeLayout() {
@@ -50,9 +49,7 @@ function CommitteeLayout() {
                 </Widget>
               ) : null}
               <Voting />
-              {committee.committee_poll === CommitteePollingType.ATTENDANCE ? (
-                <Attendance />
-              ) : null}
+              <Attendance />
               <SpeakersList />
             </Box>
             <Box sx={{ width: "100%" }}>
