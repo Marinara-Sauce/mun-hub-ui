@@ -57,14 +57,14 @@ export interface AttendanceSession {
   open_time: string,
   close_time: string,
   attendance_session_id: number,
-  entries: Vote[],
+  entries: Attendance[],
 }
 
 export interface Attendance {
   timestamp: string,
   delegation_id: number,
   attendance_session_id: number,
-  entry: VoteType,
+  entry: AttendanceEntryType,
   attendance_entry_id: number,
 }
 

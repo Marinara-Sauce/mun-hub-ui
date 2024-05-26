@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 from requests import Session
 
 from database.database import SessionLocal
-from models.models import AdminUser, Vote, AttendanceSession
+from models.models import AdminUser, AttendanceEntryType, AttendanceSession
 from operations.authentication import get_current_user
 
 import operations.attendance_operations as attendance_operations
@@ -32,7 +32,7 @@ class AttendanceConnectionManager:
     def disconnect(self, websocket: WebSocket, committee_id: int):
         self.active_connections[committee_id].remove(websocket)
                 
-    async def broadcast_vote(self, committee_id: int, update_json: AttendanceSession):
+    async def broadcast_attendance(self, committee_id: int, update_json: AttendanceSession):
         if committee_id in self.active_connections:
             for con in self.active_connections[committee_id]:
                 await con.send_json(update_json.to_dict())
@@ -44,18 +44,18 @@ manager = AttendanceConnectionManager()
         
 @router.post("/attendance/start", tags=["Attendance"])
 async def start_attendance(committee_id: int, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
-    vote_session = attendance_operations.create_attendance_session(db, committee_id)
-    await manager.broadcast_vote(committee_id, vote_session)
+    attendance_session = attendance_operations.create_attendance_session(db, committee_id)
+    await manager.broadcast_attendance(committee_id, attendance_session)
     
-    return vote_session
+    return attendance_session
 
 
 @router.post("/attendance/end", tags=["Attendance"])
 async def end_current_attendance(committee_id: int, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
-    vote_session = attendance_operations.end_current_attendance_session(db, committee_id)
-    await manager.broadcast_vote(committee_id, vote_session)
+    attendance_session = attendance_operations.end_current_attendance_session(db, committee_id)
+    await manager.broadcast_attendance(committee_id, attendance_session)
     
-    return vote_session
+    return attendance_session
 
 
 @router.get("/attendance", tags=["Attendance"])
@@ -69,11 +69,11 @@ def get_closed_attendance(committee_id: int, user: Annotated[AdminUser, Depends(
 
 
 @router.post("/attendance/submit", tags=["Attendance"])
-async def cast_attendance(committee_id: int, delegation_id: int, vote: Vote, db: Session = Depends(get_db)):
-    vote = attendance_operations.submit_attendance(db, committee_id, delegation_id, vote)
-    await manager.broadcast_vote(committee_id, vote)
+async def cast_attendance(committee_id: int, delegation_id: int, submission: AttendanceEntryType, db: Session = Depends(get_db)):
+    attendance = attendance_operations.submit_attendance(db, committee_id, delegation_id, submission)
+    await manager.broadcast_attendance(committee_id, attendance)
     
-    return vote
+    return attendance
 
 
 # websocket for attendance
