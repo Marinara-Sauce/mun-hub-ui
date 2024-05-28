@@ -4,7 +4,24 @@ steps:
     command: "./.buildkite/scripts/lint.sh"
     cancel_on_build_failing: true
 
+  - wait
+
+  - label: ":docker: Build API Image"
+    command: "./.buildkite/scripts/build-api.sh"
+    artifacts:
+      - "api-image.tar"
+    branches: "main"
+
+  - label: ":docker: Build Web Image"
+    command: "./.buildkite/scripts/build-web.sh"
+    artifacts:
+      - "web-image.tar"
+    branches: "main"
+
+  - wait
+
   - block: ":rocket: Deploy to Dev?"
+    branches: "!main"
 
   - label: "Deploy API"
     command: "./.buildkite/scripts/deploy-api.sh"
