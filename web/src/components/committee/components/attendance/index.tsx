@@ -89,13 +89,19 @@ export default function Attendance() {
       .catch((r) => r.response.status === 404);
   }
 
+  function getDelegationsInAttendance(filter: AttendanceEntryType) {
+    return attendanceSessionState?.entries.filter((a) => a.entry === filter).map((d) => d.delegation_id) ?? [];
+  }
+
   return (
     <>
     <Dialog open={moreDetailsOpen} onClose={() => setMoreDetailsOpen(false)}>
       <Box sx={{display: "flex"}}>
         <Box>
           <Typography variant="h5">Present Delegations</Typography>
-          {attendanceSessionState?.entries.filter((a) => a.entry === AttendanceEntryType.PRESENT ? (<Typography>{committee.delegations.filter((d) => d.delegation_id === a.delegation_id)}</Typography>) : null)}
+          {committee.delegations.filter((d) => getDelegationsInAttendance(AttendanceEntryType.PRESENT).includes(d.delegation_id)).map(d => (
+            
+          ))}
         </Box>
         <Box>
           <Typography variant="h5">Present & Voting Delegations</Typography>
@@ -115,13 +121,13 @@ export default function Attendance() {
                   <Box sx={{ flex: 1 }}>
                     <Typography>Present</Typography>
                     <Typography variant="h4">
-                      {attendanceSessionState.entries.filter((e) => e.entry === AttendanceEntryType.PRESENT).length}
+                      {getDelegationsInAttendance(AttendanceEntryType.PRESENT).length}
                     </Typography>
                   </Box>
                   <Box sx={{ flex: 1 }}>
                     <Typography>Present & Voting</Typography>
                     <Typography variant="h4">
-                      {attendanceSessionState.entries.filter((e) => e.entry === AttendanceEntryType.PRESENT_AND_VOTING).length}
+                      {getDelegationsInAttendance(AttendanceEntryType.PRESENT_AND_VOTING).length}
                     </Typography>
                   </Box>
                   <Box sx={{ flex: 1 }}>
