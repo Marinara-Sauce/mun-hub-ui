@@ -10,13 +10,11 @@ steps:
     command: "./.buildkite/scripts/build-api.sh"
     artifacts:
       - "api-image.tar"
-    branches: "main"
 
   - label: ":docker: Build Web Image"
     command: "./.buildkite/scripts/build-web.sh"
     artifacts:
       - "web-image.tar"
-    branches: "main"
 
   - wait
 
