@@ -2,5 +2,5 @@
 echo "REACT_APP_API_URL=${BUILDKITE_ENV_REACT_APP_API_URL}" > .env
 echo "REACT_APP_WS_URL=${BUILDKITE_ENV_REACT_APP_WS_URL}" >> .env
 
-docker build -t web:latest ./web
+docker build -t web:latest ./web/Dockerfile.deploy
 docker save web:latest -o web-image.tar
