@@ -12,4 +12,5 @@ fi
 echo "REACT_APP_API_URL=${BUILDKITE_ENV_REACT_APP_API_URL}" > .env
 echo "REACT_APP_WS_URL=${BUILDKITE_ENV_REACT_APP_WS_URL}" >> .env
 
+docker compose down
 docker compose up --build -d app
