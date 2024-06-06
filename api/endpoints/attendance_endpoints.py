@@ -68,9 +68,30 @@ def get_closed_attendance(committee_id: int, user: Annotated[AdminUser, Depends(
     return attendance_operations.get_closed_attendance_sessions(db, committee_id)
 
 
+@router.get("/attendance/delegation", tags=["Attendance"])
+def get_recent_delegation_attendance(committee_id: int, delegation_id: int, db: Session = Depends(get_db)):
+    return attendance_operations.get_most_recent_submission(db, committee_id, delegation_id)
+
+
 @router.post("/attendance/submit", tags=["Attendance"])
 async def cast_attendance(committee_id: int, delegation_id: int, submission: AttendanceEntryType, db: Session = Depends(get_db)):
     attendance = attendance_operations.submit_attendance(db, committee_id, delegation_id, submission)
+    await manager.broadcast_attendance(committee_id, attendance)
+    
+    return attendance
+
+
+@router.post("/attendance/override", tags=["Attendance"])
+async def override_attendance(committee_id: int, delegation_id: int, submission: AttendanceEntryType, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
+    attendance = attendance_operations.submit_attendance(db, committee_id, delegation_id, submission, admin_override = True)
+    await manager.broadcast_attendance(committee_id, attendance)
+    
+    return attendance
+
+
+@router.post("/attendance/markabsent", tags=["Attendance"])
+async def mark_absent(committee_id: int, delegation_id: int, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
+    attendance = attendance_operations.remove_attendance_submission(db, committee_id, delegation_id)
     await manager.broadcast_attendance(committee_id, attendance)
     
     return attendance

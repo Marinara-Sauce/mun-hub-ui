@@ -3,11 +3,17 @@ import Widget from "../../../shared/widget";
 import { useEffect, useState } from "react";
 import { useCommittee } from "../../contexts/committeeContext";
 import { useApi } from "../../../../contexts/apiContext";
-import { VoteType, VotingSession } from "../../../../model/interfaces";
+import {
+  AttendanceEntryType,
+  VoteType,
+  VotingSession,
+} from "../../../../model/interfaces";
+import { useAttendance } from "../../contexts/attendanceContext";
 
 export default function Voting() {
   const { axiosInstance, isLoggedIn } = useApi();
   const { committee, userDelegation } = useCommittee();
+  const { getDelegationAttendanceStatus } = useAttendance();
 
   const setSocket = useState<WebSocket>()[1];
   const [userVoted, setUserVoted] = useState(false);
@@ -99,7 +105,10 @@ export default function Voting() {
 
   return (
     <>
-      {(votingSessionState && votingSessionState.live && userDelegation) ||
+      {(votingSessionState &&
+        votingSessionState.live &&
+        userDelegation &&
+        getDelegationAttendanceStatus(userDelegation.delegation_id)) ||
       isLoggedIn ? (
         <Widget title="Voting">
           {isLoggedIn ? (
@@ -186,13 +195,17 @@ export default function Voting() {
                   >
                     No
                   </Button>
-                  <Button
-                    variant="contained"
-                    sx={{ flex: 1 }}
-                    onClick={() => castVote(VoteType.ABSTAIN)}
-                  >
-                    Abstain
-                  </Button>
+                  {getDelegationAttendanceStatus(
+                    userDelegation!.delegation_id,
+                  ) === AttendanceEntryType.PRESENT_AND_VOTING ? (
+                    <Button
+                      variant="contained"
+                      sx={{ flex: 1 }}
+                      onClick={() => castVote(VoteType.ABSTAIN)}
+                    >
+                      Abstain
+                    </Button>
+                  ) : null}
                 </>
               )}
             </Box>
