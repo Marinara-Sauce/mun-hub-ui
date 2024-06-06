@@ -51,6 +51,23 @@ export interface Vote {
   vote_id: number,
 }
 
+export interface AttendanceSession {
+  live: boolean,
+  committee_id: number,
+  open_time: string,
+  close_time: string,
+  attendance_session_id: number,
+  entries: Attendance[],
+}
+
+export interface Attendance {
+  timestamp: string,
+  delegation_id: number,
+  attendance_session_id: number,
+  entry: AttendanceEntryType,
+  attendance_entry_id: number,
+}
+
 export enum CommitteeStatus {
   IN_SESSION = 1,
   SUSPENDED_SESSION = 2,
@@ -69,4 +86,9 @@ export enum VoteType {
   YES = 1,
   NO = 2,
   ABSTAIN = 3
+}
+
+export enum AttendanceEntryType {
+  PRESENT = 1,
+  PRESENT_AND_VOTING = 2
 }

@@ -11,9 +11,13 @@ import { useCommittee } from "../../contexts/committeeContext";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
+import { useAttendance } from "../../contexts/attendanceContext";
+import { AttendanceEntryType } from "../../../../model/interfaces";
 
 export default function SelectDelegation() {
   const { committee, userDelegation, applyUserDelegation } = useCommittee();
+  const { getDelegationAttendanceStatus } = useAttendance();
+
   const [selectedDelegation, setSelectedDelegation] = useState<string>();
 
   function setDelegation() {
@@ -25,6 +29,21 @@ export default function SelectDelegation() {
     applyUserDelegation("");
   }
 
+  function getAttendanceText() {
+    if (!userDelegation) {
+      return '';
+    }
+
+    switch (getDelegationAttendanceStatus(userDelegation.delegation_id)) {
+      case AttendanceEntryType.PRESENT:
+        return 'Present';
+      case AttendanceEntryType.PRESENT_AND_VOTING:
+        return 'Present and Voting';
+      default:
+        return ''
+    }
+  }
+
   if (userDelegation) {
     return (
       <Box sx={{ display: "flex" }}>
@@ -32,7 +51,7 @@ export default function SelectDelegation() {
           <Typography variant="h5" sx={{ fontWeight: "bold" }}>
             {userDelegation.delegation_name}
           </Typography>
-          <Typography>{"Currently Present and Voting"}</Typography>
+          {getAttendanceText() !== '' ? <Typography>{`Currently ${getAttendanceText()}`}</Typography> : null}
         </Box>
         <IconButton aria-label="clear" onClick={clearDelegation}>
           <ClearIcon />

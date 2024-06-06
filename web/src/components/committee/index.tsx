@@ -13,8 +13,8 @@ import { useApi } from "../../contexts/apiContext";
 import AdminControls from "./components/adminControls";
 import { CommitteeProvider, useCommittee } from "./contexts/committeeContext";
 import Widget from "../shared/widget";
-import { CommitteePollingType } from "../../model/interfaces";
 import SelectDelegation from "./components/selectDelegation";
+import { AttendanceProvider } from "./contexts/attendanceContext";
 
 function CommitteeLayout() {
   // Contexts
@@ -43,18 +43,18 @@ function CommitteeLayout() {
         <Box>
           <Box>{isLoggedIn ? <AdminControls /> : null}</Box>
           <Box sx={{ display: "flex" }}>
-            <Box sx={{ flexBasis: "45%" }}>
-              {!isLoggedIn ? (
-                <Widget title="My Delegation">
-                  <SelectDelegation />
-                </Widget>
-              ) : null}
-              <Voting />
-              {committee.committee_poll === CommitteePollingType.ATTENDANCE ? (
+            <AttendanceProvider>
+              <Box sx={{ flexBasis: "45%" }}>
+                {!isLoggedIn ? (
+                  <Widget title="My Delegation">
+                    <SelectDelegation />
+                  </Widget>
+                ) : null}
+                <Voting />
                 <Attendance />
-              ) : null}
-              <SpeakersList />
-            </Box>
+                <SpeakersList />
+              </Box>
+            </AttendanceProvider>
             <Box sx={{ width: "100%" }}>
               <Announcements />
               <Widget title="Publications">

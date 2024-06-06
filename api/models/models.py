@@ -34,6 +34,11 @@ class Vote(IntEnum):
     NO = 2
     ABSTAIN = 3
     
+
+class AttendanceEntryType(IntEnum):
+    PRESENT = 1
+    PRESENT_AND_VOTING = 2
+    
     
 class Participant(Base):
     __tablename__ = "participants"
@@ -117,6 +122,54 @@ class Votes(Base):
             "delegation_id": self.delegation_id,
             "timestamp": self.timestamp.isoformat(),
             "vote": self.vote.value
+        }
+        
+class AttendanceSession(Base):
+    __tablename__ = "attendancesessions"
+    
+    attendance_session_id = Column(Integer, primary_key=True, index=True, autoincrement=True, unique=True)
+    
+    # relationships
+    committee_id = Column(Integer, ForeignKey("committees.committee_id"))
+
+    # data
+    live = Column(Boolean, default=True)
+    open_time = Column(DateTime, server_default=func.now())
+    close_time = Column(DateTime)
+    
+    entries = relationship("AttendanceEntry", backref="attendanceentries")
+    
+    def to_dict(self):
+        return {
+            "attendance_session_id": self.attendance_session_id,
+            "committee_id": self.committee_id,
+            "live": self.live,
+            "open_time": self.open_time.isoformat() if self.open_time else None,
+            "close_time": self.close_time.isoformat() if self.close_time else None,
+            "entries": [entries.to_dict() for entries in self.entries] if self.entries else [],
+        }
+
+
+class AttendanceEntry(Base):
+    __tablename__ = "attendanceentries"
+    
+    attendance_entry_id = Column(Integer, primary_key=True, index=True, autoincrement=True, unique=True)
+    
+    # foreign keys
+    attendance_session_id = Column(Integer, ForeignKey("attendancesessions.attendance_session_id"))
+    delegation_id = Column(Integer, ForeignKey("delegations.delegation_id"))
+    
+    # data
+    timestamp = Column(DateTime, server_default=func.now())
+    entry = Column(Enum(AttendanceEntryType))
+    
+    def to_dict(self):
+        return {
+            "attendance_entry_id": self.attendance_entry_id,
+            "attendance_session_id": self.attendance_session_id,
+            "delegation_id": self.delegation_id,
+            "timestamp": self.timestamp.isoformat(),
+            "entry": self.entry.value
         }
 
 

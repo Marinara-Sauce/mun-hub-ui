@@ -5,6 +5,7 @@ steps:
     cancel_on_build_failing: true
 
   - block: ":rocket: Deploy to Dev?"
+    if: "build.branch != 'main'"
 
   - label: "Deploy API"
     command: "./.buildkite/scripts/deploy-api.sh"
