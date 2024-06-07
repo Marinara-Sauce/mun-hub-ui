@@ -11,7 +11,7 @@ const DataContext = createContext<IHeaderContext>({
 });
 
 export function HeaderProvider({ children }: { children: ReactNode }) {
-  const [header, setHeader] = useState<string>("MUN HUB");
+  const [header, setHeader] = useState<string>("Tiger MUN HUB");
 
   return (
     <DataContext.Provider value={{header, setHeader}}>
