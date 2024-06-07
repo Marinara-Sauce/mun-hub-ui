@@ -3,7 +3,7 @@ import { WorkingPaper } from "../../../../../../../../model/interfaces";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Delegation } from "../../../../../../../../model/interfaces";
 import { useEffect, useState } from "react";
-import ManageWorkingPaperDelegations from "../manageWorkingPaperDelegations/manageWorkingPaperDelegations";
+import ManageWorkingPaperDelegations from "../manageWorkingPaperDelegations";
 
 export default function EditableWorkingPaper({
   workingPaper,
