@@ -1,9 +1,9 @@
 import { TextField, Box, IconButton } from "@mui/material";
-import { WorkingPaper } from "../../../../../../../model/interfaces";
-import ManageWorkingPaperDelegations from "./manageWorkingPaperDelegations";
+import { WorkingPaper } from "../../../../../../../../model/interfaces";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Delegation } from "../../../../../../../model/interfaces";
+import { Delegation } from "../../../../../../../../model/interfaces";
 import { useEffect, useState } from "react";
+import ManageWorkingPaperDelegations from "../manageWorkingPaperDelegations/manageWorkingPaperDelegations";
 
 export default function EditableWorkingPaper({
   workingPaper,

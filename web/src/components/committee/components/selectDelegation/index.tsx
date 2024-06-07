@@ -31,16 +31,16 @@ export default function SelectDelegation() {
 
   function getAttendanceText() {
     if (!userDelegation) {
-      return '';
+      return "";
     }
 
     switch (getDelegationAttendanceStatus(userDelegation.delegation_id)) {
       case AttendanceEntryType.PRESENT:
-        return 'Present';
+        return "Present";
       case AttendanceEntryType.PRESENT_AND_VOTING:
-        return 'Present and Voting';
+        return "Present and Voting";
       default:
-        return ''
+        return "";
     }
   }
 
@@ -51,7 +51,9 @@ export default function SelectDelegation() {
           <Typography variant="h5" sx={{ fontWeight: "bold" }}>
             {userDelegation.delegation_name}
           </Typography>
-          {getAttendanceText() !== '' ? <Typography>{`Currently ${getAttendanceText()}`}</Typography> : null}
+          {getAttendanceText() !== "" ? (
+            <Typography>{`Currently ${getAttendanceText()}`}</Typography>
+          ) : null}
         </Box>
         <IconButton aria-label="clear" onClick={clearDelegation}>
           <ClearIcon />

@@ -31,7 +31,11 @@ export default function AppHeader() {
           Delegations
         </Button>
         <DelegationAdminControls />
-        {isLoggedIn && currentUser?.super_user ? <Button component={Link} to="/users">Manage Users</Button> : null}
+        {isLoggedIn && currentUser?.super_user ? (
+          <Button component={Link} to="/users">
+            Manage Users
+          </Button>
+        ) : null}
         <Account />
       </Box>
     </Box>
