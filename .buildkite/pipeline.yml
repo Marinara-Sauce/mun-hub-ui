@@ -1,8 +1,10 @@
 steps:
 
-  - label: "Lint"
+  - label: ":lint-roller: Lint"
     command: "./.buildkite/scripts/lint.sh"
-    cancel_on_build_failing: true
+
+  - label: ":prettier: Prettier"
+    command: "./.buildkite/scripts/prettier.sh"
 
   - block: ":rocket: Deploy to Dev?"
     if: "build.branch != 'main'"

@@ -16,4 +16,14 @@ services:
       - .:/usr/src/app
     working_dir: /usr/src/app
     command: yarn lint
+
+  prettier:
+    build:
+      context: .
+      dockerfile: Dockerfile.debug
+    image: node:18.12.0
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: yarn prettier --check ./**/*.tsx
       
