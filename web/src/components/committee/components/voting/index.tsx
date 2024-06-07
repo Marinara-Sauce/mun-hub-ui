@@ -197,7 +197,7 @@ export default function Voting() {
                   </Button>
                   {getDelegationAttendanceStatus(
                     userDelegation!.delegation_id,
-                  ) === AttendanceEntryType.PRESENT_AND_VOTING ? (
+                  ) !== AttendanceEntryType.PRESENT_AND_VOTING ? (
                     <Button
                       variant="contained"
                       sx={{ flex: 1 }}
