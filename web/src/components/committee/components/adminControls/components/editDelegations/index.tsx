@@ -204,7 +204,7 @@ export default function EditDelegations() {
         sx={{ flex: 1, margin: 1 }}
         onClick={() => setDialogOpen(true)}
       >
-        Edit Delegations
+        Edit Delegations in Committee
       </Button>
     </>
   );

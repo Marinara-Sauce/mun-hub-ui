@@ -4,10 +4,9 @@ import SpeakersList from "./components/speakersList";
 import Voting from "./components/voting";
 import WorkingPapers from "./components/workingPapers";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useHeader } from "../../contexts/headerContext";
-import ErrorModal from "../error";
 import { Box, CircularProgress } from "@mui/material";
 import { useApi } from "../../contexts/apiContext";
 import AdminControls from "./components/adminControls";
@@ -22,8 +21,6 @@ function CommitteeLayout() {
   const { committee, loading } = useCommittee();
   const { setHeader } = useHeader();
 
-  const [errorOpen, setErrorOpen] = useState<boolean>(false);
-
   // Update page header
   useEffect(
     () => setHeader(committee ? committee.committee_name : ""),
@@ -32,16 +29,10 @@ function CommitteeLayout() {
 
   return (
     <>
-      <ErrorModal
-        open={errorOpen}
-        message={"as"}
-        onClose={() => setErrorOpen(false)}
-      />
       {loading ? (
         <CircularProgress />
       ) : (
         <Box>
-          <Box>{isLoggedIn ? <AdminControls /> : null}</Box>
           <Box sx={{ display: "flex" }}>
             <AttendanceProvider>
               <Box sx={{ flexBasis: "45%" }}>
@@ -50,6 +41,7 @@ function CommitteeLayout() {
                     <SelectDelegation />
                   </Widget>
                 ) : null}
+                {isLoggedIn ? <AdminControls /> : null}
                 <Voting />
                 <Attendance />
                 <SpeakersList />
