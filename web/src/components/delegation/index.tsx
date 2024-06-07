@@ -15,7 +15,7 @@ export default function DelegationPage() {
 
   const [delegation, setDelegation] = useState<Delegation>();
 
-  const setHeader = useHeader()[1];
+  const { setHeader } = useHeader();
 
   useEffect(() => {
     axiosInstance

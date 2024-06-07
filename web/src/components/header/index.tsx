@@ -6,7 +6,7 @@ import DelegationAdminControls from "../delegation/components/delegationAdminCon
 import { useApi } from "../../contexts/apiContext";
 
 export default function AppHeader() {
-  const [header] = useHeader();
+  const { header } = useHeader();
 
   const { isLoggedIn, currentUser } = useApi();
 
