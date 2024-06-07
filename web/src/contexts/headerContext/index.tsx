@@ -1,17 +1,20 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 
-export type IHeaderContext = [
-  string,
-  React.Dispatch<React.SetStateAction<string>>,
-];
+export type IHeaderContext = {
+  header: string;
+  setHeader: React.Dispatch<React.SetStateAction<string>>,
+};
 
-const DataContext = createContext<IHeaderContext>(["", () => null]);
+const DataContext = createContext<IHeaderContext>({
+  header: "", 
+  setHeader: () => {}
+});
 
 export function HeaderProvider({ children }: { children: ReactNode }) {
-  const [header, setHeader] = useState<string>("MUN HUB");
+  const [header, setHeader] = useState<string>("Tiger MUN HUB");
 
   return (
-    <DataContext.Provider value={[header, setHeader]}>
+    <DataContext.Provider value={{header, setHeader}}>
       {children}
     </DataContext.Provider>
   );

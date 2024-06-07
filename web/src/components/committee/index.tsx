@@ -20,7 +20,7 @@ function CommitteeLayout() {
   // Contexts
   const { isLoggedIn } = useApi();
   const { committee, loading } = useCommittee();
-  const setHeader = useHeader()[1];
+  const { setHeader } = useHeader();
 
   const [errorOpen, setErrorOpen] = useState<boolean>(false);
 

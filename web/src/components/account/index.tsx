@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   CircularProgress,
@@ -8,14 +9,17 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
+  Menu,
+  MenuItem,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { AdminUser } from "../../model/interfaces";
 import { useApi } from "../../contexts/apiContext";
 import { AxiosInstance } from "axios";
+import React from "react";
 
 interface TokenResponse {
   access_token: string;
@@ -28,6 +32,7 @@ export default function Account() {
   const auth = useApi();
 
   const [loginFormVisible, setLoginFormVisible] = useState(false);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const onLoggedIn = (token: TokenResponse) => {
     setLoginFormVisible(false);
@@ -36,6 +41,14 @@ export default function Account() {
 
   const onLogout = () => {
     auth.logoutUser();
+  };
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
   if (!auth.isLoggedIn) {
@@ -47,7 +60,7 @@ export default function Account() {
           onClose={() => setLoginFormVisible(false)}
           onLoggedIn={onLoggedIn}
         />
-        <Button sx={{ m: 1 }} onClick={() => setLoginFormVisible(true)}>
+        <Button color="inherit" sx={{ m: 1 }} onClick={() => setLoginFormVisible(true)}>
           Admin Login
         </Button>
       </>
@@ -55,19 +68,35 @@ export default function Account() {
   }
 
   return (
-    <Box sx={{ display: "flex", alignItems: "center", m: 1 }}>
-      <Typography>Welcome, {auth.currentUser?.first_name}!</Typography>
-      <IconButton
-        color="primary"
-        sx={{
-          width: "48px",
-          height: "48px",
-          ml: 1,
+    <Box sx={{ flexGrow: 0 }}>
+      <Tooltip title="Open settings">
+        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+          <Avatar alt={auth.currentUser?.first_name} />
+        </IconButton>
+      </Tooltip>
+      <Menu
+        sx={{ mt: '45px' }}
+        id="menu-appbar"
+        anchorEl={anchorElUser}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
         }}
-        onClick={onLogout}
+        keepMounted
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={Boolean(anchorElUser)}
+        onClose={handleCloseUserMenu}
       >
-        <ExitToAppIcon fontSize="inherit" />
-      </IconButton>
+        <MenuItem onClick={() => {
+          onLogout()
+          handleCloseUserMenu()
+        }}>
+          <Typography textAlign="center">Logout</Typography>
+        </MenuItem>
+      </Menu>
     </Box>
   );
 }

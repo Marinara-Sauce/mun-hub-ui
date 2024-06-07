@@ -36,7 +36,7 @@ export default function DelegationAdminControls() {
           <Button>Close</Button>
         </DialogActions>
       </Dialog>
-      <Button onClick={() => setDialogOpen(true)}>Manage Delegations</Button>
+      <Button color="inherit" onClick={() => setDialogOpen(true)}>Manage Delegations</Button>
     </>
   );
 }
