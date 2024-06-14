@@ -32,16 +32,13 @@ class CommitteeConnectionManager:
             self.active_connections[committee_id] = []
             
         self.active_connections[committee_id].append(websocket)
-        print(f"Connect: {len(self.active_connections[committee_id])}")
     
     def disconnect(self, websocket: WebSocket, committee_id: int):
         self.active_connections[committee_id].remove(websocket)
-        print(f"Disconnect: {len(self.active_connections[committee_id])}")
                 
     async def broadcast_committee(self, committee_id: int, update_txt: str = "UPDATE"):
         if committee_id in self.active_connections:
             for con in self.active_connections[committee_id]:
-                print("Sending update...")
                 await con.send_text(update_txt)
         else:
             print(f"Committee {committee_id} not in arr")
