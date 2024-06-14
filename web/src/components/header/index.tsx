@@ -11,29 +11,27 @@ export default function AppHeader() {
   const { isLoggedIn, currentUser } = useApi();
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="default">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {header}
-          </Typography>
-          <Box sx={{display: "flex", alignItems: "center", gap: 1}}>
-            <Button color="inherit" component={Link} to="/committee">
-              Committees
+    <AppBar position="static" color="default" sx={{ zIndex: 999 }}>
+      <Toolbar>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          {header}
+        </Typography>
+        <Box sx={{display: "flex", alignItems: "center", gap: 1}}>
+          <Button color="inherit" component={Link} to="/committee">
+            Committees
+          </Button>
+          <Button color="inherit" component={Link} to="/delegation">
+            Delegations
+          </Button>
+          <DelegationAdminControls />
+          {isLoggedIn && currentUser?.super_user ? (
+            <Button color="inherit" component={Link} to="/users">
+              Manage Users
             </Button>
-            <Button color="inherit" component={Link} to="/delegation">
-              Delegations
-            </Button>
-            <DelegationAdminControls />
-            {isLoggedIn && currentUser?.super_user ? (
-              <Button color="inherit" component={Link} to="/users">
-                Manage Users
-              </Button>
-            ) : null}
-            <Account />
-          </Box>
-        </Toolbar>
-      </AppBar>
-    </Box>
+          ) : null}
+          <Account />
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }

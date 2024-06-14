@@ -57,8 +57,6 @@ export function CommitteeProvider({
 
   const [loading, setLoading] = useState(true);
 
-  const [socket, setSocket] = useState<WebSocket>();
-
   useEffect(() => refreshCommittee(), [committee_id]);
 
   useEffect(() => {
@@ -79,8 +77,6 @@ export function CommitteeProvider({
     const socket = new WebSocket(
       `${process.env.REACT_APP_WS_URL}/committees/${committee_id}/ws`,
     );
-
-    setSocket(socket);
 
     socket.onopen = () => {
       console.log("Websocket is open");
@@ -145,7 +141,6 @@ export function CommitteeProvider({
         updateCommittee,
         refreshCommittee,
         applyUserDelegation,
-        socket,
       }}
     >
       {children}
