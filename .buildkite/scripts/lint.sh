@@ -2,4 +2,4 @@
 
 cd web
 
-docker compose up --build lint
+docker compose run --build lint

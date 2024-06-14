@@ -2,4 +2,4 @@
 
 cd web
 
-docker compose up --build prettier
+docker compose run --build prettier
