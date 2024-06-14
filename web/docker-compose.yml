@@ -14,7 +14,7 @@ services:
     volumes:
       - .:/usr/src/app
     working_dir: /usr/src/app
-    entrypoint: yarn lint
+    entrypoint: /bin/bash -c "yarn lint"
 
   prettier:
     build:
@@ -23,5 +23,5 @@ services:
     volumes:
       - .:/usr/src/app
     working_dir: /usr/src/app
-    entrypoint: yarn prettier --check ./**/*.tsx
+    entrypoint: /bin/bash -c "yarn prettier --check ./**/*.tsx"
       
