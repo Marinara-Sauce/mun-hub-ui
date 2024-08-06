@@ -17,6 +17,7 @@ export type ICommitteeContext = {
   refreshCommittee: () => void;
   applyUserDelegation: (delegation: string) => void;
   socket?: WebSocket;
+  speakersListVersion: number;
 };
 
 const defaultCommittee: Committee = {
@@ -36,6 +37,7 @@ const CommitteeContext = createContext<ICommitteeContext>({
   committee: defaultCommittee,
   loading: false,
   error: "",
+  speakersListVersion: 0,
   updateCommittee: () => {},
   refreshCommittee: () => {},
   applyUserDelegation: () => {},
@@ -54,6 +56,9 @@ export function CommitteeProvider({
   const [committee, setCommittee] = useState<Committee>(defaultCommittee);
   // The current user's delegation
   const [userDelegation, setUserDelegation] = useState<Delegation>();
+
+  // Used to update the speakers list
+  const [speakersListVersion, setSpeakersListVersion] = useState(0);
 
   const [loading, setLoading] = useState(true);
 
@@ -84,6 +89,7 @@ export function CommitteeProvider({
 
     socket.onmessage = (event) => {
       event.data === "UPDATE" && refreshCommittee();
+      event.data === "SPEAKER" && setSpeakersListVersion(prev => prev + 1);
     };
 
     const heartbeatInterval = setInterval(() => {
@@ -138,6 +144,7 @@ export function CommitteeProvider({
         userDelegation,
         loading,
         error: "",
+        speakersListVersion,
         updateCommittee,
         refreshCommittee,
         applyUserDelegation,
