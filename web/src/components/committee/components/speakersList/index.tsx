@@ -28,7 +28,7 @@ interface SpeakerListEntry {
 }
 
 export default function SpeakersList() {
-  const { committee, userDelegation, updateCommittee, socket } = useCommittee();
+  const { committee, userDelegation, updateCommittee, speakersListVersion } = useCommittee();
   const { axiosInstance, isLoggedIn } = useApi();
 
   const [currentList, setCurrentList] = useState<SpeakerListEntry[]>([]);
@@ -36,24 +36,13 @@ export default function SpeakersList() {
 
   const [addingToListLoading, setAddingToListLoading] = useState(false);
 
-  useEffect(() => fetchList(), [setCurrentList, committee]);
-
-  // Listen for speaker list messages on the websocket
-  useEffect(() => {
-    if (!socket) {
-      return;
-    }
-
-    socket.onmessage = (event) => {
-      event.data == "SPEAKER" && fetchList();
-    };
-  }, [socket]);
-
   function fetchList() {
     axiosInstance
       .get(`/committees/${committee.committee_id}/speaker-list`)
       .then((res) => setCurrentList(res.data));
   }
+
+  useEffect(() => fetchList(), [setCurrentList, committee, speakersListVersion]);
 
   function onAddToList() {
     setAddingToListLoading(true);
