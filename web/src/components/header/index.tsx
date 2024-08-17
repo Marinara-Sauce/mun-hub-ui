@@ -1,9 +1,10 @@
-import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import { useHeader } from "../../contexts/headerContext";
 import { Link } from "react-router-dom";
 import Account from "../account";
 import DelegationAdminControls from "../delegation/components/delegationAdminControls";
 import { useApi } from "../../contexts/apiContext";
+import HomeIcon from '@mui/icons-material/Home';
 
 export default function AppHeader() {
   const { header } = useHeader();
@@ -13,9 +14,15 @@ export default function AppHeader() {
   return (
     <AppBar position="static" color="default" sx={{ zIndex: 999 }}>
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          {header}
-        </Typography>
+        <Box sx={{ display: "flex", flexGrow: 1, alignItems: 'center', gap: 1 }}>
+          <IconButton href="/">
+            <HomeIcon />
+          </IconButton>
+          <Typography variant="h6">
+            {header}
+          </Typography>
+        </Box>
+
         <Box sx={{display: "flex", alignItems: "center", gap: 1}}>
           <Button color="inherit" component={Link} to="/committee">
             Committees

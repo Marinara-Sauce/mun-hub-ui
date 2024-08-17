@@ -8,6 +8,7 @@ import DelegationPage from "./components/delegation";
 import { Box } from "@mui/material";
 import { APIProvider } from "./contexts/apiContext";
 import UserManagement from "./components/userManagement";
+import HomePage from "./components/homePage";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
               <Route path="/delegation" Component={SelectDelegation} />
               <Route path="/delegation/:id" Component={DelegationPage} />
               <Route path="/users" Component={UserManagement} />
+              <Route path="/" Component={HomePage} />
             </Routes>
           </Box>
         </Box>

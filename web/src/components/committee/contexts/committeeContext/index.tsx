@@ -62,6 +62,10 @@ export function CommitteeProvider({
 
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    committee_id ? localStorage.setItem('recentCommittee', committee_id?.toString()) : localStorage.removeItem('recentCommittee');
+  }, [committee_id]);
+
   useEffect(() => refreshCommittee(), [committee_id]);
 
   useEffect(() => {
