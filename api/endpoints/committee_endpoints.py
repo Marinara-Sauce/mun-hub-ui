@@ -9,6 +9,8 @@ from models.models import AdminUser
 from schemas import committee_schema
 from operations import committee_operations
 
+from schemas.publications_schema import Publication, PublicationCreate
+
 from operations.authentication import get_current_user
 
 router = APIRouter()
@@ -168,6 +170,24 @@ def remove_delegation_from_working_paper(working_paper_id: int, delgation_id: in
 @router.patch("/committees/{committee_id}/working-papers", tags=["Committees"])
 def patch_committee_working_papers(committee_id: int, working_papers: List[WorkingPaperCreate], db: Session = Depends(get_db)):
     return committee_operations.patch_working_papers(db, committee_id, working_papers)
+
+
+# add a publication
+@router.post("/committees/publication", tags=["Publications"])
+def add_publication(publication: PublicationCreate, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
+    return committee_operations.add_publication(db, publication)
+
+
+# delete a publication
+@router.delete("/committees/publication/{publication_id}", tags=["Publications"])
+def delete_publication(publication_id: str, user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
+    return committee_operations.delete_publication(db, publication_id)
+
+
+# patch a publication
+@router.patch("/committees/publication", tags=["Publications"])
+def patch_publications(publications: List[Publication], user: Annotated[AdminUser, Depends(get_current_user)], db: Session = Depends(get_db)):
+    return committee_operations.patch_publications(db, publications)
 
 
 # websocket for polls

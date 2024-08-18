@@ -1,11 +1,12 @@
-from typing import Optional
+from typing import List, Optional
 from fastapi import HTTPException, status
 from sqlalchemy.orm import aliased
 
 from sqlalchemy.orm import Session
+import schemas
 from schemas.workingpaper_schema import WorkingPaperCreate
 
-from models.models import Committee, Delegation, Participant, SpeakerList, WorkingPaper, WorkingPaperDelegation
+from models.models import Committee, Delegation, Participant, Publication, SpeakerList, WorkingPaper, WorkingPaperDelegation
 from schemas.committee_schema import CommitteeCreate, CommitteeUpdate
 
 
@@ -75,7 +76,7 @@ def get_participant_by_id(db: Session, participant_id: str) -> Optional[Particip
 
 
 # add many delegations to a single committee
-def add_participants(db: Session, committee_id: int, delegation_ids: [int]) -> [Participant]:
+def add_participants(db: Session, committee_id: int, delegation_ids: List[int]) -> List[Participant]:
     if not db.query(Committee).filter(Committee.committee_id == committee_id).first():
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -107,7 +108,7 @@ def remove_participant(db: Session, committee_id: int, delegation_id: int) -> bo
 
 
 # replace a committee's list of delegations
-def patch_participants(db: Session, committee_id: int, delegation_ids: [int]):
+def patch_participants(db: Session, committee_id: int, delegation_ids: List[int]):
     # remove all participants first
     current_participants = db.query(Participant).filter(Participant.committee_id == committee_id).all()
     
@@ -119,7 +120,7 @@ def patch_participants(db: Session, committee_id: int, delegation_ids: [int]):
 
 
 
-def patch_working_papers(db: Session, committee_id: int, working_papers: [WorkingPaperCreate]):
+def patch_working_papers(db: Session, committee_id: int, working_papers: List[WorkingPaperCreate]):
     # remove all working papers first
     current_working_papers = db.query(WorkingPaper).filter(WorkingPaper.committee_id == committee_id).all()
     
@@ -158,8 +159,61 @@ def add_working_paper(db: Session, working_paper: WorkingPaperCreate):
     return db_working_paper
 
 
+def add_publication(db: Session, publication: Publication):
+
+    db_publication = Publication(
+        committee_id = publication.committee_id,
+        publication_name = publication.publication_name,
+        paper_link = publication.paper_link,
+    )
+
+    db.add(db_publication)
+    db.commit()
+    db.refresh(db_publication)
+
+    return db_publication
+
+
+def delete_publication(db: Session, publication_id: str):
+    statement = db.query(Publication).filter(Publication.publication_id == publication_id).statement
+    print(str(statement))
+    publication = db.query(Publication).filter(Publication.publication_id == publication_id).first()
+    
+    print(publication)
+    
+    if publication is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Could not find publication with ID: {publication_id}"
+        )
+
+    db.delete(publication)
+    db.commit()
+
+    return True
+
+
+def patch_publications(db: Session, publications: List[schemas.publications_schema.Publication]):
+    for p in publications:
+        current_publication = db.query(Publication).filter(Publication.publication_id == p.publication_id).first()
+        
+        if current_publication == None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Could not find publication with ID: {p.publication_id}"
+            )
+            
+        for key, value in p.model_dump().items():
+            setattr(current_publication, key, value)
+
+        db.commit()
+        db.refresh(current_publication)
+            
+    return publications
+
+
 # add a delegation to a working paper
-def add_delegations_to_working_paper(db: Session, working_paper_id: int, delegation_id: [int]):
+def add_delegations_to_working_paper(db: Session, working_paper_id: int, delegation_id: List[int]):
     db_delegation_workingpaper = [WorkingPaperDelegation(working_paper_id = working_paper_id, delegation_id = d) for d in delegation_id]
     
     db.add_all(db_delegation_workingpaper)

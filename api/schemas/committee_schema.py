@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from schemas.delegation_schema import Delegation
+from schemas.publications_schema import Publication
 from schemas.workingpaper_schema import WorkingPaper
 
 from models.models import CommitteePollingTypes, CommitteeSessionTypes
@@ -34,6 +35,7 @@ class Committee(CommitteeBase):
 
     delegations: list[Delegation] = []
     working_papers: list[WorkingPaper] = []
+    publications: list[Publication] = []
 
     class Config:
         from_attributes = True

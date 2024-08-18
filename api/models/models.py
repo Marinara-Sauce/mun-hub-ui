@@ -64,6 +64,7 @@ class Committee(Base):
     # participants in delegation
     delegations = relationship("Delegation", secondary="participants")
     working_papers = relationship("WorkingPaper", back_populates="committee", cascade="all,delete")
+    publications = relationship("Publication", back_populates="committee", cascade="all,delete")
 
     # data
     committee_name = Column(String)
@@ -228,6 +229,23 @@ class WorkingPaperDelegation(Base):
     # foreign keys
     working_paper_id = Column(Integer, ForeignKey("workingpapers.working_paper_id"))
     delegation_id = Column(Integer, ForeignKey("delegations.delegation_id"))
+    
+
+class Publication(Base):
+    __tablename__ = "publications"
+
+    # id
+    publication_id = Column(Integer, primary_key=True, index=True, autoincrement=True, unique=True)
+
+    # foreign ids
+    committee_id = Column(Integer, ForeignKey("committees.committee_id"))
+
+    # relationships
+    committee = relationship("Committee", back_populates="publications")
+
+    # data
+    paper_link = Column(String)
+    publication_name = Column(String, unique=True)
 
 
 class AdminUser(Base):
