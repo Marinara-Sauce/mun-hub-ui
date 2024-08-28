@@ -14,6 +14,7 @@ import { CommitteeProvider, useCommittee } from "./contexts/committeeContext";
 import Widget from "../shared/widget";
 import SelectDelegation from "./components/selectDelegation";
 import { AttendanceProvider } from "./contexts/attendanceContext";
+import Publications from "./components/publications";
 
 function CommitteeLayout() {
   // Contexts
@@ -49,9 +50,7 @@ function CommitteeLayout() {
             </AttendanceProvider>
             <Box sx={{ width: "100%" }}>
               <Announcements />
-              <Widget title="Publications">
-                <p>Not yet implemented :(</p>
-              </Widget>
+              <Publications />
               <WorkingPapers />
             </Box>
           </Box>

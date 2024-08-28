@@ -68,6 +68,13 @@ export interface Attendance {
   attendance_entry_id: number,
 }
 
+export interface Publication {
+  publication_id: number,
+  publication_name: string,
+  paper_link: string,
+  committee_id: number,
+}
+
 export enum CommitteeStatus {
   IN_SESSION = 1,
   SUSPENDED_SESSION = 2,
