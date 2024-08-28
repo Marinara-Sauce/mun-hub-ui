@@ -1,3 +1,3 @@
 export default function ManagePublications() {
-    return <p>Hello!</p>
+  return <p>Hello!</p>;
 }

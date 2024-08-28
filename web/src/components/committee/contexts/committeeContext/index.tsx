@@ -31,6 +31,7 @@ const defaultCommittee: Committee = {
   delegations: [],
   working_papers: [],
   speaker_list_open: false,
+  publications: [],
 };
 
 const CommitteeContext = createContext<ICommitteeContext>({

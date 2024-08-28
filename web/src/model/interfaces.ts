@@ -17,6 +17,7 @@ export interface Committee {
   delegations: Delegation[];
   working_papers: WorkingPaper[];
   speaker_list_open: boolean;
+  publications: Publication[];
 }
 
 export interface Delegation {
